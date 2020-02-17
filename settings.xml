@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <profiles>
+
+        <profile>
+            <id>production</id>
+            <activation>
+                <!-- activate if system properties 'env=prod' -->
+                <property>
+                    <name>env</name>
+                    <value>prod</value>
+                </property>
+            </activation>
+            <properties>
+                <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
+                <db.username>root</db.username>
+                <db.password></db.password>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>development</id>
+            <activation>
+                <!-- activate if system properties 'env=dev' -->
+                <property>
+                    <name>env</name>
+                    <value>dev</value>
+                </property>
+            </activation>
+            <properties>
+                <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
+                <db.username>root</db.username>
+                <db.password></db.password>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>test</id>
+            <activation>
+                <!-- activate if system properties 'env=test' -->
+                <property>
+                    <name>env</name>
+                    <value>test</value>
+                </property>
+            </activation>
+            <properties>
+                <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
+                <db.username>root</db.username>
+                <db.password></db.password>
+            </properties>
+        </profile>
+
+    </profiles>
+</settings>
