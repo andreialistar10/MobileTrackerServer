@@ -18,6 +18,11 @@
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>root</db.username>
                 <db.password></db.password>
+                <sql.dialect>org.hibernate.dialect.MySQL5Dialect</sql.dialect>
+                <device.db.url>jdbc:mysql://localhost:3306/mobile_tracker_device</device.db.url>
+                <location.db.url>jdbc:mysql://localhost:3306/mobile_tracker_location</location.db.url>
+                <notification.db.url>jdbc:mysql://localhost:3306/mobile_tracker_notification</notification.db.url>
+                <user.db.url>jdbc:mysql://localhost:3306/mobile_tracker_user</user.db.url>
             </properties>
         </profile>
 
@@ -34,6 +39,11 @@
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>root</db.username>
                 <db.password></db.password>
+                <sql.dialect>org.hibernate.dialect.MySQL5Dialect</sql.dialect>
+                <device.db.url>jdbc:mysql://localhost:3306/mobile_tracker_device_development</device.db.url>
+                <location.db.url>jdbc:mysql://localhost:3306/mobile_tracker_location_development</location.db.url>
+                <notification.db.url>jdbc:mysql://localhost:3306/mobile_tracker_notification_development</notification.db.url>
+                <user.db.url>jdbc:mysql://localhost:3306/mobile_tracker_user_development</user.db.url>
             </properties>
         </profile>
 
@@ -50,6 +60,11 @@
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>root</db.username>
                 <db.password></db.password>
+                <sql.dialect>org.hibernate.dialect.MySQL5Dialect</sql.dialect>
+                <device.db.url>jdbc:mysql://localhost:3306/mobile_tracker_device_test</device.db.url>
+                <location.db.url>jdbc:mysql://localhost:3306/mobile_tracker_location_test</location.db.url>
+                <notification.db.url>jdbc:mysql://localhost:3306/mobile_tracker_notification_test</notification.db.url>
+                <user.db.url>jdbc:mysql://localhost:3306/mobile_tracker_user_test</user.db.url>
             </properties>
         </profile>
 
