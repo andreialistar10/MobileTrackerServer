@@ -15,7 +15,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("")
@@ -30,17 +33,19 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ApiOperation(value = "Add a specific student")
+    @ApiOperation(value = "Sign-up a new user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "SUCCESS", response = MyUserDetailResponseDto.class),
             @ApiResponse(code = 400, message = "DUPLICATE_USER", response = UserExceptionType.class),
             @ApiResponse(code = 400, message = "INVALID_USER_DETAILS", response = UserExceptionType.class),
     })
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MyUserDetailResponseDto> signup(@RequestBody MyUserDetailRequestDto myUserDetailRequestDto) {
+    public ResponseEntity<MyUserDetailResponseDto> signup(@Valid @RequestBody MyUserDetailRequestDto myUserDetailRequestDto, BindingResult result) {
 
         logger.info("------------------LOGGING  signup------------------");
         logMyUserDetailRequestDto(myUserDetailRequestDto);
+        if (result.hasErrors())
+            throw new UserServiceException("User details for user: " + myUserDetailRequestDto.getUsername() + "are invalid", HttpStatus.BAD_REQUEST, UserExceptionType.INVALID_USER_DETAILS);
         MyUserDetail myUserDetail = userService.signup(myUserDetailRequestDto);
         MyUserDetailResponseDto responseDto = MyUserDetailResponseDto.builder()
                 .email(myUserDetail.getEmail())
@@ -57,9 +62,9 @@ public class UserController {
         logger.info("username:    {}", myUserDetailRequestDto.getUsername());
         logger.info("password:    {}", myUserDetailRequestDto.getPassword());
         logger.info("re-password: {}", myUserDetailRequestDto.getRepeatPassword());
-        logger.info("first name:  {}",myUserDetailRequestDto.getFirstName());
-        logger.info("last name:   {}",myUserDetailRequestDto.getLastName());
-        logger.info("e-mail:      {}",myUserDetailRequestDto.getEmail());
+        logger.info("first name:  {}", myUserDetailRequestDto.getFirstName());
+        logger.info("last name:   {}", myUserDetailRequestDto.getLastName());
+        logger.info("e-mail:      {}", myUserDetailRequestDto.getEmail());
     }
 
     @ExceptionHandler({UserServiceException.class})
