@@ -14,7 +14,7 @@
     </p>
     <br>
     <p>
-        The next step is to confirm your account by clicking <a href='www.google.com'>here</a>.
+        The next step is to confirm your account by clicking <a href=${confirmation_url}>here</a>.
     </p><br>
     <p>Our best,</p>
     <p><b>The MobileTracker team!</b></p>

@@ -1,11 +1,13 @@
 package com.andrei.mobiletracker.user.dao.jpaUtil;
 
+import com.andrei.mobiletracker.user.dao.notActivatedAccountDao.impl.jpaRepository.NotActivatedAccountPersistence;
 import com.andrei.mobiletracker.user.dao.userDao.impl.jpaRepository.MyUserPersistence;
 import com.andrei.mobiletracker.user.dao.userDetailDao.impl.jpaRepository.MyUserDetailPersistence;
 import com.andrei.mobiletracker.user.dao.userRoleDao.impl.jpaRepository.MyUserRolePersistence;
 import com.andrei.mobiletracker.user.model.MyUser;
 import com.andrei.mobiletracker.user.model.MyUserDetail;
 import com.andrei.mobiletracker.user.model.MyUserRole;
+import com.andrei.mobiletracker.user.model.NotActivatedAccount;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -63,6 +65,22 @@ public class ModelJpaPersistenceConverter {
                 .firstName(myUserDetail.getFirstName())
                 .lastName(myUserDetail.getLastName())
                 .email(myUserDetail.getEmail())
+                .build();
+    }
+
+    public NotActivatedAccount convertNotActivatedAccountPersistenceToNotActivatedAccount(NotActivatedAccountPersistence notActivatedAccountPersistence){
+
+        return notActivatedAccountPersistence == null ? null : NotActivatedAccount.builder()
+                .token(notActivatedAccountPersistence.getToken())
+                .username(notActivatedAccountPersistence.getUsername())
+                .build();
+    }
+
+    public NotActivatedAccountPersistence convertNotActivatedAccountToNotActivatedAccountPersistence(NotActivatedAccount notActivatedAccount){
+
+        return notActivatedAccount == null ? null : NotActivatedAccountPersistence.builder()
+                .token(notActivatedAccount.getToken())
+                .username(notActivatedAccount.getUsername())
                 .build();
     }
 }

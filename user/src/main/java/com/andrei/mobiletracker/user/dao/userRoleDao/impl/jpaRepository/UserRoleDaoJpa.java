@@ -29,7 +29,6 @@ public class UserRoleDaoJpa implements UserRoleDao {
     public MyUserRole findOneUserRoleByType(MyUserRoleType type) {
 
         logger.info("------------------LOGGING  findOneUserRoleByName------------------");
-        System.out.println(type.toString());
         MyUserRolePersistence foundUserRolePersistence = userRoleJpaRepository.findByName(type);
         logger.info("-----------------SUCCESSFUL findOneUserRoleByName-----------------");
         return modelJpaPersistenceConverter.convertMyUserRolePersistenceToMyUserRole(foundUserRolePersistence);

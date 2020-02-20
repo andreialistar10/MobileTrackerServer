@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
         MyUser savedUser = addUser(userDetailDto.getUsername(), userDetailDto.getPassword(),myUserRole);
         MyUserDetail savedUserDetail = addUserDetail(savedUser, userDetailDto);
         sendMail(MailUserDetail.builder()
+                .username(userDetailDto.getUsername())
                 .destinationEmail(userDetailDto.getEmail())
                 .firstName(userDetailDto.getFirstName())
                 .lastName(userDetailDto.getLastName())
