@@ -2,9 +2,12 @@ package com.andrei.mobiletracker.user.service.impl;
 
 import com.andrei.mobiletracker.user.dao.userDao.UserDao;
 import com.andrei.mobiletracker.user.dao.userDetailDao.UserDetailDao;
+import com.andrei.mobiletracker.user.dao.userRoleDao.UserRoleDao;
 import com.andrei.mobiletracker.user.dto.MyUserDetailRequestDto;
 import com.andrei.mobiletracker.user.model.MyUser;
 import com.andrei.mobiletracker.user.model.MyUserDetail;
+import com.andrei.mobiletracker.user.model.MyUserRole;
+import com.andrei.mobiletracker.user.model.MyUserRoleType;
 import com.andrei.mobiletracker.user.service.UserService;
 import com.andrei.mobiletracker.user.service.exception.UserServiceException;
 import com.andrei.mobiletracker.user.service.exception.UserExceptionType;
@@ -24,16 +27,17 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
     private final UserDetailDao userDetailDao;
+    private final UserRoleDao userRoleDao;
     private final MyMailSender myMailSender;
     private final ExecutorService executorService = Executors.newFixedThreadPool(2);
-    private final int retryAt = 5000;
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
-    public UserServiceImpl(UserDao userDao, UserDetailDao userDetailDao, MyMailSender myMailSender) {
+    public UserServiceImpl(UserDao userDao, UserDetailDao userDetailDao, UserRoleDao userRoleDao, MyMailSender myMailSender) {
 
         logger.info("------------------INIT  UserServiceImpl------------------");
         this.userDao = userDao;
         this.userDetailDao = userDetailDao;
+        this.userRoleDao = userRoleDao;
         this.myMailSender = myMailSender;
         logger.info("-------------SUCCESSFUL INIT UserServiceImpl-------------");
     }
@@ -43,7 +47,8 @@ public class UserServiceImpl implements UserService {
     public MyUserDetail signup(MyUserDetailRequestDto userDetailDto) {
 
         logger.info("------------------LOGGING  signup------------------");
-        MyUser savedUser = addUser(userDetailDto.getUsername(), userDetailDto.getPassword());
+        MyUserRole myUserRole = userRoleDao.findOneUserRoleByType(MyUserRoleType.NOT_ACTIVATED_ACCOUNT);
+        MyUser savedUser = addUser(userDetailDto.getUsername(), userDetailDto.getPassword(),myUserRole);
         MyUserDetail savedUserDetail = addUserDetail(savedUser, userDetailDto);
         sendMail(MailUserDetail.builder()
                 .destinationEmail(userDetailDto.getEmail())
@@ -56,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
     private void sendMail(MailUserDetail mailUserDetail) {
 
-        executorService.execute(() -> myMailSender.sendMailOrRetryAfterMillis(mailUserDetail,retryAt));
+        executorService.execute(() -> myMailSender.sendMail(mailUserDetail));
     }
 
     private MyUserDetail addUserDetail(MyUser savedUser, MyUserDetailRequestDto userDetailDto) {
@@ -75,11 +80,12 @@ public class UserServiceImpl implements UserService {
         return savedUserDetail;
     }
 
-    private MyUser addUser(String username, String password) {
+    private MyUser addUser(String username, String password, MyUserRole myUserRole) {
 
         MyUser myUser = userDao.saveOneUser(MyUser.builder()
                 .username(username)
                 .password(password)
+                .role(myUserRole)
                 .build());
 
         if (myUser == null) {

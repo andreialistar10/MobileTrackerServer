@@ -1,12 +1,10 @@
 package com.andrei.mobiletracker.user.dao.userDao.impl.jpaRepository;
 
+import com.andrei.mobiletracker.user.dao.userRoleDao.impl.jpaRepository.MyUserRolePersistence;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,4 +22,8 @@ public class MyUserPersistence {
 
     @Column(name = "PASSWORD")
     private String password;
+
+    @ManyToOne(targetEntity = MyUserRolePersistence.class)
+    @JoinColumn(name = "USER_ROLE_ID", referencedColumnName = "USER_ROLE_ID")
+    private MyUserRolePersistence role;
 }
