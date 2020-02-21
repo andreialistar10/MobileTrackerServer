@@ -3,7 +3,6 @@ package com.andrei.mobiletracker.user.controller;
 import com.andrei.mobiletracker.user.dto.ActivatedUserDto;
 import com.andrei.mobiletracker.user.dto.MyUserDetailRequestDto;
 import com.andrei.mobiletracker.user.dto.MyUserDetailResponseDto;
-import com.andrei.mobiletracker.user.model.MyUser;
 import com.andrei.mobiletracker.user.model.MyUserDetail;
 import com.andrei.mobiletracker.user.service.UserService;
 import com.andrei.mobiletracker.user.service.exception.UserExceptionType;
@@ -21,14 +20,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    private static final Logger logger = LogManager.getLogger(UserController.class);
-
     private final UserService userService;
+
+    private static final Logger logger = LogManager.getLogger(UserController.class);
 
     public UserController(UserService userService) {
 
@@ -73,8 +73,23 @@ public class UserController {
         logger.info("------------------LOGGING  confirmAccount------------------");
         ActivatedUserDto activatedAccount = userService.activateAccount(token);
         logger.info("-----------------SUCCESSFUL confirmAccount-----------------");
-        logger.info("Account with username: {} has been activated",activatedAccount.getUsername());
-        return new ResponseEntity<>(activatedAccount,HttpStatus.OK);
+        logger.info("Account with username: {} has been activated", activatedAccount.getUsername());
+        return new ResponseEntity<>(activatedAccount, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Resend registration account")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "SUCCESS", response = UserExceptionType.class),
+            @ApiResponse(code = 500, message = "ERROR", response = UserExceptionType.class),
+    })
+    @RequestMapping(value = "/resend-registration-email", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserExceptionType> resendRegistrationAccount(Principal principal) {
+
+        logger.info("------------------LOGGING  resendRegistrationAccount------------------");
+        logger.info("username: {}", principal.getName());
+        userService.resendRegistrationAccount(principal.getName());
+        logger.info("-----------------SUCCESSFUL resendRegistrationAccount-----------------");
+        return new ResponseEntity<>(UserExceptionType.SUCCESS, HttpStatus.OK);
     }
 
     private void logMyUserDetailRequestDto(MyUserDetailRequestDto myUserDetailRequestDto) {

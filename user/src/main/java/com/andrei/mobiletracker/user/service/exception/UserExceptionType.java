@@ -6,5 +6,6 @@ public enum UserExceptionType {
     INVALID_USER_DETAILS,
     DUPLICATE_USER,
     ERROR,
-    TOKEN_NO_LONGER_VALID
+    TOKEN_NO_LONGER_VALID,
+    SUCCESS
 }

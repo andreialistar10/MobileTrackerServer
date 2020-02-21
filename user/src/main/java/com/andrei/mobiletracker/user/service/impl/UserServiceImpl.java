@@ -76,6 +76,18 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
+    public void resendRegistrationAccount(String username) {
+
+        MyUserDetail myUserDetail = userDetailDao.findOneMyUserDetailByUsername(username);
+        myMailSender.sendMail(MailUserDetail.builder()
+                .username(username)
+                .lastName(myUserDetail.getLastName())
+                .firstName(myUserDetail.getFirstName())
+                .destinationEmail(myUserDetail.getEmail())
+                .build());
+    }
+
     private MyUser addUser(String username, String password, MyUserRole myUserRole) {
 
         MyUser myUser = userDao.saveOneUser(MyUser.builder()
