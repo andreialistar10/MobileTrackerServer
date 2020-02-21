@@ -4,5 +4,7 @@ public enum UserExceptionType {
 
     INVALID_CREDENTIALS,
     INVALID_USER_DETAILS,
-    DUPLICATE_USER
+    DUPLICATE_USER,
+    ERROR,
+    TOKEN_NO_LONGER_VALID
 }

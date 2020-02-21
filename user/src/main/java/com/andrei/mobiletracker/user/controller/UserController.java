@@ -1,7 +1,9 @@
 package com.andrei.mobiletracker.user.controller;
 
+import com.andrei.mobiletracker.user.dto.ActivatedUserDto;
 import com.andrei.mobiletracker.user.dto.MyUserDetailRequestDto;
 import com.andrei.mobiletracker.user.dto.MyUserDetailResponseDto;
+import com.andrei.mobiletracker.user.model.MyUser;
 import com.andrei.mobiletracker.user.model.MyUserDetail;
 import com.andrei.mobiletracker.user.service.UserService;
 import com.andrei.mobiletracker.user.service.exception.UserExceptionType;
@@ -55,6 +57,24 @@ public class UserController {
                 .build();
         logger.info("-----------------SUCCESSFUL signup-----------------");
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Activate a NON_ACTIVATED_ACCOUNT")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "SUCCESS", response = ActivatedUserDto.class),
+            @ApiResponse(code = 404, message = "NOT_FOUND", response = UserExceptionType.class),
+    })
+    @RequestMapping(value = "/confirm-account",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            params = {"token"})
+    public ResponseEntity<ActivatedUserDto> confirmAccount(@RequestParam(name = "token") String token) {
+
+        logger.info("------------------LOGGING  confirmAccount------------------");
+        ActivatedUserDto activatedAccount = userService.activateAccount(token);
+        logger.info("-----------------SUCCESSFUL confirmAccount-----------------");
+        logger.info("Account with username: {} has been activated",activatedAccount.getUsername());
+        return new ResponseEntity<>(activatedAccount,HttpStatus.OK);
     }
 
     private void logMyUserDetailRequestDto(MyUserDetailRequestDto myUserDetailRequestDto) {

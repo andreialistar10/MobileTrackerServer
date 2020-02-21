@@ -2,6 +2,8 @@ package com.andrei.mobiletracker.user.service.mailSender.impl;
 
 import com.andrei.mobiletracker.user.dao.notActivatedAccountDao.NotActivatedAccountDao;
 import com.andrei.mobiletracker.user.model.NotActivatedAccount;
+import com.andrei.mobiletracker.user.service.exception.UserExceptionType;
+import com.andrei.mobiletracker.user.service.exception.UserServiceException;
 import com.andrei.mobiletracker.user.service.mailSender.MailUserDetail;
 import com.andrei.mobiletracker.user.service.mailSender.MyMailSender;
 import freemarker.template.Configuration;
@@ -10,6 +12,7 @@ import freemarker.template.TemplateException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -47,37 +50,34 @@ public class MyMailSenderImpl implements MyMailSender {
     public void sendMail(MailUserDetail mailUserDetail) {
 
         logger.info("------------------LOGGING  sendMailOrRetryAfterMillis------------------");
-        try {
-            String token = saveToken(mailUserDetail.getUsername());
-            Map<String, Object> model = new HashMap<>();
-            model.put("name", new StringBuilder(mailUserDetail.getFirstName()).append(" ").append(mailUserDetail.getLastName()));
-            model.put("confirmation_url", prefixConfirmationUrl+token);
-            sendMail(mailUserDetail.getDestinationEmail(), model);
-        } catch (Exception ex) {
-            logger.error("Error when trying to send mail to: {} message:{}", mailUserDetail.getDestinationEmail(), ex.getMessage());
-            ex.printStackTrace();
-        }
+        String token = saveToken(mailUserDetail.getUsername());
+        Map<String, Object> model = new HashMap<>();
+        model.put("name", new StringBuilder(mailUserDetail.getFirstName()).append(" ").append(mailUserDetail.getLastName()));
+        model.put("confirmation_url", prefixConfirmationUrl + token);
+        sendMail(mailUserDetail.getDestinationEmail(), model);
         logger.info("-------------------FINAL sendMailOrRetryAfterMillis-------------------");
     }
 
     private String saveToken(String username) {
 
-        NotActivatedAccount notActivatedAccount;
-        do {
-            String token = buildToken();
-            notActivatedAccount = notActivatedAccountDao.saveOneNotActivatedAccount(NotActivatedAccount.builder()
-                    .token(token)
-                    .username(username)
-                    .build());
-        } while (notActivatedAccount == null);
-
-        return notActivatedAccount.getToken();
+        String token = buildToken();
+        NotActivatedAccount notActivatedAccount = notActivatedAccountDao.updateOneNotActivatedAccount(NotActivatedAccount.builder()
+                .token(token)
+                .username(username)
+                .build());
+        if (notActivatedAccount == null) {
+            logger.error("Token for user: {} could not be saved" + username);
+            throw new UserServiceException("Token for user " + username + "could not be saved", HttpStatus.INTERNAL_SERVER_ERROR, UserExceptionType.ERROR);
+        }
+        return token;
     }
 
     private String buildToken() {
 
-        int dim = random.nextInt(128) + 129;
-        return RandomStringUtils.random(dim, true, true);
+        int dim = random.nextInt(111) + 130;
+        String publicToken = RandomStringUtils.random(dim, true, true);
+        String uniqueToken = buildUniqueToken();
+        return publicToken + uniqueToken;
     }
 
     private void sendMail(String destinationEmail, Map<String, Object> model) {
@@ -97,8 +97,10 @@ public class MyMailSenderImpl implements MyMailSender {
         } catch (MessagingException e) {
             logger.error("ERROR when trying to send mail: {}", e.getMessage());
             e.printStackTrace();
+            throw new UserServiceException("ERROR when trying to send mail: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, UserExceptionType.ERROR);
         } catch (IOException | TemplateException e) {
             logger.error("ERROR when trying to build body message: {}", e.getMessage());
+            throw new UserServiceException("ERROR when trying to build body message: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, UserExceptionType.ERROR);
         }
     }
 
@@ -106,5 +108,10 @@ public class MyMailSenderImpl implements MyMailSender {
 
         Template registerEmailTemplate = configuration.getTemplate("register-email-template.ftl");
         return FreeMarkerTemplateUtils.processTemplateIntoString(registerEmailTemplate, model);
+    }
+
+    private static synchronized String buildUniqueToken() {
+
+        return "_" + System.currentTimeMillis();
     }
 }

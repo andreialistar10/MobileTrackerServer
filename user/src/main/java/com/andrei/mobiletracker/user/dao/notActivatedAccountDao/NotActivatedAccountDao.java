@@ -6,5 +6,9 @@ public interface NotActivatedAccountDao {
 
     NotActivatedAccount saveOneNotActivatedAccount(NotActivatedAccount notActivatedAccount);
 
+    NotActivatedAccount updateOneNotActivatedAccount(NotActivatedAccount notActivatedAccount);
+
     NotActivatedAccount findOneNotActivatedAccountByToken(String token);
+
+    NotActivatedAccount deleteOneNotActivatedAccount(NotActivatedAccount notActivatedAccount);
 }
