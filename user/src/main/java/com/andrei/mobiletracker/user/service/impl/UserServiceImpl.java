@@ -79,6 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resendRegistrationAccount(String username) {
 
+        logger.info("------------------LOGGING  resendRegistrationAccount------------------");
         MyUserDetail myUserDetail = userDetailDao.findOneMyUserDetailByUsername(username);
         myMailSender.sendMail(MailUserDetail.builder()
                 .username(username)
@@ -86,6 +87,7 @@ public class UserServiceImpl implements UserService {
                 .firstName(myUserDetail.getFirstName())
                 .destinationEmail(myUserDetail.getEmail())
                 .build());
+        logger.info("-----------------SUCCESSFUL resendRegistrationAccount-----------------");
     }
 
     private MyUser addUser(String username, String password, MyUserRole myUserRole) {

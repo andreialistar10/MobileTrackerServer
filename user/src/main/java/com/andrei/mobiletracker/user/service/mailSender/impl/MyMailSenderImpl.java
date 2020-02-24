@@ -49,13 +49,13 @@ public class MyMailSenderImpl implements MyMailSender {
     @Override
     public void sendMail(MailUserDetail mailUserDetail) {
 
-        logger.info("------------------LOGGING  sendMailOrRetryAfterMillis------------------");
+        logger.info("------------------LOGGING  sendMail------------------");
         String token = saveToken(mailUserDetail.getUsername());
         Map<String, Object> model = new HashMap<>();
         model.put("name", new StringBuilder(mailUserDetail.getFirstName()).append(" ").append(mailUserDetail.getLastName()));
         model.put("confirmation_url", prefixConfirmationUrl + token);
         sendMail(mailUserDetail.getDestinationEmail(), model);
-        logger.info("-------------------FINAL sendMailOrRetryAfterMillis-------------------");
+        logger.info("-------------------FINAL sendMail-------------------");
     }
 
     private String saveToken(String username) {

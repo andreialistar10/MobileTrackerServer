@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("")
 public class LoginController {
 
     private final LoginService loginService;
@@ -36,7 +36,7 @@ public class LoginController {
             @ApiResponse(code = 200, message = "SUCCESS", response = LoggedInUserDto.class),
             @ApiResponse(code = 404, message = "INVALID_CREDENTIALS", response = UserExceptionType.class),
     })
-    @RequestMapping(value = "",
+    @RequestMapping(value = "/login",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)

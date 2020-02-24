@@ -80,6 +80,7 @@ public class UserController {
     @ApiOperation(value = "Resend registration account")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "SUCCESS", response = UserExceptionType.class),
+            @ApiResponse(code = 400, message = "INVALID_REQUEST", response = UserExceptionType.class),
             @ApiResponse(code = 500, message = "ERROR", response = UserExceptionType.class),
     })
     @RequestMapping(value = "/resend-registration-email", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
