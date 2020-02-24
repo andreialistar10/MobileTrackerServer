@@ -19,9 +19,10 @@ import javax.persistence.Table;
 public class NotActivatedAccountPersistence {
 
     @Id
-    @Column(name = "TOKEN")
+    @Column(name = "USERNAME")
+    private String username;
+
+    @Column(name = "TOKEN", unique = true)
     private String token;
 
-    @Column(name = "USERNAME", unique = true)
-    private String username;
 }

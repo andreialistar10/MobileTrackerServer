@@ -26,9 +26,9 @@ CREATE TABLE USER_DETAILS(
 
 --changeset Andrei:4
 CREATE TABLE NOT_ACTIVATED_ACCOUNTS(
-    TOKEN       VARCHAR (260)   NOT NULL PRIMARY KEY,
-    USERNAME    VARCHAR (25)    NOT NULL,
-    CONSTRAINT  uq_not_activated_accounts_username  UNIQUE (USERNAME)
+    USERNAME    VARCHAR (25)    NOT NULL PRIMARY KEY,
+    TOKEN       VARCHAR (260)   NOT NULL,
+    CONSTRAINT  uq_not_activated_accounts_token  UNIQUE (TOKEN)
 );
 
 --changeset Andrei:5

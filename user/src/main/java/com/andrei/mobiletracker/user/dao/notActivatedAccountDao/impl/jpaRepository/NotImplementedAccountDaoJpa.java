@@ -30,10 +30,8 @@ public class NotImplementedAccountDaoJpa implements NotActivatedAccountDao {
 
         logger.info("------------------LOGGING  saveOneNotActivatedAccount------------------");
         NotActivatedAccount savedNotActivatedAccount = null;
-        if (!notActivatedAccountJpaRepository.findById(notActivatedAccount.getToken()).isPresent()){
-            NotActivatedAccountPersistence notActivatedAccountPersistence = modelJpaPersistenceConverter.convertNotActivatedAccountToNotActivatedAccountPersistence(notActivatedAccount);
-            notActivatedAccountJpaRepository.save(notActivatedAccountPersistence);
-            savedNotActivatedAccount = notActivatedAccount;
+        if (notActivatedAccountJpaRepository.findByToken(notActivatedAccount.getToken()) == null) {
+            savedNotActivatedAccount = addNewNotActivatedAccount(notActivatedAccount);
         }
         logger.info("-------------------FINAL saveOneNotActivatedAccount--------------------");
         return savedNotActivatedAccount;
@@ -46,11 +44,14 @@ public class NotImplementedAccountDaoJpa implements NotActivatedAccountDao {
         logger.info("------------------LOGGING  updateOneNotActivatedAccount------------------");
         try {
             NotActivatedAccountPersistence notActivatedAccountPersistence = modelJpaPersistenceConverter.convertNotActivatedAccountToNotActivatedAccountPersistence(notActivatedAccount);
-            notActivatedAccountJpaRepository.save(notActivatedAccountPersistence);
-            updatedNotActivatedAccount = notActivatedAccount;
+            if (notActivatedAccountJpaRepository.findByToken(notActivatedAccount.getToken()) == null) {
+                updatedNotActivatedAccount = addNewNotActivatedAccount(notActivatedAccount);
+            } else {
+                updatedNotActivatedAccount = updateNewNotActivatedAccount(notActivatedAccount);
+            }
             logger.info("-------------------FINAL updateOneNotActivatedAccount--------------------");
         } catch (Exception e) {
-            logger.error("ERROR when trying to update not activated account for user: {}. Message: {}",notActivatedAccount.getUsername(), e.getMessage());
+            logger.error("ERROR when trying to update not activated account for user: {}. Message: {}", notActivatedAccount.getUsername(), e.getMessage());
             e.printStackTrace();
         }
         return updatedNotActivatedAccount;
@@ -62,7 +63,7 @@ public class NotImplementedAccountDaoJpa implements NotActivatedAccountDao {
         logger.info("------------------LOGGING  findOneNotActivatedAccountByToken------------------");
         NotActivatedAccountPersistence notActivatedAccountPersistence = notActivatedAccountJpaRepository.findByToken(token);
         logger.info("-------------------FINAL findOneNotActivatedAccountByToken--------------------");
-        return  modelJpaPersistenceConverter.convertNotActivatedAccountPersistenceToNotActivatedAccount(notActivatedAccountPersistence);
+        return modelJpaPersistenceConverter.convertNotActivatedAccountPersistenceToNotActivatedAccount(notActivatedAccountPersistence);
     }
 
     @Override
@@ -75,5 +76,20 @@ public class NotImplementedAccountDaoJpa implements NotActivatedAccountDao {
             deletedNotActivatedAccount = notActivatedAccount;
         logger.info("-------------------FINAL deleteOneNotActivatedAccount--------------------");
         return deletedNotActivatedAccount;
+    }
+
+    private NotActivatedAccount addNewNotActivatedAccount(NotActivatedAccount notActivatedAccount) {
+
+        NotActivatedAccountPersistence notActivatedAccountPersistence = modelJpaPersistenceConverter.convertNotActivatedAccountToNotActivatedAccountPersistence(notActivatedAccount);
+        notActivatedAccountJpaRepository.save(notActivatedAccountPersistence);
+        return notActivatedAccount;
+    }
+
+    private NotActivatedAccount updateNewNotActivatedAccount(NotActivatedAccount notActivatedAccount) {
+
+        NotActivatedAccountPersistence notActivatedAccountPersistence = modelJpaPersistenceConverter.convertNotActivatedAccountToNotActivatedAccountPersistence(notActivatedAccount);
+        if (notActivatedAccountJpaRepository.updateTokenByUsername(notActivatedAccount.getToken(), notActivatedAccount.getUsername()) == 0)
+            return null;
+        return notActivatedAccount;
     }
 }
