@@ -2,9 +2,9 @@ package com.andrei.mobiletracker.user.dao.userDao.impl.jpaRepository;
 
 import com.andrei.mobiletracker.user.dao.jpaUtil.ModelJpaPersistenceConverter;
 import com.andrei.mobiletracker.user.dao.userDao.UserDao;
-import com.andrei.mobiletracker.user.dao.userRoleDao.impl.jpaRepository.MyUserRolePersistence;
-import com.andrei.mobiletracker.user.model.MyUser;
-import com.andrei.mobiletracker.user.model.MyUserRole;
+import com.andrei.mobiletracker.user.dao.userRoleDao.impl.jpaRepository.UserAccountRolePersistence;
+import com.andrei.mobiletracker.user.model.UserAccount;
+import com.andrei.mobiletracker.user.model.UserAccountRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -27,18 +27,18 @@ public class UserDaoJpa implements UserDao {
     }
 
     @Override
-    public MyUser saveOneUser(MyUser myUser) {
+    public UserAccount saveOneUser(UserAccount userAccount) {
 
         logger.info("------------------LOGGING  saveOneUser------------------");
-        MyUser savedUser = null;
+        UserAccount savedUser = null;
         try {
-            if (!userJpaRepository.findById(myUser.getUsername()).isPresent()) {
-                userJpaRepository.saveAndFlush(modelJpaPersistenceConverter.convertMyUserToMyUserPersistence(myUser));
-                savedUser = myUser;
+            if (!userJpaRepository.findById(userAccount.getUsername()).isPresent()) {
+                userJpaRepository.saveAndFlush(modelJpaPersistenceConverter.convertMyUserToMyUserPersistence(userAccount));
+                savedUser = userAccount;
             }
         } catch (Exception ex) {
             logger.error("------------------ERROR saveOneUser------------------");
-            logger.error("username: {}", myUser.getUsername());
+            logger.error("username: {}", userAccount.getUsername());
             logger.error(ex.getMessage());
             ex.printStackTrace();
         }
@@ -47,20 +47,20 @@ public class UserDaoJpa implements UserDao {
     }
 
     @Override
-    public MyUser findOneMyUserByUsername(String username) {
+    public UserAccount findOneMyUserByUsername(String username) {
 
         logger.info("------------------LOGGING  findOneMyUserByUsername------------------");
-        MyUser savedUser = modelJpaPersistenceConverter.convertMyUserPersistenceToMyUser(userJpaRepository.findById(username).orElse(null));
+        UserAccount savedUser = modelJpaPersistenceConverter.convertMyUserPersistenceToMyUser(userJpaRepository.findById(username).orElse(null));
         logger.info("-----------------SUCCESSFUL findOneMyUserByUsername-----------------");
         return savedUser;
     }
 
     @Override
-    public long updateUserStatusByUsername(String username, MyUserRole myUserRole) {
+    public long updateUserStatusByUsername(String username, UserAccountRole userAccountRole) {
 
         logger.info("------------------LOGGING  findOneMyUserByUsername------------------");
-        MyUserRolePersistence myUserRolePersistence = modelJpaPersistenceConverter.convertMyUserRoleToMyUserRolePersistence(myUserRole);
-        long updatedNumberOfRows = userJpaRepository.updateUserRoleByUsername(myUserRolePersistence, username);
+        UserAccountRolePersistence userAccountRolePersistence = modelJpaPersistenceConverter.convertMyUserRoleToMyUserRolePersistence(userAccountRole);
+        long updatedNumberOfRows = userJpaRepository.updateUserRoleByUsername(userAccountRolePersistence, username);
         logger.info("-----------------SUCCESSFUL findOneMyUserByUsername-----------------");
         return updatedNumberOfRows;
     }

@@ -1,6 +1,5 @@
 package com.andrei.mobiletracker.user.service.mailSender;
 
-import com.andrei.mobiletracker.user.model.MyUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

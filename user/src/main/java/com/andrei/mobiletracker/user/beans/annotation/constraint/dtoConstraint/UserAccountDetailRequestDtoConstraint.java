@@ -1,6 +1,6 @@
 package com.andrei.mobiletracker.user.beans.annotation.constraint.dtoConstraint;
 
-import com.andrei.mobiletracker.user.beans.annotation.constraint.dtoConstraint.validator.MyUserDetailRequestDtoValidator;
+import com.andrei.mobiletracker.user.beans.annotation.constraint.dtoConstraint.validator.UserAccountDetailRequestDtoValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -16,10 +16,10 @@ import java.lang.annotation.*;
  * (of course, we can define constraints for fields like @NotNull or @NotEmpty that already exist in Java)
  */
 @Documented
-@Constraint(validatedBy = MyUserDetailRequestDtoValidator.class)
+@Constraint(validatedBy = UserAccountDetailRequestDtoValidator.class)
 @Target( { ElementType.METHOD, ElementType.FIELD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MyUserDetailRequestDtoConstraint {
+public @interface UserAccountDetailRequestDtoConstraint {
     String message() default "Passwords does not match";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

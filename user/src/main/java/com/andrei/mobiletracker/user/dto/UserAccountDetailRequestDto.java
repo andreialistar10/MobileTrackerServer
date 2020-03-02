@@ -1,6 +1,6 @@
 package com.andrei.mobiletracker.user.dto;
 
-import com.andrei.mobiletracker.user.beans.annotation.constraint.dtoConstraint.MyUserDetailRequestDtoConstraint;
+import com.andrei.mobiletracker.user.beans.annotation.constraint.dtoConstraint.UserAccountDetailRequestDtoConstraint;
 import com.andrei.mobiletracker.user.beans.annotation.constraint.fieldConstraint.NameConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +15,8 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@MyUserDetailRequestDtoConstraint
-public class MyUserDetailRequestDto {
+@UserAccountDetailRequestDtoConstraint
+public class UserAccountDetailRequestDto {
 
     @NotBlank
     @Length(max = 255)

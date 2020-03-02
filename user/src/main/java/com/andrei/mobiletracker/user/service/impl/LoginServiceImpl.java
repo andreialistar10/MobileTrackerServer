@@ -2,9 +2,11 @@ package com.andrei.mobiletracker.user.service.impl;
 
 import com.andrei.mobiletracker.security.jwtFilter.authMicroserviceFilters.util.AuthJwtUtil;
 import com.andrei.mobiletracker.user.dao.userDao.UserDao;
+import com.andrei.mobiletracker.user.dto.LoggedInActivatedAccountUserDto;
 import com.andrei.mobiletracker.user.dto.LoggedInUserDto;
-import com.andrei.mobiletracker.user.dto.UserDto;
-import com.andrei.mobiletracker.user.model.MyUser;
+import com.andrei.mobiletracker.user.dto.UserAccountDto;
+import com.andrei.mobiletracker.user.model.UserAccount;
+import com.andrei.mobiletracker.user.model.UserAccountRoleType;
 import com.andrei.mobiletracker.user.service.LoginService;
 import com.andrei.mobiletracker.user.service.exception.UserExceptionType;
 import com.andrei.mobiletracker.user.service.exception.UserServiceException;
@@ -35,7 +37,7 @@ import java.util.List;
 public class LoginServiceImpl implements LoginService, UserDetailsService {
 
     @Autowired
-    private  AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
     private final UserDao userDao;
     private final AuthJwtUtil jwtUtil;
     private static final Logger logger = LogManager.getLogger(LoginServiceImpl.class);
@@ -49,37 +51,53 @@ public class LoginServiceImpl implements LoginService, UserDetailsService {
     }
 
     @Override
-    public LoggedInUserDto login(UserDto user) {
+    public LoggedInUserDto login(UserAccountDto user) {
 
         logger.info("------------------LOGGING  login------------------");
-        logger.info("{} trying to connect",user.getUsername());
-        try{
+        logger.info("{} trying to connect", user.getUsername());
+        try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
             );
             final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            final String jwt = jwtUtil.generateToken(userDetails);
             final String role = userDetails.getAuthorities()
                     .stream()
                     .findFirst()
                     .map(GrantedAuthority::getAuthority)
                     .orElse(null);
+            final String jwt = jwtUtil.generateToken(userDetails);
+            LoggedInUserDto loggedInUserDto = null;
+            if (UserAccountRoleType.ACTIVATED_ACCOUNT.toString().equals(role))
+                loggedInUserDto = generateLoggedInActivatedAccountUserDto(jwt,role, userDetails.getUsername());
+            else
+                loggedInUserDto = generateLoggedInUserDto(jwt,role,userDetails.getUsername());
             logger.info("-----------------SUCCESSFUL login-----------------");
-            return LoggedInUserDto.builder()
-                    .jwt(jwt)
-                    .role(role)
-                    .build();
-        } catch (BadCredentialsException exception){
-            logger.error("ERROR IN LOGIN: {}",exception.getMessage());
+            return loggedInUserDto;
+        } catch (BadCredentialsException exception) {
+            logger.error("ERROR IN LOGIN: {}", exception.getMessage());
             throw new UserServiceException("Incorrect username or password", HttpStatus.NOT_FOUND, UserExceptionType.INVALID_CREDENTIALS);
         }
+    }
+
+    private LoggedInUserDto generateLoggedInUserDto(String jwt, String role, String username) {
+
+        return LoggedInUserDto.builder()
+                .jwt(jwt)
+                .role(role)
+                .build();
+    }
+
+    private LoggedInUserDto generateLoggedInActivatedAccountUserDto(String jwt, String role, String username) {
+
+        final String refreshToken = jwtUtil.generateRefreshToken(username);
+        return new LoggedInActivatedAccountUserDto(jwt,role,refreshToken);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         logger.info("+++++++++++++++++++++++++++++++LOGGING loadUserByUsername+++++++++++++++++++++++++++++++");
-        MyUser user = userDao.findOneMyUserByUsername(username);
+        UserAccount user = userDao.findOneMyUserByUsername(username);
         if (user == null)
             throw new UsernameNotFoundException("Doesn't exist an user with username " + username);
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getType().toString()));

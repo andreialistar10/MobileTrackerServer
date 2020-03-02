@@ -1,13 +1,13 @@
 package com.andrei.mobiletracker.user.dao.userDao;
 
-import com.andrei.mobiletracker.user.model.MyUser;
-import com.andrei.mobiletracker.user.model.MyUserRole;
+import com.andrei.mobiletracker.user.model.UserAccount;
+import com.andrei.mobiletracker.user.model.UserAccountRole;
 
 public interface UserDao {
 
-    MyUser saveOneUser(MyUser myUser);
+    UserAccount saveOneUser(UserAccount userAccount);
 
-    MyUser findOneMyUserByUsername(String username);
+    UserAccount findOneMyUserByUsername(String username);
 
-    long updateUserStatusByUsername(String username, MyUserRole myUserRole);
+    long updateUserStatusByUsername(String username, UserAccountRole userAccountRole);
 }

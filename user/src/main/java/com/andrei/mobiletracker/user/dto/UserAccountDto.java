@@ -5,14 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class MyUserDetailResponseDto {
+import javax.validation.constraints.NotBlank;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UserAccountDto {
+
+    @NotBlank
     private String username;
-    private String firstName;
-    private String lastName;
-    private String email;
+
+    @NotBlank
+    private String password;
 }

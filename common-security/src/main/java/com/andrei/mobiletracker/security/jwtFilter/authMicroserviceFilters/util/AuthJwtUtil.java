@@ -23,56 +23,58 @@ public class AuthJwtUtil extends JwtUtil {
         this.config = config;
     }
 
-    public JwtAuthenticationConfig getConfig() {
-
-        return config;
-    }
-
     public String generateToken(UserDetails userDetails) {
 
         Map<String, Object> claims = new HashMap<>();
-        List<String> generate = generateAuthoritiesList(userDetails);
+        List<String> authorities = generateAuthoritiesList(userDetails);
+        claims.put("authorities", authorities);
+        return createToken(claims, userDetails.getUsername(), config.getExpiration(), config.getSecretSignIn());
+    }
+
+    public String generateRefreshToken(String username) {
+        Map<String, Object> claims = new HashMap<>();
+        List<String> generate = Collections.singletonList("REFRESH_TOKEN");
         claims.put("authorities", generate);
-        return createToken(claims, userDetails.getUsername());
+        return createToken(claims, username, config.getExpirationRefreshToken(), config.getSecretSignInRefreshToken());
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, UserDetails userDetails, String secretSignIn) {
 
-        final String username = extractUsername(token);
-        return !isTokenExpired(token) && username != null && username.equals(userDetails.getUsername());
+        final String username = extractUsername(token, secretSignIn);
+        return !isTokenExpired(token, secretSignIn) && username != null && username.equals(userDetails.getUsername());
     }
 
-    public String extractUsername(String token) {
+    public String extractUsername(String token, String secretSignIn) {
 
-        return extractClaim(token, Claims::getSubject);
+        return extractClaim(token, secretSignIn, Claims::getSubject);
     }
 
-    private Date extractExpiration(String token) {
+    private Date extractExpiration(String token, String secretSignIn) {
 
-        return extractClaim(token, Claims::getExpiration);
+        return extractClaim(token, secretSignIn,Claims::getExpiration);
     }
 
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    private <T> T extractClaim(String token, String secretSignIn, Function<Claims, T> claimsResolver) {
 
-        final Claims claims = extractAllClaims(token, config.getSecretSignIn());
+        final Claims claims = extractAllClaims(token, secretSignIn);
         return claimsResolver.apply(claims);
     }
 
-    private String createToken(Map<String, Object> claims, String username) {
+    private String createToken(Map<String, Object> claims, String username, long tokenValidTime, String secretSignIn) {
 
         final long currentTimestamp = System.currentTimeMillis();
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(currentTimestamp))
-                .setExpiration(new Date(currentTimestamp + config.getExpiration()))
-                .signWith(SignatureAlgorithm.HS256, config.getSecretSignIn())
+                .setExpiration(new Date(currentTimestamp + tokenValidTime))
+                .signWith(SignatureAlgorithm.HS256, secretSignIn)
                 .compact();
     }
 
-    private boolean isTokenExpired(String token) {
+    private boolean isTokenExpired(String token, String secretSignIn) {
 
-        return extractExpiration(token).before(new Date());
+        return extractExpiration(token, secretSignIn).before(new Date());
     }
 
     private List<String> generateAuthoritiesList(UserDetails userDetails) {

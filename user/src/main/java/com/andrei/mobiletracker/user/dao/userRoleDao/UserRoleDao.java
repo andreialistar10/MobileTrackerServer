@@ -1,9 +1,9 @@
 package com.andrei.mobiletracker.user.dao.userRoleDao;
 
-import com.andrei.mobiletracker.user.model.MyUserRole;
-import com.andrei.mobiletracker.user.model.MyUserRoleType;
+import com.andrei.mobiletracker.user.model.UserAccountRole;
+import com.andrei.mobiletracker.user.model.UserAccountRoleType;
 
 public interface UserRoleDao {
 
-    MyUserRole findOneUserRoleByType(MyUserRoleType type);
+    UserAccountRole findOneUserRoleByType(UserAccountRoleType type);
 }

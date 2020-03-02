@@ -1,10 +1,10 @@
 package com.andrei.mobiletracker.user.dao.userDetailDao;
 
-import com.andrei.mobiletracker.user.model.MyUserDetail;
+import com.andrei.mobiletracker.user.model.UserAccountDetail;
 
 public interface UserDetailDao {
 
-    MyUserDetail saveOneUserDetail(MyUserDetail myUserDetail);
+    UserAccountDetail saveOneUserDetail(UserAccountDetail userAccountDetail);
 
-    MyUserDetail findOneMyUserDetailByUsername(String username);
+    UserAccountDetail findOneMyUserDetailByUsername(String username);
 }

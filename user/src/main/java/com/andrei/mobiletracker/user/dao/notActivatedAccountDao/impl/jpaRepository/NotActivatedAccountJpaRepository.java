@@ -1,6 +1,5 @@
 package com.andrei.mobiletracker.user.dao.notActivatedAccountDao.impl.jpaRepository;
 
-import com.andrei.mobiletracker.user.dao.userRoleDao.impl.jpaRepository.MyUserRolePersistence;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

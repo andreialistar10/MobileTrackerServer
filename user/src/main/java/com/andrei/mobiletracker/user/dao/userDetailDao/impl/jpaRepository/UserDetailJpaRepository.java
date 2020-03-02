@@ -2,7 +2,7 @@ package com.andrei.mobiletracker.user.dao.userDetailDao.impl.jpaRepository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-interface UserDetailJpaRepository extends JpaRepository<MyUserDetailPersistence, String> {
+interface UserDetailJpaRepository extends JpaRepository<UserAccountDetailPersistence, String> {
 
-    MyUserDetailPersistence findByUsername(String username);
+    UserAccountDetailPersistence findByUsername(String username);
 }

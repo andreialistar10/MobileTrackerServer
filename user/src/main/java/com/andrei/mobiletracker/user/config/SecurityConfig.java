@@ -2,7 +2,7 @@ package com.andrei.mobiletracker.user.config;
 
 import com.andrei.mobiletracker.security.config.JwtAuthenticationConfig;
 import com.andrei.mobiletracker.security.jwtFilter.authMicroserviceFilters.AuthJwtFilter;
-import com.andrei.mobiletracker.user.model.MyUserRoleType;
+import com.andrei.mobiletracker.user.model.UserAccountRoleType;
 import com.andrei.mobiletracker.user.service.impl.LoginServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -55,7 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/v2/api-docs",
                         "/webjars/**",
                         "/api/**").permitAll()
-                .antMatchers("/users/resend-registration-email").hasAuthority(MyUserRoleType.NOT_ACTIVATED_ACCOUNT.toString())
+                .antMatchers("/users/resend-registration-email").hasAuthority(UserAccountRoleType.NOT_ACTIVATED_ACCOUNT.toString())
+                .antMatchers("/login/refresh-token").hasAuthority("REFRESH_TOKEN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

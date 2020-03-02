@@ -1,70 +1,70 @@
 package com.andrei.mobiletracker.user.dao.jpaUtil;
 
 import com.andrei.mobiletracker.user.dao.notActivatedAccountDao.impl.jpaRepository.NotActivatedAccountPersistence;
-import com.andrei.mobiletracker.user.dao.userDao.impl.jpaRepository.MyUserPersistence;
-import com.andrei.mobiletracker.user.dao.userDetailDao.impl.jpaRepository.MyUserDetailPersistence;
-import com.andrei.mobiletracker.user.dao.userRoleDao.impl.jpaRepository.MyUserRolePersistence;
-import com.andrei.mobiletracker.user.model.MyUser;
-import com.andrei.mobiletracker.user.model.MyUserDetail;
-import com.andrei.mobiletracker.user.model.MyUserRole;
+import com.andrei.mobiletracker.user.dao.userDao.impl.jpaRepository.UserAccountPersistence;
+import com.andrei.mobiletracker.user.dao.userDetailDao.impl.jpaRepository.UserAccountDetailPersistence;
+import com.andrei.mobiletracker.user.dao.userRoleDao.impl.jpaRepository.UserAccountRolePersistence;
+import com.andrei.mobiletracker.user.model.UserAccount;
+import com.andrei.mobiletracker.user.model.UserAccountDetail;
+import com.andrei.mobiletracker.user.model.UserAccountRole;
 import com.andrei.mobiletracker.user.model.NotActivatedAccount;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ModelJpaPersistenceConverter {
 
-    public MyUserRole convertMyUserRolePersistenceToMyUserRole(MyUserRolePersistence myUserRolePersistence){
+    public UserAccountRole convertMyUserRolePersistenceToMyUserRole(UserAccountRolePersistence userAccountRolePersistence){
 
-        return myUserRolePersistence == null ? null : MyUserRole.builder()
-                .id(myUserRolePersistence.getId())
-                .type(myUserRolePersistence.getName())
+        return userAccountRolePersistence == null ? null : UserAccountRole.builder()
+                .id(userAccountRolePersistence.getId())
+                .type(userAccountRolePersistence.getName())
                 .build();
     }
 
-    public MyUserRolePersistence convertMyUserRoleToMyUserRolePersistence(MyUserRole myUserRole){
+    public UserAccountRolePersistence convertMyUserRoleToMyUserRolePersistence(UserAccountRole userAccountRole){
 
-        return myUserRole == null ? null : MyUserRolePersistence.builder()
-                .id(myUserRole.getId())
-                .name(myUserRole.getType())
+        return userAccountRole == null ? null : UserAccountRolePersistence.builder()
+                .id(userAccountRole.getId())
+                .name(userAccountRole.getType())
                 .build();
     }
 
-    public MyUser convertMyUserPersistenceToMyUser(MyUserPersistence myUserPersistence) {
+    public UserAccount convertMyUserPersistenceToMyUser(UserAccountPersistence userAccountPersistence) {
 
-        return myUserPersistence == null ? null : MyUser.builder()
-                .username(myUserPersistence.getUsername())
-                .password(myUserPersistence.getPassword())
-                .role(this.convertMyUserRolePersistenceToMyUserRole(myUserPersistence.getRole()))
+        return userAccountPersistence == null ? null : UserAccount.builder()
+                .username(userAccountPersistence.getUsername())
+                .password(userAccountPersistence.getPassword())
+                .role(this.convertMyUserRolePersistenceToMyUserRole(userAccountPersistence.getRole()))
                 .build();
     }
 
-    public MyUserPersistence convertMyUserToMyUserPersistence(MyUser myUser){
+    public UserAccountPersistence convertMyUserToMyUserPersistence(UserAccount userAccount){
 
-        return myUser == null ? null : MyUserPersistence.builder()
-                .username(myUser.getUsername())
-                .password(myUser.getPassword())
-                .role(this.convertMyUserRoleToMyUserRolePersistence(myUser.getRole()))
+        return userAccount == null ? null : UserAccountPersistence.builder()
+                .username(userAccount.getUsername())
+                .password(userAccount.getPassword())
+                .role(this.convertMyUserRoleToMyUserRolePersistence(userAccount.getRole()))
                 .build();
     }
 
-    public MyUserDetail convertMyUserDetailPersistenceToMyUserDetail(MyUserDetailPersistence myUserDetailPersistence) {
+    public UserAccountDetail convertMyUserDetailPersistenceToMyUserDetail(UserAccountDetailPersistence userAccountDetailPersistence) {
 
-        return myUserDetailPersistence == null ? null : MyUserDetail.builder()
-                .user(this.convertMyUserPersistenceToMyUser(myUserDetailPersistence.getUser()))
-                .firstName(myUserDetailPersistence.getFirstName())
-                .lastName(myUserDetailPersistence.getLastName())
-                .email(myUserDetailPersistence.getEmail())
+        return userAccountDetailPersistence == null ? null : UserAccountDetail.builder()
+                .user(this.convertMyUserPersistenceToMyUser(userAccountDetailPersistence.getUser()))
+                .firstName(userAccountDetailPersistence.getFirstName())
+                .lastName(userAccountDetailPersistence.getLastName())
+                .email(userAccountDetailPersistence.getEmail())
                 .build();
     }
 
-    public MyUserDetailPersistence convertMyUserDetailToMyUserDetailPersistence(MyUserDetail myUserDetail) {
+    public UserAccountDetailPersistence convertMyUserDetailToMyUserDetailPersistence(UserAccountDetail userAccountDetail) {
 
-        return myUserDetail == null ? null : MyUserDetailPersistence.builder()
-                .username(myUserDetail.getUser().getUsername())
-                .user(this.convertMyUserToMyUserPersistence(myUserDetail.getUser()))
-                .firstName(myUserDetail.getFirstName())
-                .lastName(myUserDetail.getLastName())
-                .email(myUserDetail.getEmail())
+        return userAccountDetail == null ? null : UserAccountDetailPersistence.builder()
+                .username(userAccountDetail.getUser().getUsername())
+                .user(this.convertMyUserToMyUserPersistence(userAccountDetail.getUser()))
+                .firstName(userAccountDetail.getFirstName())
+                .lastName(userAccountDetail.getLastName())
+                .email(userAccountDetail.getEmail())
                 .build();
     }
 

@@ -2,8 +2,8 @@ package com.andrei.mobiletracker.user.dao.userRoleDao.impl.jpaRepository;
 
 import com.andrei.mobiletracker.user.dao.jpaUtil.ModelJpaPersistenceConverter;
 import com.andrei.mobiletracker.user.dao.userRoleDao.UserRoleDao;
-import com.andrei.mobiletracker.user.model.MyUserRole;
-import com.andrei.mobiletracker.user.model.MyUserRoleType;
+import com.andrei.mobiletracker.user.model.UserAccountRole;
+import com.andrei.mobiletracker.user.model.UserAccountRoleType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -26,10 +26,10 @@ public class UserRoleDaoJpa implements UserRoleDao {
     }
 
     @Override
-    public MyUserRole findOneUserRoleByType(MyUserRoleType type) {
+    public UserAccountRole findOneUserRoleByType(UserAccountRoleType type) {
 
         logger.info("------------------LOGGING  findOneUserRoleByName------------------");
-        MyUserRolePersistence foundUserRolePersistence = userRoleJpaRepository.findByName(type);
+        UserAccountRolePersistence foundUserRolePersistence = userRoleJpaRepository.findByName(type);
         logger.info("-----------------SUCCESSFUL findOneUserRoleByName-----------------");
         return modelJpaPersistenceConverter.convertMyUserRolePersistenceToMyUserRole(foundUserRolePersistence);
     }

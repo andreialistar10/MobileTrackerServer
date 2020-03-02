@@ -1,12 +1,12 @@
 package com.andrei.mobiletracker.user.service;
 
 import com.andrei.mobiletracker.user.dto.ActivatedUserDto;
-import com.andrei.mobiletracker.user.dto.MyUserDetailRequestDto;
-import com.andrei.mobiletracker.user.model.MyUserDetail;
+import com.andrei.mobiletracker.user.dto.UserAccountDetailRequestDto;
+import com.andrei.mobiletracker.user.model.UserAccountDetail;
 
 public interface UserService {
 
-    MyUserDetail signup(MyUserDetailRequestDto userDetailDto);
+    UserAccountDetail signup(UserAccountDetailRequestDto userDetailDto);
 
     ActivatedUserDto activateAccount(String token);
 

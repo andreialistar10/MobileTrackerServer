@@ -1,6 +1,6 @@
 package com.andrei.mobiletracker.user.dao.userRoleDao.impl.jpaRepository;
 
-import com.andrei.mobiletracker.user.model.MyUserRoleType;
+import com.andrei.mobiletracker.user.model.UserAccountRoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +13,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "MY_USER_ROLES")
-public class MyUserRolePersistence {
+@Table(name = "USER_ACCOUNT_ROLES")
+public class UserAccountRolePersistence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,5 +23,5 @@ public class MyUserRolePersistence {
 
     @Column(name = "NAME", unique = true)
     @Enumerated(EnumType.STRING)
-    private MyUserRoleType name;
+    private UserAccountRoleType name;
 }

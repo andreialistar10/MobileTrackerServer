@@ -2,7 +2,7 @@ package com.andrei.mobiletracker.user.dao.userDetailDao.impl.jpaRepository;
 
 import com.andrei.mobiletracker.user.dao.jpaUtil.ModelJpaPersistenceConverter;
 import com.andrei.mobiletracker.user.dao.userDetailDao.UserDetailDao;
-import com.andrei.mobiletracker.user.model.MyUserDetail;
+import com.andrei.mobiletracker.user.model.UserAccountDetail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -25,18 +25,18 @@ public class UserDetailDaoJpa implements UserDetailDao {
     }
 
     @Override
-    public MyUserDetail saveOneUserDetail(MyUserDetail myUserDetail) {
+    public UserAccountDetail saveOneUserDetail(UserAccountDetail userAccountDetail) {
 
         logger.info("------------------LOGGING  saveOneUserDetail------------------");
-        MyUserDetail savedUserDetail = null;
+        UserAccountDetail savedUserDetail = null;
         try {
-            if (userDetailJpaRepository.findByUsername(myUserDetail.getUser().getUsername()) == null) {
-                userDetailJpaRepository.save(modelJpaPersistenceConverter.convertMyUserDetailToMyUserDetailPersistence(myUserDetail));
-                savedUserDetail = myUserDetail;
+            if (userDetailJpaRepository.findByUsername(userAccountDetail.getUser().getUsername()) == null) {
+                userDetailJpaRepository.save(modelJpaPersistenceConverter.convertMyUserDetailToMyUserDetailPersistence(userAccountDetail));
+                savedUserDetail = userAccountDetail;
             }
         } catch (Exception ex) {
             logger.error("------------------ERROR saveOneUserDetail------------------");
-            logger.error("username: {}", myUserDetail.getUser().getUsername());
+            logger.error("username: {}", userAccountDetail.getUser().getUsername());
             logger.error(ex.getMessage());
             ex.printStackTrace();
         }
@@ -45,12 +45,12 @@ public class UserDetailDaoJpa implements UserDetailDao {
     }
 
     @Override
-    public MyUserDetail findOneMyUserDetailByUsername(String username) {
+    public UserAccountDetail findOneMyUserDetailByUsername(String username) {
 
         logger.info("------------------LOGGING  findOneMyUserDetailByUsername------------------");
-        MyUserDetail myUserDetail = modelJpaPersistenceConverter.convertMyUserDetailPersistenceToMyUserDetail(userDetailJpaRepository.findByUsername(username));
+        UserAccountDetail userAccountDetail = modelJpaPersistenceConverter.convertMyUserDetailPersistenceToMyUserDetail(userDetailJpaRepository.findByUsername(username));
         logger.info("-----------------SUCCESSFUL findOneMyUserDetailByUsername-----------------");
-        return myUserDetail;
+        return userAccountDetail;
 
     }
 }
