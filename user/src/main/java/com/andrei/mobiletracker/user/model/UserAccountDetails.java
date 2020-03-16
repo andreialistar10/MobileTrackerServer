@@ -1,6 +1,5 @@
-package com.andrei.mobiletracker.user.dao.userDetailDao.impl.jpaRepository;
+package com.andrei.mobiletracker.user.model;
 
-import com.andrei.mobiletracker.user.dao.userDao.impl.jpaRepository.UserAccountPersistence;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +14,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "USER_ACCOUNT_DETAILS")
-public class UserAccountDetailPersistence {
+public class UserAccountDetails {
 
     @Id
     @Column(name = "USERNAME")
@@ -26,14 +25,14 @@ public class UserAccountDetailPersistence {
     @PrimaryKeyJoinColumn(name = "USERNAME", referencedColumnName = "USERNAME")
 //    @JoinColumn(name = "USERNAME", referencedColumnName = "USERNAME")
 //    @MapsId
-    private UserAccountPersistence user;
+    private UserAccount user;
 
-    @Column(name = "FIRST_NAME")
+    @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
 
-    @Column(name = "LAST_NAME")
+    @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", nullable = false)
     private String email;
 }

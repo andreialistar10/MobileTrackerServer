@@ -1,9 +1,9 @@
 package com.andrei.mobiletracker.user.service.impl;
 
-import com.andrei.mobiletracker.user.dao.notActivatedAccountDao.NotActivatedAccountDao;
-import com.andrei.mobiletracker.user.dao.userDao.UserDao;
-import com.andrei.mobiletracker.user.dao.userDetailDao.UserDetailDao;
-import com.andrei.mobiletracker.user.dao.userRoleDao.UserRoleDao;
+import com.andrei.mobiletracker.user.dao.notActivatedAccount.NotActivatedAccountDao;
+import com.andrei.mobiletracker.user.dao.user.UserDao;
+import com.andrei.mobiletracker.user.dao.userDetail.UserDetailDao;
+import com.andrei.mobiletracker.user.dao.userRole.UserRoleDao;
 import com.andrei.mobiletracker.user.dto.ActivatedUserDto;
 import com.andrei.mobiletracker.user.dto.UserAccountDetailRequestDto;
 import com.andrei.mobiletracker.user.model.*;
@@ -45,12 +45,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserAccountDetail signup(UserAccountDetailRequestDto userDetailDto) {
+    public UserAccountDetails signup(UserAccountDetailRequestDto userDetailDto) {
 
         logger.info("------------------LOGGING  signup------------------");
         UserAccountRole userAccountRole = userRoleDao.findOneUserRoleByType(UserAccountRoleType.NOT_ACTIVATED_ACCOUNT);
         UserAccount savedUser = addUser(userDetailDto.getUsername(), userDetailDto.getPassword(), userAccountRole);
-        UserAccountDetail savedUserDetail = addUserDetail(savedUser, userDetailDto);
+        UserAccountDetails savedUserDetail = addUserDetail(savedUser, userDetailDto);
         sendMail(MailUserDetail.builder()
                 .username(userDetailDto.getUsername())
                 .destinationEmail(userDetailDto.getEmail())
@@ -80,12 +80,12 @@ public class UserServiceImpl implements UserService {
     public void resendRegistrationAccount(String username) {
 
         logger.info("------------------LOGGING  resendRegistrationAccount------------------");
-        UserAccountDetail userAccountDetail = userDetailDao.findOneMyUserDetailByUsername(username);
+        UserAccountDetails userAccountDetails = userDetailDao.findOneMyUserDetailByUsername(username);
         myMailSender.sendMail(MailUserDetail.builder()
                 .username(username)
-                .lastName(userAccountDetail.getLastName())
-                .firstName(userAccountDetail.getFirstName())
-                .destinationEmail(userAccountDetail.getEmail())
+                .lastName(userAccountDetails.getLastName())
+                .firstName(userAccountDetails.getFirstName())
+                .destinationEmail(userAccountDetails.getEmail())
                 .build());
         logger.info("-----------------SUCCESSFUL resendRegistrationAccount-----------------");
     }
@@ -105,9 +105,10 @@ public class UserServiceImpl implements UserService {
         return userAccount;
     }
 
-    private UserAccountDetail addUserDetail(UserAccount savedUser, UserAccountDetailRequestDto userDetailDto) {
+    private UserAccountDetails addUserDetail(UserAccount savedUser, UserAccountDetailRequestDto userDetailDto) {
 
-        UserAccountDetail savedUserDetail = userDetailDao.saveOneUserDetail(UserAccountDetail.builder()
+        UserAccountDetails savedUserDetail = userDetailDao.saveOneUserDetail(UserAccountDetails.builder()
+                .username(userDetailDto.getUsername())
                 .user(savedUser)
                 .firstName(userDetailDto.getFirstName())
                 .lastName(userDetailDto.getLastName())

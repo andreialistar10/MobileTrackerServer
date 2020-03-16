@@ -1,4 +1,4 @@
-package com.andrei.mobiletracker.user.dao.userDao;
+package com.andrei.mobiletracker.user.dao.user;
 
 import com.andrei.mobiletracker.user.model.UserAccount;
 import com.andrei.mobiletracker.user.model.UserAccountRole;

@@ -1,7 +1,7 @@
 package com.andrei.mobiletracker.user.service.impl;
 
 import com.andrei.mobiletracker.security.jwtFilter.authMicroserviceFilters.util.AuthJwtUtil;
-import com.andrei.mobiletracker.user.dao.userDao.UserDao;
+import com.andrei.mobiletracker.user.dao.user.UserDao;
 import com.andrei.mobiletracker.user.dto.LoggedInActivatedAccountUserDto;
 import com.andrei.mobiletracker.user.dto.LoggedInUserDto;
 import com.andrei.mobiletracker.user.dto.UserAccountDto;

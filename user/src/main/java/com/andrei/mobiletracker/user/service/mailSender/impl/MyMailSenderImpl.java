@@ -1,6 +1,6 @@
 package com.andrei.mobiletracker.user.service.mailSender.impl;
 
-import com.andrei.mobiletracker.user.dao.notActivatedAccountDao.NotActivatedAccountDao;
+import com.andrei.mobiletracker.user.dao.notActivatedAccount.NotActivatedAccountDao;
 import com.andrei.mobiletracker.user.model.NotActivatedAccount;
 import com.andrei.mobiletracker.user.service.exception.UserExceptionType;
 import com.andrei.mobiletracker.user.service.exception.UserServiceException;

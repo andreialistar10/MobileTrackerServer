@@ -1,4 +1,4 @@
-package com.andrei.mobiletracker.user.dao.notActivatedAccountDao;
+package com.andrei.mobiletracker.user.dao.notActivatedAccount;
 
 import com.andrei.mobiletracker.user.model.NotActivatedAccount;
 

@@ -3,7 +3,7 @@ package com.andrei.mobiletracker.user.controller;
 import com.andrei.mobiletracker.user.dto.ActivatedUserDto;
 import com.andrei.mobiletracker.user.dto.UserAccountDetailRequestDto;
 import com.andrei.mobiletracker.user.dto.UserAccountDetailResponseDto;
-import com.andrei.mobiletracker.user.model.UserAccountDetail;
+import com.andrei.mobiletracker.user.model.UserAccountDetails;
 import com.andrei.mobiletracker.user.service.UserService;
 import com.andrei.mobiletracker.user.service.exception.UserExceptionType;
 import com.andrei.mobiletracker.user.service.exception.UserServiceException;
@@ -48,12 +48,12 @@ public class UserController {
         logMyUserDetailRequestDto(userAccountDetailRequestDto);
         if (result.hasErrors())
             throw new UserServiceException("User details for user: " + userAccountDetailRequestDto.getUsername() + "are invalid", HttpStatus.BAD_REQUEST, UserExceptionType.INVALID_USER_DETAILS);
-        UserAccountDetail userAccountDetail = userService.signup(userAccountDetailRequestDto);
+        UserAccountDetails userAccountDetails = userService.signup(userAccountDetailRequestDto);
         UserAccountDetailResponseDto responseDto = UserAccountDetailResponseDto.builder()
-                .email(userAccountDetail.getEmail())
-                .firstName(userAccountDetail.getFirstName())
-                .lastName(userAccountDetail.getLastName())
-                .username(userAccountDetail.getUser().getUsername())
+                .email(userAccountDetails.getEmail())
+                .firstName(userAccountDetails.getFirstName())
+                .lastName(userAccountDetails.getLastName())
+                .username(userAccountDetails.getUser().getUsername())
                 .build();
         logger.info("-----------------SUCCESSFUL signup-----------------");
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
