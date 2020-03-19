@@ -13,6 +13,9 @@ public class JwtAuthenticationConfig extends BasicJwtConfig{
     @Value("${security.jwt.url}")
     private String loginUrl;
 
+    @Value("${security.jwt.logout-url}")
+    private String logoutUrl;
+
     @Value("${security.jwt.secret-refresh-token}")
     private String secretSignInRefreshToken;
 

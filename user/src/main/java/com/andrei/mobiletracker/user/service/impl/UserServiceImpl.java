@@ -1,20 +1,23 @@
 package com.andrei.mobiletracker.user.service.impl;
 
-import com.andrei.mobiletracker.user.dao.notActivatedAccount.NotActivatedAccountDao;
+import com.andrei.mobiletracker.user.dao.notactivatedaccount.NotActivatedAccountDao;
 import com.andrei.mobiletracker.user.dao.user.UserDao;
-import com.andrei.mobiletracker.user.dao.userDetail.UserDetailDao;
-import com.andrei.mobiletracker.user.dao.userRole.UserRoleDao;
+import com.andrei.mobiletracker.user.dao.userdetail.UserDetailDao;
 import com.andrei.mobiletracker.user.dto.ActivatedUserDto;
 import com.andrei.mobiletracker.user.dto.UserAccountDetailRequestDto;
-import com.andrei.mobiletracker.user.model.*;
+import com.andrei.mobiletracker.user.model.NotActivatedAccount;
+import com.andrei.mobiletracker.user.model.UserAccount;
+import com.andrei.mobiletracker.user.model.UserAccountDetails;
+import com.andrei.mobiletracker.user.model.UserAccountRole;
 import com.andrei.mobiletracker.user.service.UserService;
 import com.andrei.mobiletracker.user.service.exception.UserExceptionType;
 import com.andrei.mobiletracker.user.service.exception.UserServiceException;
-import com.andrei.mobiletracker.user.service.mailSender.MailUserDetail;
-import com.andrei.mobiletracker.user.service.mailSender.MyMailSender;
+import com.andrei.mobiletracker.user.service.mailsender.MailUserDetails;
+import com.andrei.mobiletracker.user.service.mailsender.UserAccountMailSender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,20 +29,20 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
     private final UserDetailDao userDetailDao;
-    private final UserRoleDao userRoleDao;
     private final NotActivatedAccountDao notActivatedAccountDao;
-    private final MyMailSender myMailSender;
+    private final UserAccountMailSender userAccountMailSender;
+    private final PasswordEncoder passwordEncoder;
     private final ExecutorService executorService = Executors.newFixedThreadPool(3);
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
-    public UserServiceImpl(UserDao userDao, UserDetailDao userDetailDao, UserRoleDao userRoleDao, NotActivatedAccountDao notActivatedAccountDao, MyMailSender myMailSender) {
+    public UserServiceImpl(UserDao userDao, UserDetailDao userDetailDao, NotActivatedAccountDao notActivatedAccountDao, UserAccountMailSender userAccountMailSender, PasswordEncoder passwordEncoder) {
 
         logger.info("------------------INIT  UserServiceImpl------------------");
         this.userDao = userDao;
         this.userDetailDao = userDetailDao;
-        this.userRoleDao = userRoleDao;
         this.notActivatedAccountDao = notActivatedAccountDao;
-        this.myMailSender = myMailSender;
+        this.userAccountMailSender = userAccountMailSender;
+        this.passwordEncoder = passwordEncoder;
         logger.info("-------------SUCCESSFUL INIT UserServiceImpl-------------");
     }
 
@@ -48,10 +51,9 @@ public class UserServiceImpl implements UserService {
     public UserAccountDetails signup(UserAccountDetailRequestDto userDetailDto) {
 
         logger.info("------------------LOGGING  signup------------------");
-        UserAccountRole userAccountRole = userRoleDao.findOneUserRoleByType(UserAccountRoleType.NOT_ACTIVATED_ACCOUNT);
-        UserAccount savedUser = addUser(userDetailDto.getUsername(), userDetailDto.getPassword(), userAccountRole);
+        UserAccount savedUser = addUser(userDetailDto.getUsername(), passwordEncoder.encode(userDetailDto.getPassword()));
         UserAccountDetails savedUserDetail = addUserDetail(savedUser, userDetailDto);
-        sendMail(MailUserDetail.builder()
+        sendMail(MailUserDetails.builder()
                 .username(userDetailDto.getUsername())
                 .destinationEmail(userDetailDto.getEmail())
                 .firstName(userDetailDto.getFirstName())
@@ -67,12 +69,12 @@ public class UserServiceImpl implements UserService {
 
         logger.info("------------------LOGGING  activateAccount------------------");
         NotActivatedAccount notActivatedAccount = findNotActivatedAccountByToken(token);
-        updateUserRoleStatusByUsername(notActivatedAccount, UserAccountRoleType.ACTIVATED_ACCOUNT);
+        updateUserRoleStatusByUsername(notActivatedAccount);
         notActivatedAccountDao.deleteOneNotActivatedAccount(notActivatedAccount);
         logger.info("-----------------SUCCESSFUL activateAccount-----------------");
         return ActivatedUserDto.builder()
                 .username(notActivatedAccount.getUsername())
-                .role(UserAccountRoleType.ACTIVATED_ACCOUNT.toString())
+                .role(UserAccountRole.ACTIVATED_ACCOUNT.toString())
                 .build();
     }
 
@@ -81,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
         logger.info("------------------LOGGING  resendRegistrationAccount------------------");
         UserAccountDetails userAccountDetails = userDetailDao.findOneMyUserDetailByUsername(username);
-        myMailSender.sendMail(MailUserDetail.builder()
+        userAccountMailSender.sendMail(MailUserDetails.builder()
                 .username(username)
                 .lastName(userAccountDetails.getLastName())
                 .firstName(userAccountDetails.getFirstName())
@@ -90,12 +92,12 @@ public class UserServiceImpl implements UserService {
         logger.info("-----------------SUCCESSFUL resendRegistrationAccount-----------------");
     }
 
-    private UserAccount addUser(String username, String password, UserAccountRole userAccountRole) {
+    private UserAccount addUser(String username, String password) {
 
         UserAccount userAccount = userDao.saveOneUser(UserAccount.builder()
                 .username(username)
                 .password(password)
-                .role(userAccountRole)
+                .role(UserAccountRole.NOT_ACTIVATED_ACCOUNT)
                 .build());
 
         if (userAccount == null) {
@@ -131,20 +133,19 @@ public class UserServiceImpl implements UserService {
         return notActivatedAccount;
     }
 
-    private void updateUserRoleStatusByUsername(NotActivatedAccount notActivatedAccount, UserAccountRoleType type) {
+    private void updateUserRoleStatusByUsername(NotActivatedAccount notActivatedAccount) {
 
-        UserAccountRole userAccountRole = userRoleDao.findOneUserRoleByType(type);
-        if (userDao.updateUserStatusByUsername(notActivatedAccount.getUsername(), userAccountRole) != 1) {
+        if (userDao.updateUserStatusByUsername(notActivatedAccount.getUsername(), UserAccountRole.ACTIVATED_ACCOUNT) != 1) {
             this.scheduleDeleteNotActivatedAccount(notActivatedAccount);
             throw new UserServiceException("The username" + notActivatedAccount.getUsername() + " does not exists!", HttpStatus.NOT_FOUND, UserExceptionType.TOKEN_NO_LONGER_VALID);
         }
     }
 
-    private void sendMail(MailUserDetail mailUserDetail) {
+    private void sendMail(MailUserDetails mailUserDetail) {
 
         executorService.execute(() -> {
             try {
-                myMailSender.sendMail(mailUserDetail);
+                userAccountMailSender.sendMail(mailUserDetail);
             } catch (UserServiceException ignored) {
             }
         });

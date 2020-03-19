@@ -1,9 +1,11 @@
 package com.andrei.mobiletracker.user.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Data
 @Builder
@@ -21,15 +23,5 @@ public class RefreshToken {
 
     @Id
     @Column(name = "TOKEN")
-    private String token;
-}
-
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode
-@Builder
-class RefreshTokenKey implements Serializable {
-
-    private String userAccount;
     private String token;
 }

@@ -7,5 +7,6 @@ public enum UserExceptionType {
     DUPLICATE_USER,
     ERROR,
     TOKEN_NO_LONGER_VALID,
+    INVALID_REFRESH_TOKEN,
     SUCCESS
 }

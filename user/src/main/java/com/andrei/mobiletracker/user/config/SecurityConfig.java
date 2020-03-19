@@ -2,7 +2,7 @@ package com.andrei.mobiletracker.user.config;
 
 import com.andrei.mobiletracker.security.config.JwtAuthenticationConfig;
 import com.andrei.mobiletracker.security.jwtFilter.authMicroserviceFilters.AuthJwtFilter;
-import com.andrei.mobiletracker.user.model.UserAccountRoleType;
+import com.andrei.mobiletracker.user.model.UserAccountRole;
 import com.andrei.mobiletracker.user.service.impl.LoginServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -55,8 +55,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/v2/api-docs",
                         "/webjars/**",
                         "/api/**").permitAll()
-                .antMatchers("/users/resend-registration-email").hasAuthority(UserAccountRoleType.NOT_ACTIVATED_ACCOUNT.toString())
-                .antMatchers("/login/refresh-token").hasAuthority("REFRESH_TOKEN")
+                .antMatchers("/users/resend-registration-email").hasAuthority(UserAccountRole.NOT_ACTIVATED_ACCOUNT.toString())
+                .antMatchers("/refresh-token").hasAuthority("REFRESH_TOKEN")
+                .antMatchers("/logout").hasAuthority("REFRESH_TOKEN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -66,13 +67,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(
                 (httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED))
                 .and()
-                .addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class); //execute this filter before verifying if user is authenticated
+                .addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
 
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     @Override

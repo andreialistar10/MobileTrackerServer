@@ -1,8 +1,9 @@
 package com.andrei.mobiletracker.user.controller;
 
-import com.andrei.mobiletracker.user.dto.LoggedInUserDto;
-import com.andrei.mobiletracker.user.dto.UserAccountDto;
-import com.andrei.mobiletracker.user.service.LoginService;
+import com.andrei.mobiletracker.security.config.BasicJwtConfig;
+import com.andrei.mobiletracker.user.dto.LoggedInUserData;
+import com.andrei.mobiletracker.user.dto.UserAccountData;
+import com.andrei.mobiletracker.user.facade.login.LoginFacade;
 import com.andrei.mobiletracker.user.service.exception.UserExceptionType;
 import com.andrei.mobiletracker.user.service.exception.UserServiceException;
 import io.swagger.annotations.ApiOperation;
@@ -24,48 +25,79 @@ import java.security.Principal;
 @RequestMapping("")
 public class LoginController {
 
-    private final LoginService loginService;
+    private final LoginFacade loginFacade;
+    private final BasicJwtConfig basicJwtConfig;
     private static final Logger logger = LogManager.getLogger(LoginController.class);
 
-    public LoginController(LoginService loginService) {
+    public LoginController(LoginFacade loginFacade, BasicJwtConfig basicJwtConfig) {
 
-        this.loginService = loginService;
+        this.loginFacade = loginFacade;
+        this.basicJwtConfig = basicJwtConfig;
     }
 
     @ApiOperation(value = "Login an user")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "SUCCESS", response = LoggedInUserDto.class),
+            @ApiResponse(code = 200, message = "SUCCESS", response = LoggedInUserData.class),
             @ApiResponse(code = 404, message = "INVALID_CREDENTIALS", response = UserExceptionType.class),
     })
     @RequestMapping(value = "/login",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<LoggedInUserDto> login(@Valid UserAccountDto userAccountDto, BindingResult result) {
+    public ResponseEntity<LoggedInUserData> login(@Valid UserAccountData userAccountData, BindingResult result) {
 
         logger.info("------------------LOGGING  login------------------");
-        logger.info("username: {}", userAccountDto.getUsername());
+        logger.info("username: {}", userAccountData.getUsername());
         if (result.hasErrors())
-            throw new UserServiceException("Username or password for user: " + userAccountDto.getUsername() + "can not be null!", HttpStatus.NOT_FOUND, UserExceptionType.INVALID_USER_DETAILS);
-        LoggedInUserDto loggedInUserDto = loginService.login(userAccountDto);
+            throw new UserServiceException("Username or password for user: " + userAccountData.getUsername() + "can not be null!", HttpStatus.NOT_FOUND, UserExceptionType.INVALID_USER_DETAILS);
+        LoggedInUserData loggedInUserData = loginFacade.login(userAccountData);
         logger.info("-----------------SUCCESSFUL login-----------------");
-        return new ResponseEntity<>(loggedInUserDto, HttpStatus.OK);
+        return new ResponseEntity<>(loggedInUserData, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Login an user")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "SUCCESS", response = LoggedInUserDto.class),
-            @ApiResponse(code = 404, message = "INVALID_CREDENTIALS", response = UserExceptionType.class),
+            @ApiResponse(code = 200, message = "SUCCESS", response = LoggedInUserData.class),
+            @ApiResponse(code = 400, message = "INVALID_REFRESH_TOKEN", response = UserExceptionType.class),
     })
-    @RequestMapping(value = "/login/refresh-token",
+    @RequestMapping(value = "/refresh-token",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public void generateNewToken(Principal principal) {
+    public ResponseEntity<LoggedInUserData> generateNewToken(Principal principal, @RequestHeader HttpHeaders httpHeaders) {
 
         logger.info("------------------LOGGING  generateNewToken------------------");
         logger.info("username: {}", principal.getName());
-
+        String jwtRefreshToken = getJwtRefreshTokenFromHttpHeaders(httpHeaders);
+        LoggedInUserData loggedInUserData = loginFacade.generateNewRefreshToken(principal.getName(), jwtRefreshToken);
         logger.info("-----------------SUCCESSFUL generateNewToken-----------------");
+        return new ResponseEntity<>(loggedInUserData, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Login an user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "SUCCESS", response = UserExceptionType.class),
+            @ApiResponse(code = 400, message = "INVALID_REFRESH_TOKEN", response = UserExceptionType.class),
+    })
+    @RequestMapping(value = "/logout",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserExceptionType> logout(Principal principal, @RequestHeader HttpHeaders httpHeaders) {
+
+        logger.info("------------------LOGGING  logout------------------");
+        logger.info("username: {}", principal.getName());
+        String jwtRefreshToken = getJwtRefreshTokenFromHttpHeaders(httpHeaders);
+        loginFacade.logout(principal.getName(), jwtRefreshToken);
+        logger.info("-----------------SUCCESSFUL logout-----------------");
+        return new ResponseEntity<>(UserExceptionType.SUCCESS, HttpStatus.OK);
+    }
+
+    private String getJwtRefreshTokenFromHttpHeaders(@RequestHeader HttpHeaders httpHeaders) {
+
+        return httpHeaders.get(basicJwtConfig.getHeader())
+                .stream()
+                .findFirst()
+                .map(authorizationHeaderValue -> authorizationHeaderValue.substring(basicJwtConfig.getPrefixHeader().length() + 1))
+                .orElse("");
     }
 
     @ExceptionHandler({UserServiceException.class})

@@ -7,7 +7,7 @@ public interface UserDao {
 
     UserAccount saveOneUser(UserAccount userAccount);
 
-    UserAccount findOneMyUserByUsername(String username);
+    UserAccount findOneUserAccountByUsername(String username);
 
     long updateUserStatusByUsername(String username, UserAccountRole userAccountRole);
 }

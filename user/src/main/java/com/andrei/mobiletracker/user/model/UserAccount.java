@@ -22,7 +22,7 @@ public class UserAccount {
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
-    @ManyToOne(targetEntity = UserAccountRole.class, optional = false)
-    @JoinColumn(name = "USER_ROLE_ID", referencedColumnName = "USER_ROLE_ID")
+    @Column(name = "USER_ROLE", unique = true, nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserAccountRole role;
 }

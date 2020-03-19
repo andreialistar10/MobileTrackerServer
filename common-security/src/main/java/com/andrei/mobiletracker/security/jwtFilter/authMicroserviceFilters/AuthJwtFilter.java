@@ -53,7 +53,8 @@ public class AuthJwtFilter extends OncePerRequestFilter {
         String secretSignIn = null;
         if (authorizationHeader != null && authorizationHeader.startsWith(config.getPrefixHeader() + " ")) {
             jwt = authorizationHeader.substring(config.getPrefixHeader().length() + 1);
-            if (httpServletRequest.getRequestURI().equals(config.getGenerateRefreshTokenUrl())) {
+            String requestURI = httpServletRequest.getRequestURI();
+            if (requestURI.equals(config.getGenerateRefreshTokenUrl()) || requestURI.equals(config.getLogoutUrl())) {
                 logger.info("Request with refresh token");
                 username = jwtUtil.extractUsername(jwt, config.getSecretSignInRefreshToken());
                 authorities = jwtUtil.extractAllClaims(jwt, config.getSecretSignInRefreshToken()).get("authorities", List.class);
