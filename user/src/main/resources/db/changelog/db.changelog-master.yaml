@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Andrei Alistar
+      changes:
+        - sqlFile:
+            path: changes/changelog_user_v1.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: true
