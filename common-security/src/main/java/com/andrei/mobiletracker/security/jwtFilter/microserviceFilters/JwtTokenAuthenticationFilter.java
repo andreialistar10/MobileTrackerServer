@@ -4,6 +4,7 @@ package com.andrei.mobiletracker.security.jwtFilter.microserviceFilters;
 import com.andrei.mobiletracker.security.config.BasicJwtConfig;
 import com.andrei.mobiletracker.security.util.JwtUtil;
 import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,14 +23,11 @@ import java.util.stream.Collectors;
 
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
-    private final BasicJwtConfig config;
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private BasicJwtConfig config;
 
-    public JwtTokenAuthenticationFilter(BasicJwtConfig config, JwtUtil jwtUtil) {
-
-        this.config = config;
-        this.jwtUtil = jwtUtil;
-    }
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest httpServletRequest, @NonNull HttpServletResponse httpServletResponse, @NonNull FilterChain filterChain)

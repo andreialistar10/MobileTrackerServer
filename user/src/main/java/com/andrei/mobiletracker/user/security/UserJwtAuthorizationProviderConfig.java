@@ -1,14 +1,17 @@
-package com.andrei.mobiletracker.security.config;
+package com.andrei.mobiletracker.user.security;
 
+import com.andrei.mobiletracker.security.config.JwtAuthorizationProviderConfig;
 import lombok.Getter;
-import lombok.ToString;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 @Getter
-@ToString
+@Setter
+@RefreshScope
 @Component
-public class JwtAuthenticationConfig extends BasicJwtConfig{
+public class UserJwtAuthorizationProviderConfig extends UserBasicJwtConfig implements JwtAuthorizationProviderConfig {
 
     @Value("${user.security.jwt.login-url}")
     private String loginUrl;

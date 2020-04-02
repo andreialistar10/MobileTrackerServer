@@ -1,10 +1,11 @@
 package com.andrei.mobiletracker.security.jwtFilter.authMicroserviceFilters.util;
 
-import com.andrei.mobiletracker.security.config.JwtAuthenticationConfig;
+import com.andrei.mobiletracker.security.config.JwtAuthorizationProviderConfig;
 import com.andrei.mobiletracker.security.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,8 @@ import java.util.stream.Collectors;
 @Service
 public class AuthJwtUtil extends JwtUtil {
 
-    private final JwtAuthenticationConfig config;
-
-    public AuthJwtUtil(JwtAuthenticationConfig config) {
-
-        this.config = config;
-    }
+    @Autowired
+    private JwtAuthorizationProviderConfig config;
 
     public String generateToken(UserDetails userDetails) {
 
