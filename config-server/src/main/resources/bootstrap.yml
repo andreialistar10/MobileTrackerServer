@@ -1,0 +1,6 @@
+encrypt:
+  key-store:
+    location: classpath:/server.jks
+    password: aiN-aidMing$aD@ilL@Poarta69!23odatacaFdgsaNiciojfGadaa;
+    alias: configTestKeyForMicroservices
+    secret: aiN-aidMing$aD@ilL@Poarta69!23odatacaFdgsaNiciojfGadaa;

@@ -1,0 +1,28 @@
+#Tomcat Server configuration
+server:
+  port: 8888
+
+#Spring cloud configurations
+spring:
+  application:
+    name: "config-service"
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/andreialistar10/mobile-tracker-server-configurations.git
+          force-pull: true
+          username: @git.username@
+          password: @git.password@
+          search-paths: '{application}/{profile}'
+
+#Eureka client configuration
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 30
+  instance:
+    prefer-ip-address: true
+    lease-expiration-duration-in-seconds: 60
+    lease-renewal-interval-in-seconds: 30
