@@ -1,89 +1,18 @@
-##set running port for tomcat
-#server:
-#  port: 8086
-##set application name
-#spring:
-#  application:
-#    name: user-service
-#  profiles:
-#    active: @activated-profile@
-
-
 #set running port for tomcat
 server:
   port: 8086
-
 #set application name
 spring:
   application:
     name: user-service
   profiles:
     active: @activated-profile@
-  #datasource properties
-  datasource:
-    url: @user.db.url@
-    driver-class-name: @db.driverClassName@
-    username: @db.username@
-    password: @db.password@
-    dbcp2:
-      test-while-idle: true
-      validation-query: SELECT 1
-  #jpa properties
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: none
-      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-    properties:
-      hibernate:
-        temp:
-          use_jdbc_metadata: false
-        dialect: @sql.dialect@
-  #liquibase properties
-  liquibase:
-    enabled: true
-    url: ${spring.datasource.url}
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
-    drop-first: false
-    change-log: classpath:db/changelog/db.changelog-master.yaml
-  #freemarker configuration
-  freemarker:
-    template-loader-path: classpath:/templates
-    suffix: .ftl
   #mail configurations
   mail:
-    default-encoding: UTF-8
-    host: smtp.gmail.com
-    port: 587
     username: @gmail.username@
     password: @gmail.password@
-    protocol: smtp
-    #other smtp properties
-    properties:
-      mail:
-        smtp:
-          auth: true
-          startttls.enable: true
-          ssl.trust: smtp.gmail.com
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000
-        transport.protocol: smtp
-        debug: false
 
-#eureka client configurations
-eureka:
-  client:
-    fetch-registry: true
-    register-with-eureka: true
-    registry-fetch-interval-seconds: 30
-  instance:
-    prefer-ip-address: true
-    lease-renewal-interval-in-seconds: 30
-    lease-expiration-duration-in-seconds: 60
-
-  #properties for AuthJwtUtil
+#properties for AuthJwtUtil
 security.jwt.url: /login
 security.jwt.logout-url: /logout
 security.jwt.generate-refresh-token-url: /refresh-token
@@ -93,7 +22,3 @@ security.jwt.expiration: 1800000
 security.jwt.secret: ZjsanferfndSFDSc453423dsCASCASdascdmc323432dscs0-qwddasxaskcnw
 security.jwt.expiration-refresh-token: 1209600000
 security.jwt.secret-refresh-token: dsasd3-32r23r2SASREadmFsdfAs2312312easDasdDffRREEfedsa3f3e
-
-# SSL, port 465
-#spring.mail.properties.mail.smtp.socketFactory.port = 465
-#spring.mail.properties.mail.smtp.socketFactory.class = javax.net.ssl.SSLSocketFactory
