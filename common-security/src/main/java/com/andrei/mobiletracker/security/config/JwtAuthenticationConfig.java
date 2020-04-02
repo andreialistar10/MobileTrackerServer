@@ -10,18 +10,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtAuthenticationConfig extends BasicJwtConfig{
 
-    @Value("${security.jwt.url}")
+    @Value("${user.security.jwt.login-url}")
     private String loginUrl;
 
-    @Value("${security.jwt.logout-url}")
+    @Value("${user.security.jwt.logout-url}")
     private String logoutUrl;
 
-    @Value("${security.jwt.secret-refresh-token}")
+    @Value("${user.security.jwt.secret-refresh-token}")
     private String secretSignInRefreshToken;
 
-    @Value("${security.jwt.expiration-refresh-token}")
+    @Value("${user.security.jwt.expiration-refresh-token}")
     private long expirationRefreshToken;
 
-    @Value("${security.jwt.generate-refresh-token-url}")
+    @Value("${user.security.jwt.generate-refresh-token-url}")
     private String generateRefreshTokenUrl;
 }

@@ -11,14 +11,3 @@ spring:
   mail:
     username: @gmail.username@
     password: @gmail.password@
-
-#properties for AuthJwtUtil
-security.jwt.url: /login
-security.jwt.logout-url: /logout
-security.jwt.generate-refresh-token-url: /refresh-token
-security.jwt.header: Authorization
-security.jwt.header.prefix: Bearer
-security.jwt.expiration: 1800000
-security.jwt.secret: ZjsanferfndSFDSc453423dsCASCASdascdmc323432dscs0-qwddasxaskcnw
-security.jwt.expiration-refresh-token: 1209600000
-security.jwt.secret-refresh-token: dsasd3-32r23r2SASREadmFsdfAs2312312easDasdDffRREEfedsa3f3e
