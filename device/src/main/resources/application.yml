@@ -1,0 +1,7 @@
+#set running port for tomcat
+server:
+  port: 8081
+#set application name
+spring:
+  profiles:
+    active: @activated-profile@

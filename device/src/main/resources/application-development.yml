@@ -1,0 +1,11 @@
+#set spring config
+spring:
+  cloud:
+    config:
+      uri: http://192.168.100.3:8888
+
+#set logging file
+logging:
+  file:
+    path: ./logs
+    name: ${logging.file.path}/device.log
