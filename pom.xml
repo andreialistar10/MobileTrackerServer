@@ -11,6 +11,7 @@
 		<module>gateway</module>
 		<module>common-security</module>
 		<module>service-discovery</module>
+		<module>config-server</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
