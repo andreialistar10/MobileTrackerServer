@@ -25,6 +25,8 @@
                 <user.db.url>jdbc:mysql://localhost:3306/mobile_tracker_user</user.db.url>
                 <gmail.username>username</gmail.username>
                 <gmail.password>password</gmail.password>
+                <git.username>gitusername</git.username>
+                <git.password>gitpassword</git.password>
             </properties>
         </profile>
 
@@ -48,6 +50,8 @@
                 <user.db.url>jdbc:mysql://localhost:3306/mobile_tracker_user_development</user.db.url>
                 <gmail.username>username</gmail.username>
                 <gmail.password>password</gmail.password>
+                <git.username>gitusername</git.username>
+                <git.password>gitpassword</git.password>
             </properties>
         </profile>
 
@@ -71,6 +75,8 @@
                 <user.db.url>jdbc:mysql://localhost:3306/mobile_tracker_user_test</user.db.url>
                 <gmail.username>username</gmail.username>
                 <gmail.password>password</gmail.password>
+                <git.username>gitusername</git.username>
+                <git.password>gitpassword</git.password>
             </properties>
         </profile>
 
