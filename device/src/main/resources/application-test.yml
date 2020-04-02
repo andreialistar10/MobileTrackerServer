@@ -1,4 +1,8 @@
 spring:
+  #spring cloud properties
+  cloud:
+    config:
+      enabled: false
   #datasource properties
   datasource:
     url: @device.db.url@
