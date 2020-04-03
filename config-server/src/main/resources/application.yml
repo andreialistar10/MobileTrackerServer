@@ -14,7 +14,10 @@ spring:
           force-pull: true
           username: @git.username@
           password: @git.password@
-          search-paths: '{application}/{profile}'
+          search-paths:
+            - '{application}/{profile}'
+            - '{application}'
+            - 'common-configurations'
   security:
     user:
       name: remoteMicroservice
