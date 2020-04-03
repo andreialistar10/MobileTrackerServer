@@ -15,6 +15,10 @@ spring:
           username: @git.username@
           password: @git.password@
           search-paths: '{application}/{profile}'
+  security:
+    user:
+      name: remoteMicroservice
+      password: "{cipher}AQBVlnSjQjvvvZqsbbAiLIBDZsZ2Kadbc5pA25pvCWM8bUskaZCECcd/SiBz/h1rqyJ+xUlDVbQjo4t19zgXzoFM4MDYdl/oHRp6cZPLZE0lR7S8p3i/wC5uIcz8F7oBKUIeyDHAMZqpso/oztInVnotj0Y90fKMadthA46mHs1aNHnzyhSpSOTazTi/R/miwBgZYf/dMGal4KTlEMYpluh/mbywNxJkkEsLv3zB+T7QXqRF0hAygOEUEOW2Wjn1kegiqeWTHi5CCe7zuBHR1CrQoVY9o9qJWBUTHXYVUMOCyZjjqMNrbXsjfpchVnVfXRcDv+gg4yZNrCF1y+on+giFZpvbyqBGsX7BTk4/ecgGfuP4dSc5F6ezK/Ccg2ZIPyUDzQM+OvUZLYsH72sgqYZi"
 
 #Eureka client configuration
 eureka:

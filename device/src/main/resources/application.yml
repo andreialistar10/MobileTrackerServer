@@ -3,7 +3,5 @@ server:
   port: 8081
 #set application name
 spring:
-  application:
-    name: device-service
   profiles:
     active: @activated-profile@
