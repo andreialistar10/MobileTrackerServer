@@ -1,15 +1,8 @@
 spring:
   profiles:
-    active: @activated-profile@
+    active: @worker-microservice.spring-activated-profiles@
   cloud:
     config:
       name: user-service
       username: remoteMicroservice
       password: c@k3forMicroservice
-      discovery:
-        service-id: config-service
-        enabled: true
-eureka:
-  client:
-    service-url:
-      defaultZone: http://192.168.100.3:8761/eureka

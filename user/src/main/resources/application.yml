@@ -1,10 +1,7 @@
 #set running port for tomcat
 server:
   port: 8086
-#set application name
 spring:
-  profiles:
-    active: @activated-profile@
   #mail configurations
   mail:
     username: @gmail.username@

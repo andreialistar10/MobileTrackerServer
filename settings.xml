@@ -15,7 +15,7 @@
                 </property>
             </activation>
             <properties>
-                <activated-profile>production</activated-profile>
+                <worker-microservice.spring-activated-profiles>production,discovery-client,user-authorization,jpa,liquibase</worker-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>mobiletracker</db.username>
                 <db.password>mobiletrackerpassword</db.password>
@@ -41,7 +41,7 @@
                 </property>
             </activation>
             <properties>
-                <activated-profile>development</activated-profile>
+                <worker-microservice.spring-activated-profiles>development,discovery-client,user-authorization,jpa,liquibase</worker-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>mobiletracker</db.username>
                 <db.password>mobiletrackerpassword</db.password>
@@ -67,7 +67,7 @@
                 </property>
             </activation>
             <properties>
-                <activated-profile>test</activated-profile>
+                <worker-microservice.spring-activated-profiles>test,jpa,liquibase,user-authorization</worker-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>mobiletracker</db.username>
                 <db.password>mobiletrackerpassword</db.password>
