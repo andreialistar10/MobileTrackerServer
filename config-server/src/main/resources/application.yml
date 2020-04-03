@@ -5,7 +5,7 @@ server:
 #Spring cloud configurations
 spring:
   application:
-    name: "config-service"
+    name: config-service
   cloud:
     config:
       server:
@@ -22,11 +22,14 @@ spring:
 
 #Eureka client configuration
 eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    registry-fetch-interval-seconds: 30
   instance:
     prefer-ip-address: true
     lease-expiration-duration-in-seconds: 60
     lease-renewal-interval-in-seconds: 30
+    hostname: 192.168.100.3
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 30
+    service-url:
+      default-zone: http://${eureka.instance.hostname}:8761/eureka/
