@@ -1,38 +1,3 @@
 #Tomcat Server configuration
 server:
   port: 8888
-
-#Spring cloud configurations
-spring:
-  application:
-    name: config-service
-  cloud:
-    config:
-      server:
-        git:
-          uri: https://github.com/andreialistar10/mobile-tracker-server-configurations.git
-          force-pull: true
-          username: @git.username@
-          password: @git.password@
-          search-paths:
-            - '{application}/{profile}'
-            - '{application}'
-            - 'common-configurations'
-  security:
-    user:
-      name: remoteMicroservice
-      password: "{cipher}AQBVlnSjQjvvvZqsbbAiLIBDZsZ2Kadbc5pA25pvCWM8bUskaZCECcd/SiBz/h1rqyJ+xUlDVbQjo4t19zgXzoFM4MDYdl/oHRp6cZPLZE0lR7S8p3i/wC5uIcz8F7oBKUIeyDHAMZqpso/oztInVnotj0Y90fKMadthA46mHs1aNHnzyhSpSOTazTi/R/miwBgZYf/dMGal4KTlEMYpluh/mbywNxJkkEsLv3zB+T7QXqRF0hAygOEUEOW2Wjn1kegiqeWTHi5CCe7zuBHR1CrQoVY9o9qJWBUTHXYVUMOCyZjjqMNrbXsjfpchVnVfXRcDv+gg4yZNrCF1y+on+giFZpvbyqBGsX7BTk4/ecgGfuP4dSc5F6ezK/Ccg2ZIPyUDzQM+OvUZLYsH72sgqYZi"
-
-#Eureka client configuration
-eureka:
-  instance:
-    prefer-ip-address: true
-    lease-expiration-duration-in-seconds: 60
-    lease-renewal-interval-in-seconds: 30
-    hostname: 192.168.100.3
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    registry-fetch-interval-seconds: 30
-    service-url:
-      default-zone: http://${eureka.instance.hostname}:8761/eureka/
