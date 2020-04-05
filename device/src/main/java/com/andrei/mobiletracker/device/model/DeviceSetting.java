@@ -20,15 +20,12 @@ public class DeviceSetting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TIME_INTERVAL")
+    @Column(name = "TIME_INTERVAL", nullable = false)
     private Integer timeInterval;
 
-    @Column(name = "GEOFENCE_RADIUS")
-    private Double geofenceRadius;
+    @Column(name = "NAME", nullable = false)
+    private String name;
 
-    @Column(name = "GEOFENCE_CENTER_LATITUDE")
-    private Double geofenceCenterLatitude;
-
-    @Column(name = "GEOFENCE_CENTER_LONGITUDE")
-    private Double geofenceCenterLongitude;
+    @Column(name = "PHOTO_PATH", nullable = false)
+    private String photoPath;
 }
