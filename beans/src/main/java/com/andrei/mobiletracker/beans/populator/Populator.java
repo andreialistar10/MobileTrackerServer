@@ -1,6 +1,7 @@
-package com.andrei.mobiletracker.user.facade.populator;
+package com.andrei.mobiletracker.beans.populator;
 
 public interface Populator<S, T> {
 
     void populate(T target, S source);
 }
+
