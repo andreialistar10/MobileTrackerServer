@@ -1,0 +1,10 @@
+.bg{
+    background-image: url("http://localhost:3002/images/background/mobile-tracker-background.jpg");
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
