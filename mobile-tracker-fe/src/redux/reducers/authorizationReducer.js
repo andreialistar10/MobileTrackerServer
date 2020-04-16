@@ -1,13 +1,14 @@
 import * as types from "../actions/actionTypes";
-import initialState from "./initialState";
+import { defaultState } from "../stateManagement";
 
 export default function authorizationReducer(
-  state = initialState.authorization,
+  state = defaultState.authorization,
   action
 ) {
-  switch (action.type) {
+  const { type, payload } = action;
+  switch (type) {
     case types.LOGIN_SUCCESS:
-      return { ...state };
+      return { ...state, ...payload };
     default:
       return state;
   }

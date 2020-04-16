@@ -26,6 +26,9 @@ module.exports = {
     new webpack.DefinePlugin({
       // "process.env.API_URL": JSON.stringify("http://localhost:3001"),
       "process.env.API_FILE_URL": JSON.stringify("http://localhost:3002"),
+      "process.env.BACKEND_URL": JSON.stringify(
+        "http://localhost:8080/mobile-tracker"
+      ),
     }),
     new HtmlWebpackPlugin({
       template: "src/index.html",

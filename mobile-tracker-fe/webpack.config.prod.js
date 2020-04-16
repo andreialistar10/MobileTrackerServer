@@ -26,6 +26,10 @@ module.exports = {
     new webpack.DefinePlugin({
       // This global makes sure React is built in prod mode.
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      "process.env.API_FILE_URL": JSON.stringify("http://localhost:3002"),
+      "process.env.BACKEND_URL": JSON.stringify(
+        "http://localhost:8080/mobile-tracker"
+      ),
       // "process.env.API_URL": JSON.stringify("http://localhost:3001"),
     }),
     new HtmlWebpackPlugin({
