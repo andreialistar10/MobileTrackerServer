@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { NOT_ACTIVATED_ACCOUNT } from "../../utils/auth/roles";
+import { NOT_ACTIVATED_ACCOUNT } from "../../../utils/auth/roles";
 import { Redirect } from "react-router-dom";
 import "./NotActivatedAccount.css";
-import { resendConfirmationEmail } from "../../redux/actions/userActions";
+import { resendConfirmationEmail } from "../../../redux/actions/userActions";
 import { toast } from "react-toastify";
-import AccountCircularProgress from "../common/AccountCircularProgress";
+import AccountCircularProgress from "../../common/AccountCircularProgress";
 
 const NotActivatedAccount = ({
   username,
