@@ -1,0 +1,21 @@
+encrypt:
+  key-store:
+    location: classpath:/server.jks
+    password: aiN-aidMing$aD@ilL@Poarta69!23odatacaFdgsaNiciojfGadaa;
+    alias: configTestKeyForMicroservices
+    secret: aiN-aidMing$aD@ilL@Poarta69!23odatacaFdgsaNiciojfGadaa;
+spring:
+  profiles:
+    active: discovery-client
+  cloud:
+    config:
+      name: config-service
+      server:
+        git:
+          uri: https://github.com/andreialistar10/mobile-tracker-server-configurations.git
+          username: @git.username@
+          password: @git.password@
+          search-paths:
+            - '{application}'
+            - 'common-configurations'
+        bootstrap: true

@@ -1,6 +1,6 @@
 package com.andrei.mobiletracker.user.config;
 
-import com.andrei.mobiletracker.security.config.JwtAuthenticationConfig;
+import com.andrei.mobiletracker.security.config.JwtAuthorizationProviderConfig;
 import com.andrei.mobiletracker.security.jwtFilter.authMicroserviceFilters.AuthJwtFilter;
 import com.andrei.mobiletracker.user.model.UserAccountRole;
 import com.andrei.mobiletracker.user.service.impl.LoginServiceImpl;
@@ -22,9 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final LoginServiceImpl service;
     private final AuthJwtFilter authJwtFilter;
-    private final JwtAuthenticationConfig config;
+    private final JwtAuthorizationProviderConfig config;
 
-    public SecurityConfig(JwtAuthenticationConfig config, AuthJwtFilter authJwtFilter, LoginServiceImpl service) {
+    public SecurityConfig(JwtAuthorizationProviderConfig config, AuthJwtFilter authJwtFilter, LoginServiceImpl service) {
 
         this.config = config;
         this.authJwtFilter = authJwtFilter;

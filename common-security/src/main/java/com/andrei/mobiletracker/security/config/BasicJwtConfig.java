@@ -1,26 +1,12 @@
 package com.andrei.mobiletracker.security.config;
 
-import lombok.Getter;
-import lombok.ToString;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
+public interface BasicJwtConfig {
 
-@Getter
-@ToString
-@Component
-@Primary
-public class BasicJwtConfig {
+    String getHeader();
 
-    @Value("${security.jwt.header}")
-    private String header;
+    String getPrefixHeader();
 
-    @Value("${security.jwt.header.prefix}")
-    private String prefixHeader;
+    long getExpiration();
 
-    @Value("${security.jwt.expiration}")
-    private long expiration;
-
-    @Value("${security.jwt.secret}")
-    private String secretSignIn;
+    String getSecretSignIn();
 }

@@ -1,0 +1,8 @@
+#set running port for tomcat
+server:
+  port: 8086
+spring:
+  #mail configurations
+  mail:
+    username: @gmail.username@
+    password: @gmail.password@

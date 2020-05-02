@@ -1,0 +1,3 @@
+#set running port for tomcat
+server:
+  port: 8081

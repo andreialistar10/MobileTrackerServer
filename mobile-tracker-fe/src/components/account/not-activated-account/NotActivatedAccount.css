@@ -1,0 +1,91 @@
+.wrapper {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  background-color: #e2dfb2;
+  overflow: hidden;
+
+  background-image: url("http://localhost:3002/images/background/mobile-tracker-background.jpg");
+  /*background-image: url("https://www.consalerno.com/wp-content/uploads/2019/01/The-location.png");*/
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.positioning-message-box {
+  height: 100%;
+  width: 100%;
+  padding: 5vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  width: 50%;
+  min-height: 30%;
+  border: 1px solid black;
+  padding: 1.5rem;
+  text-align: justify;
+  border-radius: 8px;
+  overflow: auto;
+
+  background-color: rgba(255, 255, 255, 0.4);
+  font-family: sans-serif;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+}
+
+.paragraph-message-box{
+  font-size: 1.5rem;
+  margin: 1rem 0 0;
+}
+
+.header-message-box{
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.anchor-message-box{
+  color: black;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+@media screen and (max-width: 450px){
+  .message-box{
+    width: 90%;
+
+  }
+
+  .paragraph-message-box{
+    font-size: 1.4rem;
+    margin: 0.75rem 0 0;
+    line-height: 1;
+  }
+}
+
+@media screen and (min-width: 451px) and (max-width: 600px) {
+  .message-box{
+    width: 80%;
+  }
+  .paragraph-message-box{
+    line-height: 1;
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 800px) {
+  .message-box{
+    width: 80%;
+  }
+}

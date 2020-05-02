@@ -15,16 +15,19 @@
                 </property>
             </activation>
             <properties>
+                <worker-microservice.spring-activated-profiles>production,discovery-client,user-authorization,jpa,liquibase</worker-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
-                <db.username>root</db.username>
-                <db.password></db.password>
+                <db.username>mobiletracker</db.username>
+                <db.password>mobiletrackerpassword</db.password>
                 <sql.dialect>org.hibernate.dialect.MySQL5Dialect</sql.dialect>
                 <device.db.url>jdbc:mysql://localhost:3306/mobile_tracker_device</device.db.url>
                 <location.db.url>jdbc:mysql://localhost:3306/mobile_tracker_location</location.db.url>
                 <notification.db.url>jdbc:mysql://localhost:3306/mobile_tracker_notification</notification.db.url>
                 <user.db.url>jdbc:mysql://localhost:3306/mobile_tracker_user</user.db.url>
-                <gmail.username>username</gmail.username>
-                <gmail.password>password</gmail.password>
+                <gmail.username>andreianw98@gmail.com</gmail.username>
+                <gmail.password>libidou10a</gmail.password>
+                <git.username>andreialistar10</git.username>
+                <git.password>te-amda123fac</git.password>
             </properties>
         </profile>
 
@@ -38,16 +41,19 @@
                 </property>
             </activation>
             <properties>
+                <worker-microservice.spring-activated-profiles>development,discovery-client,user-authorization,jpa,liquibase</worker-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
-                <db.username>root</db.username>
-                <db.password></db.password>
+                <db.username>mobiletracker</db.username>
+                <db.password>mobiletrackerpassword</db.password>
                 <sql.dialect>org.hibernate.dialect.MySQL5Dialect</sql.dialect>
                 <device.db.url>jdbc:mysql://localhost:3306/mobile_tracker_device_development</device.db.url>
                 <location.db.url>jdbc:mysql://localhost:3306/mobile_tracker_location_development</location.db.url>
                 <notification.db.url>jdbc:mysql://localhost:3306/mobile_tracker_notification_development</notification.db.url>
                 <user.db.url>jdbc:mysql://localhost:3306/mobile_tracker_user_development</user.db.url>
-                <gmail.username>username</gmail.username>
-                <gmail.password>password</gmail.password>
+                <gmail.username>andreianw98@gmail.com</gmail.username>
+                <gmail.password>libidou10a</gmail.password>
+                <git.username>andreialistar10</git.username>
+                <git.password>te-amda123fac</git.password>
             </properties>
         </profile>
 
@@ -61,16 +67,19 @@
                 </property>
             </activation>
             <properties>
+                <worker-microservice.spring-activated-profiles>test,jpa,liquibase,user-authorization</worker-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
-                <db.username>root</db.username>
-                <db.password></db.password>
+                <db.username>mobiletracker</db.username>
+                <db.password>mobiletrackerpassword</db.password>
                 <sql.dialect>org.hibernate.dialect.MySQL5Dialect</sql.dialect>
                 <device.db.url>jdbc:mysql://localhost:3306/mobile_tracker_device_test</device.db.url>
                 <location.db.url>jdbc:mysql://localhost:3306/mobile_tracker_location_test</location.db.url>
                 <notification.db.url>jdbc:mysql://localhost:3306/mobile_tracker_notification_test</notification.db.url>
                 <user.db.url>jdbc:mysql://localhost:3306/mobile_tracker_user_test</user.db.url>
-                <gmail.username>username</gmail.username>
-                <gmail.password>password</gmail.password>
+                <gmail.username>andreianw98@gmail.com</gmail.username>
+                <gmail.password>libidou10a</gmail.password>
+                <git.username>andreialistar10</git.username>
+                <git.password>te-amda123fac</git.password>
             </properties>
         </profile>
 

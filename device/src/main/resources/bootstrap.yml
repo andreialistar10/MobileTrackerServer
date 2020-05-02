@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: @worker-microservice.spring-activated-profiles@
+  cloud:
+    config:
+      name: device-service
+      username: remoteMicroservice
+      password: c@k3forMicroservice

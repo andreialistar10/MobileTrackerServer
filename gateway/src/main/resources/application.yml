@@ -1,0 +1,14 @@
+#logging file properties
+logging:
+  file:
+    path: ./logs
+    name: ${logging.file.path}/gateway.log
+#set running port for tomcat
+server:
+  port: 8080
+#expose endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

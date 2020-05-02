@@ -1,6 +1,6 @@
 package com.andrei.mobiletracker.security.jwtFilter.authMicroserviceFilters;
 
-import com.andrei.mobiletracker.security.config.JwtAuthenticationConfig;
+import com.andrei.mobiletracker.security.config.JwtAuthorizationProviderConfig;
 import com.andrei.mobiletracker.security.jwtFilter.authMicroserviceFilters.util.AuthJwtUtil;
 import lombok.NonNull;
 import org.apache.logging.log4j.LogManager;
@@ -27,15 +27,14 @@ public class AuthJwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserDetailsService service;
-    private final AuthJwtUtil jwtUtil;
-    private final JwtAuthenticationConfig config;
+
+    @Autowired
+    private AuthJwtUtil jwtUtil;
+
+    @Autowired
+    private JwtAuthorizationProviderConfig config;
+
     private static final Logger logger = LogManager.getLogger(AuthJwtFilter.class);
-
-    public AuthJwtFilter(AuthJwtUtil jwtUtil, JwtAuthenticationConfig config) {
-
-        this.jwtUtil = jwtUtil;
-        this.config = config;
-    }
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest httpServletRequest, @NonNull HttpServletResponse httpServletResponse, @NonNull FilterChain filterChain)

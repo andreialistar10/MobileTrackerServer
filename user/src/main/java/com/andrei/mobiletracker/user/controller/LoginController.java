@@ -55,7 +55,7 @@ public class LoginController {
         return new ResponseEntity<>(loggedInUserData, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Login an user")
+    @ApiOperation(value = "Get a new refresh token")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "SUCCESS", response = LoggedInUserData.class),
             @ApiResponse(code = 400, message = "INVALID_REFRESH_TOKEN", response = UserExceptionType.class),
@@ -73,7 +73,7 @@ public class LoginController {
         return new ResponseEntity<>(loggedInUserData, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Login an user")
+    @ApiOperation(value = "Logout an user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "SUCCESS", response = UserExceptionType.class),
             @ApiResponse(code = 400, message = "INVALID_REFRESH_TOKEN", response = UserExceptionType.class),
