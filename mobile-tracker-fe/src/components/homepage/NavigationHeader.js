@@ -26,7 +26,7 @@ const NavigationHeader = ({ selectedPage, onMenuChanged }) => {
           onMenuChanged("sign-up");
         }}
       >
-        Sing Up
+        Sign Up
       </Button>
     </div>
   );

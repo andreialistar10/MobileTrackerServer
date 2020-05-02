@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import "./HomePage.css";
 import LoginForm from "./LoginForm";
-import SingupForm from "./SingupForm";
+import SignupForm from "./SignupForm";
 import { Redirect, Route } from "react-router-dom";
 import NavigationHeader from "./NavigationHeader";
 import { stringIsBlank, validateUser } from "../../utils/validation";
@@ -166,7 +166,7 @@ const HomePage = ({ history, selectedPage, login, signUp, loggedIn }) => {
             <Route
               path="/sign-up"
               render={(props) => (
-                <SingupForm
+                <SignupForm
                   {...props}
                   focus={focus}
                   onFocusChange={handleSignUpOnFocusChange}

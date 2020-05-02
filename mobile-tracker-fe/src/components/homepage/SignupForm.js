@@ -10,7 +10,7 @@ import "./HomePageForms.css";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeProgressStyle } from "../../style/homepage/linearProgress";
 
-const SingupForm = ({
+const SignupForm = ({
   data,
   onSubmit,
   onTextChange,
@@ -231,7 +231,7 @@ const SingupForm = ({
   );
 };
 
-SingupForm.propTypes = {
+SignupForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onTextChange: PropTypes.func.isRequired,
   onFocusChange: PropTypes.func.isRequired,
@@ -263,4 +263,4 @@ SingupForm.propTypes = {
   }).isRequired,
 };
 
-export default SingupForm;
+export default SignupForm;
