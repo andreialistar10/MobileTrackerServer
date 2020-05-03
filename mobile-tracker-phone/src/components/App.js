@@ -23,13 +23,14 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import MobileTrackerPhoneHeader from './common/MobileTrackerPhoneHeader';
 
 const App: () => React$Node = () => {
   useEffect(() => {
-    console.log("Da");
+    console.log('Da');
     return () => {
-      console.log("NU");
-    }
+      console.log('NU');
+    };
   });
   return (
     <>
@@ -38,7 +39,7 @@ const App: () => React$Node = () => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
-          <Header />
+          <MobileTrackerPhoneHeader />
           {global.HermesInternal == null ? null : (
             <View style={styles.engine}>
               <Text style={styles.footer}>Engine: Hermes</Text>
