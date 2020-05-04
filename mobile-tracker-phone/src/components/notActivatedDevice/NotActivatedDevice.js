@@ -60,7 +60,7 @@ const NotActivatedDevice = () => {
         <Text style={styles.title}>Your device is not registered!</Text>
         <Text style={styles.text}>
           You cannot use our features until you register your device by clicking
-          the button below!
+          '<Text style={{fontWeight: 'bold'}}>REGISTER DEVICE</Text>' button!
         </Text>
       </View>
       <View style={styles.buttonWrapper}>
@@ -130,12 +130,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   buttonWrapper: {
-    // width: '100%',
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignContent: 'center',
-    // backgroundColor: 'black',
   },
   button: {
     borderRadius: 8,
