@@ -1,27 +1,41 @@
 import React from 'react';
 import {Text, StyleSheet, Image, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 const backgroundImage = require('../../assets/logo.png');
 const MobileTrackerPhoneHeader = () => {
   return (
-    <View style={styles.headerContainer}>
+    <LinearGradient
+      style={styles.headerContainer}
+      colors={['rgba(207, 241, 238,0.4)', 'rgba(175,228,241, 1)']}
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 0}}>
       <Image source={backgroundImage} style={styles.logo} />
       <Text style={styles.textContainer}>
         <Text style={styles.prefix}>Mobile</Text>
         <Text style={styles.suffix}>Tracker</Text>
       </Text>
-    </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   headerContainer: {
+    backgroundColor: '#fff',
     alignItems: 'center',
     width: '100%',
-    height: 115,
+    height: 110,
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: 'rgba(207, 241, 238,0.45)',
+    elevation: 6,
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
   },
   logo: {
     // opacity: 0.9,
