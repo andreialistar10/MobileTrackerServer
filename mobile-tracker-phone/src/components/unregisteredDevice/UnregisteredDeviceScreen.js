@@ -13,12 +13,13 @@ import LinearGradient from 'react-native-linear-gradient';
 const dimensions = Dimensions.get('window');
 const imageHeight = 0.5 * Math.round((dimensions.height * 9) / 16);
 
-const NotActivatedDevice = () => {
+const UnregisteredDeviceScreen = ({onRegisterDevice}) => {
   const gif = require('../../assets/location_animation.gif');
   const [actualImageDimensions, setActualImageDimensions] = useState({
     width: dimensions.width,
     height: dimensions.height,
   });
+
   const [actualRootDimensions, setActualRootDimensions] = useState({
     width: dimensions.width,
     height: dimensions.height,
@@ -42,7 +43,7 @@ const NotActivatedDevice = () => {
   };
 
   const getStyleForRoot = () => {
-    let {width, height} = actualRootDimensions;
+    let {height} = actualRootDimensions;
     height -= 110;
     return {...styles.container, minHeight: height};
   };
@@ -60,11 +61,12 @@ const NotActivatedDevice = () => {
         <Text style={styles.title}>Your device is not registered!</Text>
         <Text style={styles.text}>
           You cannot use our features until you register your device by clicking
-          '<Text style={{fontWeight: 'bold'}}>REGISTER DEVICE</Text>' button!
+          the '<Text style={{fontWeight: 'bold'}}>REGISTER DEVICE</Text>'
+          button!
         </Text>
       </View>
       <View style={styles.buttonWrapper}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={onRegisterDevice}>
           <Text style={styles.buttonText}>REGISTER DEVICE</Text>
         </TouchableOpacity>
       </View>
@@ -165,4 +167,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NotActivatedDevice;
+export default UnregisteredDeviceScreen;
