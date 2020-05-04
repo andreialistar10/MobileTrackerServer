@@ -8,11 +8,10 @@
 
 import React, {useEffect} from 'react';
 
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import {createAppContainer} from 'react-navigation';
 
 import {MobileTrackerPhoneStore} from '../context/MobileTrackerPhoneStore';
 import UnregisteredDeviceContainer from './unregisteredDevice/UnregisteredDeviceContainer';
-import navService from '../core/navService';
 import RegisteredDeviceContainer from './registeredDevice/RegisteredDeviceContainer';
 import {createStackNavigator} from 'react-navigation-stack';
 

@@ -3,7 +3,6 @@ import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import MobileTrackerPhoneHeader from '../common/MobileTrackerPhoneHeader';
 import UnregisteredDeviceScreen from './UnregisteredDeviceScreen';
 import {MobileTrackerPhoneContext} from '../../context';
-import navService from '../../core/navService';
 
 const UnregisteredDeviceContainer = ({navigation}) => {
   const {deviceCode, onRegisterDevice} = useContext(MobileTrackerPhoneContext);
@@ -12,17 +11,28 @@ const UnregisteredDeviceContainer = ({navigation}) => {
     console.log(deviceCode);
   });
 
-  const registerDevice = () => {
+  const registerDevice = (deviceInfo) => {
     onRegisterDevice();
     navigation.navigate('RegisteredDevice');
     // navService.navigate('RegisteredDevice');
+  };
+
+  const deviceNameIsValid = (deviceName) => {
+    return !stringIsBlank(deviceName);
+  };
+
+  const stringIsBlank = (str) => {
+    return !str || /^\s*$/.test(str);
   };
 
   return (
     <SafeAreaView>
       <ScrollView style={styles.scrollView}>
         <MobileTrackerPhoneHeader />
-        <UnregisteredDeviceScreen onRegisterDevice={registerDevice} />
+        <UnregisteredDeviceScreen
+          onRegisterDevice={registerDevice}
+          deviceNameValidator={deviceNameIsValid}
+        />
       </ScrollView>
     </SafeAreaView>
   );
