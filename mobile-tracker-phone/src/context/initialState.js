@@ -1,3 +1,6 @@
-export default {
-  deviceCode: null,
+export const initialState = {
+  deviceInformation: {
+    id: null,
+    name: null,
+  },
 };

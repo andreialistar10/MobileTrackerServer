@@ -1,20 +1,51 @@
-import React, {useContext, useEffect} from 'react';
-import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  ToastAndroid,
+  Platform,
+  AlertIOS,
+} from 'react-native';
 import MobileTrackerPhoneHeader from '../common/MobileTrackerPhoneHeader';
 import UnregisteredDeviceScreen from './UnregisteredDeviceScreen';
 import {MobileTrackerPhoneContext} from '../../context';
+import Loading from '../common/Loading';
 
 const UnregisteredDeviceContainer = ({navigation}) => {
-  const {deviceCode, onRegisterDevice} = useContext(MobileTrackerPhoneContext);
-
+  const {onRegisterDevice} = useContext(MobileTrackerPhoneContext);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    console.log(deviceCode);
-  });
+    setLoading(false);
+  }, []);
 
-  const registerDevice = (deviceInfo) => {
-    onRegisterDevice();
-    navigation.navigate('RegisteredDevice');
-    // navService.navigate('RegisteredDevice');
+  const notifyError = (errorMessage) => {
+    if (Platform.OS === 'android') {
+      ToastAndroid.showWithGravityAndOffset(
+        errorMessage,
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        25,
+        50,
+      );
+    } else {
+      AlertIOS.alert(errorMessage);
+    }
+  };
+
+  const registerDevice = (name) => {
+    if (!deviceNameIsValid(name)) {
+      return;
+    }
+    setLoading(true);
+    onRegisterDevice({name})
+      .then((resp) => {
+        navigation.navigate('RegisteredDevice');
+      })
+      .catch((error) => {
+        setLoading(false);
+        notifyError(error.message);
+      });
   };
 
   const deviceNameIsValid = (deviceName) => {
@@ -25,7 +56,9 @@ const UnregisteredDeviceContainer = ({navigation}) => {
     return !str || /^\s*$/.test(str);
   };
 
-  return (
+  return loading ? (
+    <Loading isLoading={loading} />
+  ) : (
     <SafeAreaView>
       <ScrollView style={styles.scrollView}>
         <MobileTrackerPhoneHeader />
@@ -40,8 +73,6 @@ const UnregisteredDeviceContainer = ({navigation}) => {
 
 const styles = StyleSheet.create({
   scrollView: {
-    // backgroundColor: Colors.lighter,
-    // flex: 1,
     height: '100%',
     width: '100%',
   },

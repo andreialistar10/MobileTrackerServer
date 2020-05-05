@@ -8,12 +8,13 @@
 
 import React, {useEffect} from 'react';
 
-import {createAppContainer} from 'react-navigation';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 
 import {MobileTrackerPhoneStore} from '../context/MobileTrackerPhoneStore';
 import UnregisteredDeviceContainer from './unregisteredDevice/UnregisteredDeviceContainer';
 import RegisteredDeviceContainer from './registeredDevice/RegisteredDeviceContainer';
 import {createStackNavigator} from 'react-navigation-stack';
+import AuthLoading from './AuthLoading';
 
 // const MainNavigator = createSwitchNavigator(
 //   {
@@ -25,24 +26,30 @@ import {createStackNavigator} from 'react-navigation-stack';
 //
 // const AppContainer = createAppContainer(MainNavigator);
 
-const MainNavigator = createStackNavigator(
-  {
-    UnregisteredDevice: {
-      screen: UnregisteredDeviceContainer,
-      navigationOptions: {headerShown: false},
-    },
-    RegisteredDevice: RegisteredDeviceContainer,
-  },
-  {
-    initialRouteName: 'UnregisteredDevice',
-  },
-  {
-    headerMode: 'none',
-    navigationOptions: {
-      headerVisible: false,
-    },
-  },
-);
+// const stackNavigator = createStackNavigator(
+//   {
+//     UnregisteredDevice: {
+//       screen: UnregisteredDeviceContainer,
+//       navigationOptions: {headerShown: false},
+//     },
+//     RegisteredDevice: RegisteredDeviceContainer,
+//   },
+//   {
+//     initialRouteName: 'AuthLoading',
+//   },
+//   {
+//     headerMode: 'none',
+//     navigationOptions: {
+//       headerVisible: false,
+//     },
+//   },
+// );
+
+const MainNavigator = createSwitchNavigator({
+  AuthLoading,
+  UnregisteredDevice: UnregisteredDeviceContainer,
+  RegisteredDevice: RegisteredDeviceContainer,
+});
 
 const AppContainer = createAppContainer(MainNavigator);
 
