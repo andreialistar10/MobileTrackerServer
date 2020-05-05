@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Modal from 'react-native-modal';
+import {HEADER_HEIGHT} from "../style";
 
 const dimensions = Dimensions.get('window');
 const imageHeight = 0.5 * Math.round((dimensions.height * 9) / 16);
@@ -51,13 +52,13 @@ const UnregisteredDeviceScreen = ({onRegisterDevice, deviceNameValidator}) => {
 
   const getStyleForRoot = () => {
     let {height} = actualRootDimensions;
-    height -= 110;
+    height -= HEADER_HEIGHT;
     return {...styles.container, minHeight: height};
   };
 
   const getStyleForModal = () => {
     let {height} = actualRootDimensions;
-    height -= 110 - 30;
+    height -= HEADER_HEIGHT - 30;
     if (height < 600) {
       height *= 0.8;
     } else if (height < 700) {
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageWrapper: {
-    marginTop: 15,
+    marginTop: 25,
     marginLeft: 15,
     marginRight: 15,
     overflow: 'hidden',

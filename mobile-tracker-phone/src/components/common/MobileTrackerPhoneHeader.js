@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, StyleSheet, Image, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {HEADER_HEIGHT} from '../style';
 
 const backgroundImage = require('../../assets/logo.png');
 const MobileTrackerPhoneHeader = () => {
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     width: '100%',
-    height: 110,
+    height: HEADER_HEIGHT,
     flex: 1,
     flexDirection: 'row',
     elevation: 6,
@@ -41,12 +42,12 @@ const styles = StyleSheet.create({
     // opacity: 0.9,
     overflow: 'visible',
     marginLeft: 10,
-    width: 72,
-    height: 72,
+    width: 65,
+    height: 65,
   },
   textContainer: {
     marginLeft: 8,
-    fontSize: 35,
+    fontSize: 32,
     fontWeight: '500',
     fontFamily: 'Rubik-Regular',
   },
