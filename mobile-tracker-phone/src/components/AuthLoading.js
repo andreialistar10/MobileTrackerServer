@@ -4,11 +4,10 @@ import {MobileTrackerPhoneContext} from '../context';
 
 const AuthLoading = ({navigation}) => {
   const {initStore} = useContext(MobileTrackerPhoneContext);
-
   useEffect(() => {
-    initStore().then((state) => {
+    initStore().then(({deviceInformation}) => {
       navigation.navigate(
-        state.deviceInformation.id !== null
+        deviceInformation.id !== null
           ? 'RegisteredDevice'
           : 'UnregisteredDevice',
       );

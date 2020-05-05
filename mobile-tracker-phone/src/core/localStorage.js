@@ -15,14 +15,23 @@ export const saveDeviceInformation = async (deviceInformation) => {
 export const getDeviceInformation = async () => {
   try {
     const deviceInfo = await AsyncStorage.getItem(DEVICE_INFORMATION_KEY);
-    return JSON.parse(deviceInfo);
+    let deviceInformation = JSON.parse(deviceInfo);
+    if (!deviceInformation) {
+      deviceInformation = initialState.deviceInformation;
+    }
+    return deviceInformation;
   } catch (e) {
     const {deviceInformation} = initialState;
     return {deviceInformation};
   }
 };
 
-export const removeDeviceInforation = async () => {
+export const getState = async () => {
+  const deviceInformation = await getDeviceInformation();
+  return {deviceInformation};
+};
+
+export const removeDeviceInformation = async () => {
   return AsyncStorage.removeItem(DEVICE_INFORMATION_KEY);
 };
 

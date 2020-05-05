@@ -2,10 +2,7 @@ import React, {useReducer} from 'react';
 import {Provider} from './index';
 import {initialState} from './initialState';
 import {registerDevice} from '../core/api';
-import {
-  getDeviceInformation,
-  saveDeviceInformation,
-} from '../core/localStorage';
+import {getState, saveDeviceInformation} from '../core/localStorage';
 
 const SET_DEVICE_CODE = 'SET_DEVICE_CODE';
 const INIT_STORE = 'INIT_STORE';
@@ -41,18 +38,9 @@ export const MobileTrackerPhoneStore = ({children}) => {
   };
 
   const initStore = () => {
-    return getDeviceInformation().then(deviceInformation => {
-      if (deviceInformation === null || deviceInformation === undefined) {
-        dispatch({
-          type: INIT_STORE,
-          payload: {initialState},
-        });
-        return Promise.resolve(initialState);
-      } else {
-        const storedState = {deviceInformation: deviceInformation};
-        dispatch({type: INIT_STORE, payload: storedState});
-        return Promise.resolve(storedState);
-      }
+    return getState().then(storedState => {
+      dispatch({type: INIT_STORE, payload: storedState});
+      return Promise.resolve(storedState);
     });
   };
 
