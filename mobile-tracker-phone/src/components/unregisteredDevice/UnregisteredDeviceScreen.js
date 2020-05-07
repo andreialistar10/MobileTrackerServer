@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Modal from 'react-native-modal';
-import {HEADER_HEIGHT} from "../style";
+import {HEADER_HEIGHT} from '../style';
 
 const dimensions = Dimensions.get('window');
 const imageHeight = 0.5 * Math.round((dimensions.height * 9) / 16);

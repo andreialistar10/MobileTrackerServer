@@ -5,7 +5,7 @@ import {clearLocalStorage} from '../core/localStorage';
 
 const AuthLoading = ({navigation}) => {
   const {initStore} = useContext(MobileTrackerPhoneContext);
-  clearLocalStorage();
+  // clearLocalStorage();
   useEffect(() => {
     initStore().then(({deviceInformation}) => {
       navigation.navigate(
