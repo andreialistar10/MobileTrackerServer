@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UnregisteredDeviceData {
+public class UnregisteredDeviceDataRequest {
 
     @NotBlank
     @Length(max = 50)

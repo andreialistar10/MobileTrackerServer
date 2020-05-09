@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Builder
@@ -24,4 +21,14 @@ public class UnregisteredDevice {
 
     @Column(name = "NAME", nullable = false)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATE", nullable = false)
+    private UnregisteredDeviceState state;
+
+    @Column(name = "PAIRING_PASSWORD")
+    private String password;
+
+    @Column(name = "USER_TRYING_TO_PAIR")
+    private String tryingToPairingUsername;
 }
