@@ -24,4 +24,13 @@ public class UnregisteredDevice {
 
     @Column(name = "NAME", nullable = false)
     private String name;
+
+    @Column(name = "STATE")
+    private UnregisteredDeviceState state;
+
+    @Column(name = "PAIRING_PASSWORD")
+    private String password;
+
+    @Column(name = "USER_TRYING_TO_PAIR")
+    private String tryingToPairingUsername;
 }
