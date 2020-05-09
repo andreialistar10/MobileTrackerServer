@@ -1,18 +1,18 @@
 package com.andrei.mobiletracker.device.facade.populator.unregistereddevice;
 
 import com.andrei.mobiletracker.beans.populator.Populator;
-import com.andrei.mobiletracker.device.dto.UnregisteredDeviceData;
+import com.andrei.mobiletracker.device.dto.UnregisteredDeviceDataRequest;
 import com.andrei.mobiletracker.device.model.UnregisteredDevice;
 import com.andrei.mobiletracker.device.model.UnregisteredDeviceState;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UnregisteredDeviceReversePopulator implements Populator<UnregisteredDevice, UnregisteredDeviceData> {
+public class UnregisteredDeviceReversePopulator implements Populator<UnregisteredDevice, UnregisteredDeviceDataRequest> {
 
     @Override
-    public void populate(UnregisteredDeviceData unregisteredDeviceData, UnregisteredDevice unregisteredDevice) {
+    public void populate(UnregisteredDeviceDataRequest unregisteredDeviceDataRequest, UnregisteredDevice unregisteredDevice) {
 
-        unregisteredDevice.setName(unregisteredDeviceData.getName());
+        unregisteredDevice.setName(unregisteredDeviceDataRequest.getName());
         unregisteredDevice.setState(UnregisteredDeviceState.UNPAIRED);
     }
 }
