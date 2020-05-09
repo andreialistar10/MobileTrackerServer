@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: @device-microservice.spring-activated-profiles@
   cloud:
     config:
       discovery:
