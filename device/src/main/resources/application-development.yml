@@ -3,3 +3,17 @@ logging:
   file:
     path: ./logs
     name: ${logging.file.path}/device.log
+
+spring:
+  rabbitmq:
+    password: mobile-tracker-password
+    username: mobile-tracker
+    host: localhost
+    port: 5672
+
+rabbitmq:
+  topics:
+    pairing:
+      name: pairing.device
+      routing-key: pairing
+

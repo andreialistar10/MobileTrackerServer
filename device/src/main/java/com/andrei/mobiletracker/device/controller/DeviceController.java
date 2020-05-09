@@ -2,7 +2,10 @@ package com.andrei.mobiletracker.device.controller;
 
 import com.andrei.mobiletracker.device.dto.UnregisteredDeviceData;
 import com.andrei.mobiletracker.device.facade.unregistereddevice.UnregisteredDeviceFacade;
+import com.andrei.mobiletracker.device.message.event.pairing.PairingEvent;
+import com.andrei.mobiletracker.device.message.publisher.MobileTrackerMessagePublisher;
 import com.andrei.mobiletracker.device.model.UnregisteredDevice;
+import com.andrei.mobiletracker.device.model.UnregisteredDeviceState;
 import com.andrei.mobiletracker.device.service.exception.DeviceExceptionType;
 import com.andrei.mobiletracker.device.service.exception.DeviceServiceException;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +13,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,6 +31,9 @@ public class DeviceController {
 
     @Autowired
     private UnregisteredDeviceFacade unregisteredDeviceFacade;
+
+    @Autowired
+    private MobileTrackerMessagePublisher<PairingEvent> pairingPublisher;
 
     @ApiOperation(value = "Register a new device")
     @ApiResponses(value = {
@@ -60,4 +67,13 @@ public class DeviceController {
         logger.error("-----------------SUCCESSFUL handleException-----------------");
         return new ResponseEntity<>(exception.getType(), new HttpHeaders(), exception.getStatus());
     }
+
+    @RequestMapping(value = "/test",
+            method = RequestMethod.GET)
+    public String salva() {
+
+        pairingPublisher.publish(new PairingEvent(UnregisteredDeviceState.PAIRED, "andrei", "121221"));
+        return "DA";
+    }
+
 }
