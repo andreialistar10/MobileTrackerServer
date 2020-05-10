@@ -19,3 +19,7 @@ export const RIGHT_SIDE_PADDING = "4%";
 export const MEDIUM_DEVICE_MAX_WIDTH = "750px";
 export const SMALL_DEVICE_MAX_WIDTH = "500px";
 export const TINY_DEVICE_MAX_WIDTH = "400px";
+
+//Text fiels
+export const DEFAULT_BORDER_SPACING = "1.2rem";
+export const DEFAULT_BORDER_SPACING_MAX_WIDTH_500px = "0.4rem";
