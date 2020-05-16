@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class DeviceSetting {
 
     @Id
-    @Column(name = "DEVICE_SETTINGS_ID")
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -25,7 +25,4 @@ public class DeviceSetting {
 
     @Column(name = "NAME", nullable = false)
     private String name;
-
-    @Column(name = "PHOTO_PATH", nullable = false)
-    private String photoPath;
 }

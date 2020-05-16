@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @EnableJpaRepositories(basePackageClasses = DeviceDaoJpa.class)
 public class DeviceDaoImpl implements DeviceDao {
@@ -24,5 +26,14 @@ public class DeviceDaoImpl implements DeviceDao {
         Device device = jpaRepository.findByCodeAndOwnerUsername(id, ownerUsername);
         logger.info("-----------------SUCCESSFUL findOneDeviceByDeviceIdAndOwnerUsername-----------------");
         return device;
+    }
+
+    @Override
+    public List<Device> findAllAvailableDevicesByOwnerUsernameAndDeleted(String username) {
+
+        logger.info("------------------LOGGING  findAllDevicesByOwnerUsername------------------");
+        List<Device> devices = jpaRepository.findAllByOwnerUsernameAndDeleted(username, false);
+        logger.info("-----------------SUCCESSFUL findAllDevicesByOwnerUsername-----------------");
+        return devices;
     }
 }

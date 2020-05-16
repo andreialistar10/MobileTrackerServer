@@ -23,11 +23,13 @@ import java.util.stream.Collectors;
 
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
     private BasicJwtConfig config;
-
-    @Autowired
     private JwtUtil jwtUtil;
+
+    public JwtTokenAuthenticationFilter(BasicJwtConfig config, JwtUtil jwtUtil) {
+        this.config = config;
+        this.jwtUtil = jwtUtil;
+    }
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest httpServletRequest, @NonNull HttpServletResponse httpServletResponse, @NonNull FilterChain filterChain)

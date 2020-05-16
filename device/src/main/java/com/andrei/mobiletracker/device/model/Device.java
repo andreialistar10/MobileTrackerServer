@@ -25,7 +25,10 @@ public class Device {
     @Column(name = "OWNER_USERNAME", nullable = false)
     private String ownerUsername;
 
+    @Column(name = "REGISTERED_ON", nullable = false)
+    private Long registeredOn;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, targetEntity = DeviceSetting.class)
-    @JoinColumn(name = "DEVICE_SETTINGS_ID", referencedColumnName = "DEVICE_SETTINGS_ID", nullable = false)
+    @JoinColumn(name = "DEVICE_SETTINGS_ID", referencedColumnName = "ID", nullable = false)
     private DeviceSetting deviceSetting;
 }
