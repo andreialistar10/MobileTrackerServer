@@ -1,5 +1,5 @@
 import React from "react";
-import { makeSharedStyle } from "../../../../style/activated-account/shared";
+import { makeSharedStyle } from "../../../../../style/activated-account/shared";
 import PropTypes from "prop-types";
 
 const MobileTrackerTableContainer = ({ children }) => {

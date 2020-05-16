@@ -1,11 +1,18 @@
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  COLOR_TITLE_PAGE,
   DEFAULT_FONT_SIZE_TITLE_PAGE,
   DEFAULT_BORDER_SPACING,
   DEFAULT_BORDER_SPACING_MAX_WIDTH_500px,
   MEDIUM_DEVICE_MAX_WIDTH,
   SMALL_DEVICE_MAX_WIDTH,
+  FIELD_BORDER_RADIUS,
+  FIELD_BORDER,
+  FIELD_BACKGROUND_COLOR,
+  FIELD_COLOR,
+  FIELD_HEIGHT,
+  LABEL_COLOR,
+  COLOR_TITLE_PAGE,
+  FONT_SIZE_TITLE_PAGE_MAX_WIDTH_500PX,
 } from "./constants";
 
 export const makeSharedStyle = makeStyles({
@@ -61,6 +68,7 @@ export const makeSharedStyle = makeStyles({
     textAlign: "center",
   },
   modalWrapper: {
+    minHeight: "fit-content",
     zIndex: 4,
     width: "100%",
     height: "100%",
@@ -80,7 +88,7 @@ export const makeSharedStyle = makeStyles({
     fontWeight: "bold",
     fontFamily: "Rubik-Regular",
     fontSize: "1.2rem",
-    color: "#545050",
+    color: LABEL_COLOR,
     display: "table-cell",
     paddingRight: DEFAULT_BORDER_SPACING,
     margin: "auto",
@@ -96,12 +104,12 @@ export const makeSharedStyle = makeStyles({
     },
   },
   textField: {
-    backgroundColor: "rgba(5, 152, 230,0.25)",
-    height: "2rem",
+    backgroundColor: FIELD_BACKGROUND_COLOR,
+    height: FIELD_HEIGHT,
     margin: 0,
     justifyContent: "center",
-    border: `1px solid ${COLOR_TITLE_PAGE}`,
-    borderRadius: "4px",
+    border: FIELD_BORDER,
+    borderRadius: FIELD_BORDER_RADIUS,
   },
   primitiveInput: {
     paddingLeft: "5px",
@@ -112,7 +120,7 @@ export const makeSharedStyle = makeStyles({
   input: {
     fontSize: "1.2rem",
     fontWeight: "500",
-    color: "rgb(13,108,230)",
+    color: FIELD_COLOR,
     fontFamily: "Rubik-Regular",
   },
   textFieldWrapper: {
@@ -141,7 +149,7 @@ export const makeSharedStyle = makeStyles({
     backgroundColor: "rgba(5, 152, 230,1)",
     borderRadius: "8px",
     padding: "10px",
-    fontSize: "1.2rem",
+    fontSize: "1.1rem",
     textTransform: "uppercase",
     fontWeight: "bold",
     color: "#fff",
@@ -154,6 +162,17 @@ export const makeSharedStyle = makeStyles({
     "&:disabled": {
       color: "white",
       backgroundColor: "rgba(121,215,187,0.5)",
+    },
+    marginBottom: DEFAULT_BORDER_SPACING,
+  },
+
+  modalTitlePage: {
+    color: COLOR_TITLE_PAGE,
+    fontFamily: "Rubik-Regular",
+    fontSize: DEFAULT_FONT_SIZE_TITLE_PAGE,
+    [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
+      fontSize: FONT_SIZE_TITLE_PAGE_MAX_WIDTH_500PX,
+      marginBottom: FONT_SIZE_TITLE_PAGE_MAX_WIDTH_500PX,
     },
   },
 });

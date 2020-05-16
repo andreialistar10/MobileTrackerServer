@@ -15,7 +15,7 @@ import DeviceSettingsPage from "./pages/DeviceSettingsPage";
 import LocationsPage from "./pages/LocationsPage";
 import NotificationsPage from "./pages/NotificationsPage";
 
-const ActivatedAccount = ({ username, logout, pageTitle }) => {
+const ActivatedAccount = ({ logout, pageTitle }) => {
   const style = makeActivatedAccountStyle();
   const {
     root,
@@ -50,7 +50,7 @@ const ActivatedAccount = ({ username, logout, pageTitle }) => {
           <TitlePage title={pageTitle} />
           <div className={rightSideContentWrapper}>
             <Switch>
-              <Route path="/account/devices" component={DevicesPage} />
+              <Route path="/account/devices" component={DevicesPage}/>
               <Route
                 path="/account/device-settings"
                 component={DeviceSettingsPage}
@@ -79,7 +79,6 @@ const mapStateToProps = (state, ownProps) => {
   const page = ownProps.match.params.page;
   const pageTitle = page || "profile";
   return {
-    username: state.authorization.username,
     pageTitle,
   };
 };

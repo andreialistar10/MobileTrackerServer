@@ -1,7 +1,9 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
-import { makeSharedStyle } from "../../../../style/activated-account/shared";
+import { makeSharedStyle } from "../../../../../style/activated-account/shared";
 import PropTypes from "prop-types";
+import MobileTrackerCell from "../containers/MobileTrackerCell";
+import MobileTrackerLabel from "./MobileTrackerLabel";
 
 const MobileTrackerTextField = ({
   textLabel,
@@ -9,11 +11,11 @@ const MobileTrackerTextField = ({
   onValueChange,
   readOnly,
 }) => {
-  const { textField, input, label, primitiveInput, cell } = makeSharedStyle();
+  const { textField, input, primitiveInput } = makeSharedStyle();
   return (
     <>
-      <div className={label}>{textLabel}</div>
-      <div className={cell}>
+      <MobileTrackerLabel textLabel={textLabel} />
+      <MobileTrackerCell>
         <TextField
           disabled={readOnly}
           value={value}
@@ -28,7 +30,7 @@ const MobileTrackerTextField = ({
             className: input,
           }}
         />
-      </div>
+      </MobileTrackerCell>
     </>
   );
 };

@@ -20,6 +20,12 @@ export const MEDIUM_DEVICE_MAX_WIDTH = "750px";
 export const SMALL_DEVICE_MAX_WIDTH = "500px";
 export const TINY_DEVICE_MAX_WIDTH = "400px";
 
-//Text fiels
+//Form style
 export const DEFAULT_BORDER_SPACING = "1.2rem";
 export const DEFAULT_BORDER_SPACING_MAX_WIDTH_500px = "0.4rem";
+export const FIELD_BORDER_RADIUS = "4px";
+export const FIELD_BORDER = `1px solid ${COLOR_TITLE_PAGE}`;
+export const FIELD_BACKGROUND_COLOR = 'rgba(5, 152, 230,0.25)';
+export const FIELD_COLOR = "rgb(13,108,230)";
+export const FIELD_HEIGHT = "2rem";
+export const LABEL_COLOR = "#545050";

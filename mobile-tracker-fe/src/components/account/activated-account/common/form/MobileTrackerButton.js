@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import PropTypes from "prop-types";
-import { makeSharedStyle } from "../../../../style/activated-account/shared";
+import { makeSharedStyle } from "../../../../../style/activated-account/shared";
 
 const MobileTrackerButton = ({
   disabled,

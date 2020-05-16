@@ -1,5 +1,16 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { COLOR_TITLE_PAGE, SMALL_DEVICE_MAX_WIDTH } from "../constants";
+import {
+  COLOR_TITLE_PAGE,
+  DEFAULT_BORDER_SPACING,
+  DEFAULT_BORDER_SPACING_MAX_WIDTH_500px,
+  FIELD_BACKGROUND_COLOR,
+  FIELD_BORDER,
+  FIELD_BORDER_RADIUS,
+  FIELD_COLOR,
+  FIELD_HEIGHT,
+  LABEL_COLOR,
+  SMALL_DEVICE_MAX_WIDTH,
+} from "../constants";
 
 export const makeDevicesStyle = makeStyles({
   root: {
@@ -49,5 +60,50 @@ export const makeDevicesStyle = makeStyles({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
+  },
+  switchContainer: {
+    width: "100%",
+    paddingRight: DEFAULT_BORDER_SPACING,
+    [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
+      paddingRight: DEFAULT_BORDER_SPACING_MAX_WIDTH_500px,
+    },
+  },
+  switchWrapper: {
+    float: "right",
+  },
+  switchLabel: {
+    margin: 0,
+    marginRight: "0!important",
+    userSelect: "none",
+    fontFamily: "Rubik-Regular",
+    textAlign: "right",
+    color: LABEL_COLOR,
+    fontWeight: "bold",
+    fontSize: "1rem",
+    [`@media (max-width:600px)`]: {
+      fontSize: "0.9rem",
+    },
+    [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
+      fontSize: "0.8rem",
+    },
+    "&:hover": {
+      color: FIELD_COLOR,
+    },
+  },
+  select: {
+    justifyContent: "center",
+    width: "100%",
+    height: FIELD_HEIGHT,
+    margin: 0,
+    backgroundColor: FIELD_BACKGROUND_COLOR,
+    paddingLeft: "5px",
+    paddingRight: "5px",
+    paddingTop: 0,
+    paddingBottom: 0,
+    border: FIELD_BORDER,
+    borderRadius: FIELD_BORDER_RADIUS,
+    color: FIELD_COLOR,
+    fontSize: "1.1rem",
+    fontWeight: "500",
   },
 });

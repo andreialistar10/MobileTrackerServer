@@ -2,15 +2,13 @@ package com.andrei.mobiletracker.device.message.event.pairing;
 
 import com.andrei.mobiletracker.device.message.event.MobileTrackerMessageEvent;
 import com.andrei.mobiletracker.device.model.UnregisteredDeviceState;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class PairingEvent implements MobileTrackerMessageEvent {
 
     private UnregisteredDeviceState state;

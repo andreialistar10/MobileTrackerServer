@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/pairing-device")
-public class PairingController {
+public class PairingDeviceController {
 
-    private static final Logger logger = LogManager.getLogger(PairingController.class);
+    private static final Logger logger = LogManager.getLogger(PairingDeviceController.class);
 
 //    @ApiOperation(value = "Enroll a new device")
 //    @ApiResponses(value = {

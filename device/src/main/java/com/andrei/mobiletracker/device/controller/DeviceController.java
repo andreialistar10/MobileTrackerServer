@@ -1,7 +1,7 @@
 package com.andrei.mobiletracker.device.controller;
 
-import com.andrei.mobiletracker.device.dto.UnregisteredDeviceDataRequest;
-import com.andrei.mobiletracker.device.dto.UnregisteredDeviceDataResponse;
+import com.andrei.mobiletracker.device.dto.unregistereddevice.UnregisteredDeviceDataRequest;
+import com.andrei.mobiletracker.device.dto.unregistereddevice.UnregisteredDeviceDataResponse;
 import com.andrei.mobiletracker.device.facade.unregistereddevice.UnregisteredDeviceFacade;
 import com.andrei.mobiletracker.device.message.event.pairing.PairingEvent;
 import com.andrei.mobiletracker.device.message.publisher.MobileTrackerMessagePublisher;
@@ -32,8 +32,6 @@ public class DeviceController {
     @Autowired
     private UnregisteredDeviceFacade unregisteredDeviceFacade;
 
-    @Autowired
-    private MobileTrackerMessagePublisher<PairingEvent> pairingPublisher;
 
     @ApiOperation(value = "Register a new device")
     @ApiResponses(value = {
@@ -73,12 +71,4 @@ public class DeviceController {
 
         return new ResponseEntity<>(exception.getType(), new HttpHeaders(), exception.getStatus());
     }
-
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public String salva() {
-
-        pairingPublisher.publish(new PairingEvent(UnregisteredDeviceState.PAIRED, "andrei", "121221"));
-        return "DA";
-    }
-
 }

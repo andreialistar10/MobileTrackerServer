@@ -31,4 +31,7 @@ public class UnregisteredDevice {
 
     @Column(name = "USER_TRYING_TO_PAIR")
     private String tryingToPairingUsername;
+
+    @Column(name = "ID_AFTER_PAIRING")
+    private String idAfterPairing;
 }

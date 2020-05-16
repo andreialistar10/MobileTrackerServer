@@ -2,13 +2,13 @@ package com.andrei.mobiletracker.device.facade.converter.unregistereddevice;
 
 import com.andrei.mobiletracker.beans.converter.Converter;
 import com.andrei.mobiletracker.beans.populator.Populator;
-import com.andrei.mobiletracker.device.dto.UnregisteredDeviceDataResponse;
+import com.andrei.mobiletracker.device.dto.unregistereddevice.UnregisteredDeviceDataResponse;
 import com.andrei.mobiletracker.device.model.UnregisteredDevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UnregisteredDeviceConverter implements Converter<UnregisteredDevice, UnregisteredDeviceDataResponse> {
+public class UnregisteredDeviceDataResponseFromUnregisteredDeviceConverter implements Converter<UnregisteredDevice, UnregisteredDeviceDataResponse> {
 
     @Autowired
     private Populator<UnregisteredDeviceDataResponse, UnregisteredDevice> populator;

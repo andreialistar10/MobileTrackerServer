@@ -1,10 +1,10 @@
 import React from "react";
-import { makeSharedStyle } from "../../../../style/activated-account/shared";
+import { makeSharedStyle } from "../../../../../style/activated-account/shared";
 import PropTypes from "prop-types";
 
-const MobileTrackerRow = ({ children }) => {
+const MobileTrackerRow = ({ children, show }) => {
   const { textFieldWrapper } = makeSharedStyle();
-  return <div className={textFieldWrapper}>{children}</div>;
+  return show && <div className={textFieldWrapper}>{children}</div>;
 };
 
 MobileTrackerRow.propTypes = {
@@ -12,6 +12,11 @@ MobileTrackerRow.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
+  show: PropTypes.bool
+};
+
+MobileTrackerRow.defaultProps= {
+  show: true
 };
 
 export default MobileTrackerRow;

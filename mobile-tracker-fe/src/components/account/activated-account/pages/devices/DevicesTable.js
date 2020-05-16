@@ -6,7 +6,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { makeDevicesStyle } from "../../../../../style/activated-account/pages/devices";
 import PropTypes from "prop-types";
 
-const DevicesTable = ({ handleOnAdd }) => {
+const DevicesTable = ({ handleOnAdd, devices }) => {
   const myTextIcon = React.useRef(null);
   const wrapperStyle = {
     backgroundColor: "rgba(255,255,255,0.6)",
@@ -42,38 +42,7 @@ const DevicesTable = ({ handleOnAdd }) => {
         searchable: false,
       },
     ],
-    data: [
-      {
-        id: "MOTR_$4234230423423942304923402394_4324234",
-        name: "Baran",
-        date: new Date().toDateString(),
-      },
-      {
-        id: "MOTR_$4234230423423942304923402394_4324234",
-        name: "Baran",
-        date: new Date(23).toDateString(),
-      },
-      {
-        id: "MOTR_$4234230423423942304923402394_4324234",
-        name: "Baran",
-        date: new Date(23).toDateString(),
-      },
-      {
-        id: "MOTR_$4234230423423942304923402394_4324234",
-        name: "Baran",
-        date: new Date(23).toDateString(),
-      },
-      {
-        id: "MOTR_$4234230423423942304923402394_4324234",
-        name: "Baran",
-        date: new Date(23).toDateString(),
-      },
-      {
-        id: "MOTR_$4234230423423942304923402394_4324234",
-        name: "Baran",
-        date: new Date(23).toDateString(),
-      },
-    ],
+    data: {},
   });
 
   React.useEffect(() => {
@@ -87,7 +56,7 @@ const DevicesTable = ({ handleOnAdd }) => {
   return (
     <MaterialTable
       columns={state.columns}
-      data={state.data}
+      data={devices}
       style={wrapperStyle}
       options={{
         minBodyHeight: 295,
@@ -152,6 +121,11 @@ const DevicesTable = ({ handleOnAdd }) => {
 
 DevicesTable.propTypes = {
   handleOnAdd: PropTypes.func.isRequired,
+  devices: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired
+  })).isRequired
 };
 
 export default DevicesTable;

@@ -1,4 +1,4 @@
-package com.andrei.mobiletracker.device.dto;
+package com.andrei.mobiletracker.device.dto.unregistereddevice;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
