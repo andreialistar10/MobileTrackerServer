@@ -26,6 +26,9 @@ public class UnregisteredDevice {
     @Column(name = "STATE", nullable = false)
     private UnregisteredDeviceState state;
 
+    @Column(name = "TOKEN", nullable = false)
+    private String token;
+
     @Column(name = "PAIRING_PASSWORD")
     private String password;
 

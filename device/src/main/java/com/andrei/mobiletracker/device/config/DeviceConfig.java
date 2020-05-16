@@ -1,7 +1,10 @@
 package com.andrei.mobiletracker.device.config;
 
+import com.andrei.mobiletracker.device.security.DeviceJwtAuthorizationProviderConfig;
 import com.andrei.mobiletracker.device.security.UserBasicJwtSecurity;
 import com.andrei.mobiletracker.security.config.BasicJwtConfig;
+import com.andrei.mobiletracker.security.config.JwtAuthorizationProviderConfig;
+import com.andrei.mobiletracker.security.jwtFilter.authMicroserviceFilters.util.AuthJwtUtil;
 import com.andrei.mobiletracker.security.jwtFilter.microserviceFilters.JwtTokenAuthenticationFilter;
 import com.andrei.mobiletracker.security.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +12,16 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DeviceConfig {
+
+    @Bean
+    public JwtAuthorizationProviderConfig jwtAuthorizationProviderConfigBean() {
+        return new DeviceJwtAuthorizationProviderConfig();
+    }
+
+    @Bean
+    public AuthJwtUtil authJwtUtilBean(JwtAuthorizationProviderConfig jwtAuthorizationProviderConfigBean){
+        return new AuthJwtUtil(jwtAuthorizationProviderConfigBean);
+    }
 
     @Bean
     public JwtUtil jwtUtilBean() {

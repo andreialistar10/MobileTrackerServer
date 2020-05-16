@@ -1,4 +1,4 @@
-package com.andrei.mobiletracker.user.security;
+package com.andrei.mobiletracker.device.security;
 
 import com.andrei.mobiletracker.security.config.JwtAuthorizationProviderConfig;
 import lombok.Getter;
@@ -10,20 +10,21 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @RefreshScope
-public class UserJwtAuthorizationProviderConfig extends UserBasicJwtConfig implements JwtAuthorizationProviderConfig {
+@Component
+public class DeviceJwtAuthorizationProviderConfig extends DeviceBasicJwtSecurity implements JwtAuthorizationProviderConfig {
 
-    @Value("${user.security.jwt.login-url}")
+    @Value("${device.security.jwt.login-url}")
     private String loginUrl;
 
-    @Value("${user.security.jwt.logout-url}")
+    @Value("${device.security.jwt.logout-url}")
     private String logoutUrl;
 
-    @Value("${user.security.jwt.secret-refresh-token}")
+    @Value("${device.security.jwt.secret-refresh-token}")
     private String secretSignInRefreshToken;
 
-    @Value("${user.security.jwt.expiration-refresh-token}")
+    @Value("${device.security.jwt.expiration-refresh-token}")
     private long expirationRefreshToken;
 
-    @Value("${user.security.jwt.generate-refresh-token-url}")
+    @Value("${device.security.jwt.generate-refresh-token-url}")
     private String generateRefreshTokenUrl;
 }

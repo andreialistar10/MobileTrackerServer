@@ -14,11 +14,14 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Service
 public class AuthJwtUtil extends JwtUtil {
 
-    @Autowired
+//    @Autowired
     private JwtAuthorizationProviderConfig config;
+
+    public AuthJwtUtil(JwtAuthorizationProviderConfig config) {
+        this.config = config;
+    }
 
     public String generateToken(UserDetails userDetails) {
 

@@ -28,11 +28,14 @@ public class AuthJwtFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService service;
 
-    @Autowired
     private AuthJwtUtil jwtUtil;
 
-    @Autowired
     private JwtAuthorizationProviderConfig config;
+
+    public AuthJwtFilter(AuthJwtUtil jwtUtil, JwtAuthorizationProviderConfig config) {
+        this.jwtUtil = jwtUtil;
+        this.config = config;
+    }
 
     private static final Logger logger = LogManager.getLogger(AuthJwtFilter.class);
 
@@ -40,7 +43,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest httpServletRequest, @NonNull HttpServletResponse httpServletResponse, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        logger.info("---------------------- REQUEST TO {} ----------------------",httpServletRequest.getRequestURI());
+        logger.info("---------------------- REQUEST TO {} ----------------------", httpServletRequest.getRequestURI());
         if (skipIfLogin(httpServletRequest, httpServletResponse, filterChain))
             return;
 
@@ -58,8 +61,7 @@ public class AuthJwtFilter extends OncePerRequestFilter {
                 username = jwtUtil.extractUsername(jwt, config.getSecretSignInRefreshToken());
                 authorities = jwtUtil.extractAllClaims(jwt, config.getSecretSignInRefreshToken()).get("authorities", List.class);
                 secretSignIn = config.getSecretSignInRefreshToken();
-            }
-            else {
+            } else {
                 logger.info("Request with simple token");
                 username = jwtUtil.extractUsername(jwt, config.getSecretSignIn());
                 authorities = jwtUtil.extractAllClaims(jwt, config.getSecretSignIn()).get("authorities", List.class);
