@@ -2,7 +2,7 @@ import React from "react";
 import Dialog from "@material-ui/core/Dialog";
 import PropTypes from "prop-types";
 import DialogContent from "@material-ui/core/DialogContent";
-import { makeSharedStyle } from "../../../../style/activated-account/shared";
+import { makeSharedStyle } from "../../../../../style/activated-account/shared";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 

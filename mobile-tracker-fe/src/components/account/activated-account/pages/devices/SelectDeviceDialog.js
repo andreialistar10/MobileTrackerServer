@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import ModalDropDown from "../../common/ModalDropDown";
+import ModalDropDown from "../../common/modals/ModalDropDown";
 import PropTypes from "prop-types";
 import {
   FIELD_BACKGROUND_COLOR,
@@ -59,7 +59,7 @@ const SelectDeviceDialog = ({ devices, onSelect }) => {
 
     if (newValue) {
       setReplacedDevice({ ...newValue });
-      onSelect(newValue.id);
+      onSelect(newValue);
     }
   };
 

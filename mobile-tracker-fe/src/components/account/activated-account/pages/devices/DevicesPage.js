@@ -68,7 +68,7 @@ const DevicesPage = ({ username }) => {
   const handlePairing = (credentials) => {
     console.log(credentials);
     setCredentials(credentials);
-    // setPairingLoading(true);
+    setPairingLoading(true);
   };
 
   const sendMessage = () => {

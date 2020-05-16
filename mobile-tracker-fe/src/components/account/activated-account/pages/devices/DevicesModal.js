@@ -1,6 +1,6 @@
 import React from "react";
 import AddDeviceForm from "./AddDeviceForm";
-import MobileTrackerModal from "../../common/MobileTrackerModal";
+import MobileTrackerModal from "../../common/modals/MobileTrackerModal";
 import { makeDevicesStyle } from "../../../../../style/activated-account/pages/devices";
 import PropTypes from "prop-types";
 

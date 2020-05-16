@@ -7,10 +7,10 @@ import Dialog from "@material-ui/core/Dialog";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import MobileTrackerButton from "./form/MobileTrackerButton";
-import { makeSharedStyle } from "../../../../style/activated-account/shared";
+import MobileTrackerButton from "../form/MobileTrackerButton";
+import { makeSharedStyle } from "../../../../../style/activated-account/shared";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-import { COLOR_TITLE_PAGE } from "../../../../style/activated-account/constants";
+import { COLOR_TITLE_PAGE } from "../../../../../style/activated-account/constants";
 
 const ModalDropDown = ({
   onClose,

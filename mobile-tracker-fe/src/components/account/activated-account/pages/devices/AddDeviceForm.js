@@ -12,13 +12,19 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import SelectDeviceDialog from "./SelectDeviceDialog";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-import { COLOR_TITLE_PAGE } from "../../../../../style/activated-account/constants";
+import {
+  COLOR_TITLE_PAGE,
+  LABEL_COLOR,
+} from "../../../../../style/activated-account/constants";
+import MobileTrackerAlertModal from "../../common/modals/MobileTrackerAlertModal";
 
 const AddDeviceForm = ({ loading, handleSubmit, devices }) => {
   const [deviceCode, setDeviceCode] = useState("");
   const [devicePassword, setDevicePassword] = useState("");
   const [replacedDevice, setReplacedDevice] = useState("");
+  const [replacedDeviceName, setReplacedDeviceName] = useState("");
   const [replaceDevice, setReplaceDevice] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
 
   const dataIsValid = () => {
     if (deviceCode === "" || devicePassword === "") {
@@ -41,21 +47,38 @@ const AddDeviceForm = ({ loading, handleSubmit, devices }) => {
     setDevicePassword(event.target.value);
   };
 
+  const handleOnSubmit = () => {
+    handleSubmit({
+      id: deviceCode,
+      password: devicePassword,
+      idAfterPairing: replacedDevice,
+    });
+  };
+
+  const handleOnAgree = () => {
+    setDevicePassword("");
+    setOpenAlert(false);
+    handleOnSubmit();
+  };
+
+  const handleOnDisagree = () => {
+    setOpenAlert(false);
+  };
+
   const handleAddDeviceOnSubmit = (event) => {
     event.preventDefault();
     if (dataIsValid()) {
-      handleSubmit({
-        id: deviceCode,
-        password: devicePassword,
-        idAfterPairing: replacedDevice,
-      });
-      setDevicePassword("");
+      if (replaceDevice) {
+        setOpenAlert(true);
+      } else {
+        handleOnSubmit();
+      }
     }
   };
 
-  const onReplacedDeviceChange = (id) => {
-    // setReplacedDevice(event.target.value);
-    setReplacedDevice(id);
+  const onReplacedDeviceChange = (device) => {
+    setReplacedDevice(device.id);
+    setReplacedDeviceName(device.name);
   };
 
   const onChangeReplaceDevice = () => {
@@ -68,6 +91,23 @@ const AddDeviceForm = ({ loading, handleSubmit, devices }) => {
       primary: { main: COLOR_TITLE_PAGE },
     },
   });
+
+  const getMessage = () => {
+    return (
+      <p
+        style={{
+          textAlign: "justify",
+          color: "rgb(121, 110, 110)",
+          fontSize: "1.2rem",
+        }}
+      >
+        You have chosen to register the new device by replacing the one with the
+        ID: <b>{replacedDevice}</b> and the name: <b>{replacedDeviceName}</b>.
+        Are you sure you want to do this? The old device will be disconnected
+        and will not be able to be tracked unless you register it again.
+      </p>
+    );
+  };
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -125,6 +165,15 @@ const AddDeviceForm = ({ loading, handleSubmit, devices }) => {
           disabled={!dataIsValid()}
         />
       </form>
+      <MobileTrackerAlertModal
+        handleOnAgree={handleOnAgree}
+        open={openAlert}
+        message={getMessage()}
+        handleOnDisagree={handleOnDisagree}
+        title="Do you want to replace selected device?"
+        agreeButtonText={"YES"}
+        disagreeButtonText={"NO"}
+      />
     </MuiThemeProvider>
   );
 };
