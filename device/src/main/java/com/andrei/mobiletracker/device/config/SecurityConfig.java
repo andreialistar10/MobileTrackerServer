@@ -1,11 +1,13 @@
 package com.andrei.mobiletracker.device.config;
 
+import com.andrei.mobiletracker.device.security.DeviceAuthority;
 import com.andrei.mobiletracker.security.jwtFilter.microserviceFilters.JwtTokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -21,6 +23,10 @@ public class SecurityConfig {
     @Configuration
     public static class UnregisteredDeviceApiConfig extends WebSecurityConfigurerAdapter {
 
+        @Autowired
+        @Qualifier(value = "deviceAuthenticationFilter")
+        private JwtTokenAuthenticationFilter deviceAuthJwtFilter;
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
@@ -30,6 +36,7 @@ public class SecurityConfig {
                     .formLogin().disable()
                     .cors().and()
                     .authorizeRequests()
+                    .antMatchers("/unregistered-devices/confirm-pairing").hasAuthority(DeviceAuthority.UNREGISTERED_DEVICE.toString())
                     .antMatchers("/unregistered-devices/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
@@ -38,9 +45,9 @@ public class SecurityConfig {
                     .anonymous()
                     .and()
                     .exceptionHandling().authenticationEntryPoint(
-                    (httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED));
-//                .and()
-//                .addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class);
+                    (httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+                    .and()
+                    .addFilterBefore(deviceAuthJwtFilter, UsernamePasswordAuthenticationFilter.class);
         }
     }
 
@@ -78,10 +85,10 @@ public class SecurityConfig {
 
     @Configuration
     @Order(3)
-    public static class DefaultSecurityConfig extends WebSecurityConfigurerAdapter{
+    public static class DefaultSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
-        protected void configure(HttpSecurity http) throws Exception{
+        protected void configure(HttpSecurity http) throws Exception {
 
             http.antMatcher("/**")
                     .csrf()
@@ -90,13 +97,13 @@ public class SecurityConfig {
                     .formLogin().disable()
                     .cors().and()
                     .authorizeRequests()
-                    .antMatchers("/unregistered-devices/**",
-                            "/swagger-ui.html/**",
+                    .antMatchers("/swagger-ui.html/**",
                             "/configuration/**",
                             "/swagger-resources/**",
                             "/v2/api-docs",
                             "/webjars/**",
-                            "/api/**").permitAll();
+                            "/api/**")
+                    .permitAll();
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.andrei.mobiletracker.device.config;
 
+import com.andrei.mobiletracker.device.security.DeviceBasicJwtSecurity;
 import com.andrei.mobiletracker.device.security.DeviceJwtAuthorizationProviderConfig;
 import com.andrei.mobiletracker.device.security.UserBasicJwtSecurity;
 import com.andrei.mobiletracker.security.config.BasicJwtConfig;
@@ -34,7 +35,22 @@ public class DeviceConfig {
     }
 
     @Bean
+    public BasicJwtConfig deviceJwtConfig() {
+        return new DeviceBasicJwtSecurity();
+    }
+
+    @Bean
+    public JwtAuthorizationProviderConfig deviceJwtAuthorizationProviderConfig() {
+        return new DeviceJwtAuthorizationProviderConfig();
+    }
+
+    @Bean
     public JwtTokenAuthenticationFilter userAuthenticationFilter(BasicJwtConfig userJwtConfigBean, JwtUtil jwtUtilBean) {
         return new JwtTokenAuthenticationFilter(userJwtConfigBean, jwtUtilBean);
+    }
+
+    @Bean
+    public JwtTokenAuthenticationFilter deviceAuthenticationFilter(BasicJwtConfig deviceJwtConfig, JwtUtil jwtUtilBean){
+        return new JwtTokenAuthenticationFilter(deviceJwtConfig, jwtUtilBean);
     }
 }

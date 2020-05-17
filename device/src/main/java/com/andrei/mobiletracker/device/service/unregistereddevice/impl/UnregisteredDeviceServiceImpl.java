@@ -53,7 +53,7 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
 
         logger.info("------------------LOGGING  saveOneUnregisteredDevice------------------");
         String code = unregisteredDeviceCodeGenerator.generate(unregisteredDevice.getName());
-        String token = tokenGenerator.generateApiToken(code, DeviceAuthority.UNREGISTERED_DEVICE);
+        String token = tokenGenerator.generateRegisterToken(code);
 
         unregisteredDevice.setId(code);
         unregisteredDevice.setIdAfterPairing(code);

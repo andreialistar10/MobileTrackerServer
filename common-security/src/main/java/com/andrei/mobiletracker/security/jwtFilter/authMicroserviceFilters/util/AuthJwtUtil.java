@@ -28,6 +28,14 @@ public class AuthJwtUtil extends JwtUtil {
         return createToken(claims, userDetails.getUsername(), config.getExpiration(), config.getSecretSignIn());
     }
 
+    public String generateUnexpiredToken(UserDetails userDetails){
+
+        Map<String, Object> claims = new HashMap<>();
+        List<String> authorities = generateAuthoritiesList(userDetails);
+        claims.put("authorities", authorities);
+        return createUnexpiredToken(claims, userDetails.getUsername(), config.getSecretSignIn());
+    }
+
     public String generateRefreshToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         List<String> generate = Collections.singletonList("REFRESH_TOKEN");
@@ -69,6 +77,16 @@ public class AuthJwtUtil extends JwtUtil {
                 .compact();
     }
 
+    private String createUnexpiredToken(Map<String, Object> claims, String username, String secretSignIn) {
+
+        final long currentTimestamp = System.currentTimeMillis();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(username)
+                .setIssuedAt(new Date(currentTimestamp))
+                .signWith(SignatureAlgorithm.HS256, secretSignIn)
+                .compact();
+    }
     private boolean isTokenExpired(String token, String secretSignIn) {
 
         return extractExpiration(token, secretSignIn).before(new Date());

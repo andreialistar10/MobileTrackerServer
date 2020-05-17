@@ -20,6 +20,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/unregistered-devices")
 public class UnregisteredDeviceController {
@@ -56,8 +58,25 @@ public class UnregisteredDeviceController {
         return new ResponseEntity<>(unregisteredDeviceDataResponse, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Pair a new device")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "SUCCESS", response = UnregisteredDevice.class),
+            @ApiResponse(code = 400, message = "INVALID_DATA", response = DeviceExceptionType.class),
+    })
+    @RequestMapping(value = "/confirm-pairing",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public String pairDevice(Principal principal) {
 
-    @ExceptionHandler({DeviceServiceException.class})
+        logger.info("------------------LOGGING  addUnregisteredDevice------------------");
+        logger.info("Device ID: {}", principal.getName());
+
+        logger.info("-----------------SUCCESSFUL addUnregisteredDevice-----------------");
+        return "3";
+    }
+
+
+        @ExceptionHandler({DeviceServiceException.class})
     @ResponseBody
     public ResponseEntity<DeviceExceptionType> handleException(DeviceServiceException exception) {
 
