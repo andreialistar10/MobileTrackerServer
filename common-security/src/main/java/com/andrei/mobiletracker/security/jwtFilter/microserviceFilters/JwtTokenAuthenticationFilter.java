@@ -1,10 +1,8 @@
 package com.andrei.mobiletracker.security.jwtFilter.microserviceFilters;
 
-
 import com.andrei.mobiletracker.security.config.BasicJwtConfig;
 import com.andrei.mobiletracker.security.util.JwtUtil;
 import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

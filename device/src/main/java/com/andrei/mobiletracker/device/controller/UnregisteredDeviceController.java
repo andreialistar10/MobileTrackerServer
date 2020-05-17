@@ -21,7 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/unregistered-device")
+@RequestMapping("/unregistered-devices")
 public class UnregisteredDeviceController {
 
     private static final Logger logger = LogManager.getLogger(UnregisteredDeviceController.class);
