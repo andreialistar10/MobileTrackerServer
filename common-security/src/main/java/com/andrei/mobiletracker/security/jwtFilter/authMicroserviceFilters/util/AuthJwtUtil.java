@@ -5,10 +5,8 @@ import com.andrei.mobiletracker.security.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Function;
@@ -16,7 +14,6 @@ import java.util.stream.Collectors;
 
 public class AuthJwtUtil extends JwtUtil {
 
-//    @Autowired
     private JwtAuthorizationProviderConfig config;
 
     public AuthJwtUtil(JwtAuthorizationProviderConfig config) {
@@ -51,7 +48,7 @@ public class AuthJwtUtil extends JwtUtil {
 
     private Date extractExpiration(String token, String secretSignIn) {
 
-        return extractClaim(token, secretSignIn,Claims::getExpiration);
+        return extractClaim(token, secretSignIn, Claims::getExpiration);
     }
 
     private <T> T extractClaim(String token, String secretSignIn, Function<Claims, T> claimsResolver) {

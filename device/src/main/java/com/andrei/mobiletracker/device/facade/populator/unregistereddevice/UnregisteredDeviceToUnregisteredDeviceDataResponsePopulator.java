@@ -13,5 +13,6 @@ public class UnregisteredDeviceToUnregisteredDeviceDataResponsePopulator impleme
 
         unregisteredDeviceDataResponse.setId(unregisteredDevice.getId());
         unregisteredDeviceDataResponse.setName(unregisteredDevice.getName());
+        unregisteredDeviceDataResponse.setToken(unregisteredDevice.getToken());
     }
 }

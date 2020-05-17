@@ -16,7 +16,7 @@
             </activation>
             <properties>
                 <worker-microservice.spring-activated-profiles>production,discovery-client,user-authorization,jpa,liquibase</worker-microservice.spring-activated-profiles>
-                <device-microservice.spring-activated-profiles>rabbitmq,pairing-topic</device-microservice.spring-activated-profiles>
+                <device-microservice.spring-activated-profiles>rabbitmq,pairing-topic,device-authorization</device-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>mobiletracker</db.username>
                 <db.password>mobiletrackerpassword</db.password>
@@ -43,7 +43,7 @@
             </activation>
             <properties>
                 <worker-microservice.spring-activated-profiles>development,discovery-client,user-authorization,jpa,liquibase</worker-microservice.spring-activated-profiles>
-                <device-microservice.spring-activated-profiles>rabbitmq,pairing-topic</device-microservice.spring-activated-profiles>
+                <device-microservice.spring-activated-profiles>rabbitmq,pairing-topic,device-authorization</device-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>mobiletracker</db.username>
                 <db.password>mobiletrackerpassword</db.password>
@@ -70,7 +70,7 @@
             </activation>
             <properties>
                 <worker-microservice.spring-activated-profiles>test,jpa,liquibase,user-authorization</worker-microservice.spring-activated-profiles>
-                <device-microservice.spring-activated-profiles></device-microservice.spring-activated-profiles>
+                <device-microservice.spring-activated-profiles>application-device-authorization</device-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>mobiletracker</db.username>
                 <db.password>mobiletrackerpassword</db.password>

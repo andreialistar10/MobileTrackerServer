@@ -1,6 +1,5 @@
 package com.andrei.mobiletracker.device.dao.deviceconstant.impl.jpa;
 
-import com.andrei.mobiletracker.device.controller.DeviceController;
 import com.andrei.mobiletracker.device.dao.deviceconstant.DeviceConstantDao;
 import com.andrei.mobiletracker.device.model.DeviceConstant;
 import com.andrei.mobiletracker.device.model.DeviceConstantName;

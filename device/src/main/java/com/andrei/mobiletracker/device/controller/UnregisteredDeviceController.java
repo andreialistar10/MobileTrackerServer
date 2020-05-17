@@ -3,10 +3,7 @@ package com.andrei.mobiletracker.device.controller;
 import com.andrei.mobiletracker.device.dto.unregistereddevice.UnregisteredDeviceDataRequest;
 import com.andrei.mobiletracker.device.dto.unregistereddevice.UnregisteredDeviceDataResponse;
 import com.andrei.mobiletracker.device.facade.unregistereddevice.UnregisteredDeviceFacade;
-import com.andrei.mobiletracker.device.message.event.pairing.PairingEvent;
-import com.andrei.mobiletracker.device.message.publisher.MobileTrackerMessagePublisher;
 import com.andrei.mobiletracker.device.model.UnregisteredDevice;
-import com.andrei.mobiletracker.device.model.UnregisteredDeviceState;
 import com.andrei.mobiletracker.device.service.exception.DeviceExceptionType;
 import com.andrei.mobiletracker.device.service.exception.DeviceServiceException;
 import io.swagger.annotations.ApiOperation;
@@ -24,10 +21,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/devices")
-public class DeviceController {
+@RequestMapping("/unregistered-device")
+public class UnregisteredDeviceController {
 
-    private static final Logger logger = LogManager.getLogger(DeviceController.class);
+    private static final Logger logger = LogManager.getLogger(UnregisteredDeviceController.class);
 
     @Autowired
     private UnregisteredDeviceFacade unregisteredDeviceFacade;
