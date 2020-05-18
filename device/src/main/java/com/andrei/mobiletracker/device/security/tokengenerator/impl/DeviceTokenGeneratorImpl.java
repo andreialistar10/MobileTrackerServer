@@ -33,4 +33,12 @@ public class DeviceTokenGeneratorImpl implements DeviceTokenGenerator {
         UserDetails deviceCredentials = new User(deviceId, "", Collections.singletonList(deviceAuthority));
         return authJwtUtil.generateUnexpiredToken(deviceCredentials);
     }
+
+    @Override
+    public String generateRefreshToken(String deviceId) {
+
+        GrantedAuthority deviceAuthority = new SimpleGrantedAuthority(DeviceAuthority.REFRESH_TOKEN.toString());
+        UserDetails deviceCredentials = new User(deviceId, "", Collections.singletonList(deviceAuthority));
+        return authJwtUtil.generateUnexpiredToken(deviceCredentials);
+    }
 }

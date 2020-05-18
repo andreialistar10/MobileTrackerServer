@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "DEVICE_SETTINGS")
-public class DeviceSetting {
+public class DeviceSettings {
 
     @Id
     @Column(name = "ID")

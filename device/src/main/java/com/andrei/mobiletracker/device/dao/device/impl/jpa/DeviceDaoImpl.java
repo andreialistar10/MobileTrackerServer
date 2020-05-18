@@ -36,4 +36,13 @@ public class DeviceDaoImpl implements DeviceDao {
         logger.info("-----------------SUCCESSFUL findAllDevicesByOwnerUsername-----------------");
         return devices;
     }
+
+    @Override
+    public Device saveOrUpdateOneDevice(Device device) {
+
+        logger.info("------------------LOGGING  saveOrUpdateOneDevice------------------");
+        Device savedDevice = jpaRepository.save(device);
+        logger.info("-----------------SUCCESSFUL saveOrUpdateOneDevice-----------------");
+        return savedDevice;
+    }
 }

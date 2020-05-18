@@ -9,4 +9,6 @@ public interface DeviceDao {
     Device findOneDeviceByDeviceIdAndOwnerUsername(String id, String ownerUsername);
 
     List<Device> findAllAvailableDevicesByOwnerUsernameAndDeleted(String username);
+
+    Device saveOrUpdateOneDevice(Device device);
 }

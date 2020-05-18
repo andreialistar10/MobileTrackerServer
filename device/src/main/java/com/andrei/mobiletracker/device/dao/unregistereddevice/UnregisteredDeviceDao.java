@@ -10,4 +10,8 @@ public interface UnregisteredDeviceDao {
     UnregisteredDevice findOneUnregisteredDeviceByIdAndPasswordAndState(String deviceId, String devicePassword, UnregisteredDeviceState state);
 
     UnregisteredDevice updateOneUnregisteredDevice(UnregisteredDevice foundUnregisteredDevice);
+
+    UnregisteredDevice findOneUnregisteredDeviceById(String id);
+
+    void deleteOneUnregisteredDevice(String id);
 }

@@ -28,7 +28,13 @@ public class Device {
     @Column(name = "REGISTERED_ON", nullable = false)
     private Long registeredOn;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, targetEntity = DeviceSetting.class)
+    @Transient
+    private String tokenApi;
+
+    @Transient
+    private String refreshToken;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, targetEntity = DeviceSettings.class)
     @JoinColumn(name = "DEVICE_SETTINGS_ID", referencedColumnName = "ID", nullable = false)
-    private DeviceSetting deviceSetting;
+    private DeviceSettings deviceSettings;
 }

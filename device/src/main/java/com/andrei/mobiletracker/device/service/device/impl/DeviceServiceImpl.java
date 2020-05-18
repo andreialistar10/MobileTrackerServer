@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class DeviceServiceImpl implements DeviceService {
 
     @Autowired
@@ -21,14 +20,13 @@ public class DeviceServiceImpl implements DeviceService {
 
     private static final Logger logger = LogManager.getLogger(DeviceServiceImpl.class);
 
-
     @Transactional(readOnly = true)
     @Override
     public List<Device> findAllDevicesByOwnerUsername(String username) {
 
         logger.info("------------------LOGGING  findAllDevicesByOwnerUsername------------------");
         List<Device> devices = deviceDao.findAllAvailableDevicesByOwnerUsernameAndDeleted(username);
-        devices.forEach(device -> Hibernate.initialize(device.getDeviceSetting()));
+        devices.forEach(device -> Hibernate.initialize(device.getDeviceSettings()));
         logger.info("-----------------SUCCESSFUL findAllDevicesByOwnerUsername-----------------");
         return devices;
     }

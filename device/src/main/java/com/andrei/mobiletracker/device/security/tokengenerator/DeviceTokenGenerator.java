@@ -7,4 +7,6 @@ public interface DeviceTokenGenerator {
     String generateApiToken(String deviceId, DeviceAuthority authority);
 
     String generateRegisterToken(String deviceId);
+
+    String generateRefreshToken(String code);
 }

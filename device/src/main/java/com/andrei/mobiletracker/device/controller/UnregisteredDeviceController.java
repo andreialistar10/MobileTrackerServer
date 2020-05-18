@@ -1,7 +1,7 @@
 package com.andrei.mobiletracker.device.controller;
 
-import com.andrei.mobiletracker.device.dto.unregistereddevice.UnregisteredDeviceDataRequest;
-import com.andrei.mobiletracker.device.dto.unregistereddevice.UnregisteredDeviceDataResponse;
+import com.andrei.mobiletracker.device.dto.ownerdevice.DevicesData;
+import com.andrei.mobiletracker.device.dto.unregistereddevice.*;
 import com.andrei.mobiletracker.device.facade.unregistereddevice.UnregisteredDeviceFacade;
 import com.andrei.mobiletracker.device.model.UnregisteredDevice;
 import com.andrei.mobiletracker.device.service.exception.DeviceExceptionType;
@@ -16,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class UnregisteredDeviceController {
 
     @ApiOperation(value = "Register a new device")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "SUCCESS", response = UnregisteredDevice.class),
+            @ApiResponse(code = 200, message = "SUCCESS", response = DevicesData.class),
             @ApiResponse(code = 400, message = "INVALID_DATA", response = DeviceExceptionType.class),
     })
     @RequestMapping(value = "",
@@ -60,23 +61,46 @@ public class UnregisteredDeviceController {
 
     @ApiOperation(value = "Pair a new device")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "SUCCESS", response = UnregisteredDevice.class),
+            @ApiResponse(code = 200, message = "SUCCESS", response = PairingDeviceDataResponse.class),
             @ApiResponse(code = 400, message = "INVALID_DATA", response = DeviceExceptionType.class),
     })
     @RequestMapping(value = "/confirm-pairing",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public String pairDevice(Principal principal) {
+    @Transactional
+    public ResponseEntity<PairingDeviceDataResponse> pairDevice(@Validated PairingDeviceDataRequest pairingDeviceDataRequest, BindingResult result, Principal principal) {
 
         logger.info("------------------LOGGING  addUnregisteredDevice------------------");
-        logger.info("Device ID: {}", principal.getName());
+        logger.info("Device ID:      {}", principal.getName());
+        logger.info("Owner username: {}", pairingDeviceDataRequest.getOwnerUsername());
 
+        if (result.hasErrors()) {
+            throw new DeviceServiceException("Username cannot be blank", HttpStatus.BAD_REQUEST, DeviceExceptionType.INVALID_DATA);
+        }
+        PairingDeviceDataResponse pairingDeviceDataResponse = unregisteredDeviceFacade.pairing(pairingDeviceDataRequest, principal.getName());
         logger.info("-----------------SUCCESSFUL addUnregisteredDevice-----------------");
-        return "3";
+        return new ResponseEntity<>(pairingDeviceDataResponse, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Pair a new device")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "SUCCESS", response = UnregisteredDevice.class),
+            @ApiResponse(code = 400, message = "INVALID_DATA", response = DeviceExceptionType.class),
+    })
+    @RequestMapping(value = "/start-pairing",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UnregisteredDevicePasswordData> startPairing(Principal principal) {
+
+        logger.info("------------------LOGGING  startPairing------------------");
+        logger.info("Device ID: {}", principal.getName());
+        UnregisteredDevicePasswordData unregisteredDevicePasswordData = unregisteredDeviceFacade.startPairing(principal.getName());
+        logger.info("-----------------SUCCESSFUL startPairing-----------------");
+        return new ResponseEntity<>(unregisteredDevicePasswordData, HttpStatus.OK);
     }
 
 
-        @ExceptionHandler({DeviceServiceException.class})
+    @ExceptionHandler({DeviceServiceException.class})
     @ResponseBody
     public ResponseEntity<DeviceExceptionType> handleException(DeviceServiceException exception) {
 

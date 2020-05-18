@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @EnableJpaRepositories(basePackageClasses = UnregisteredDeviceJpaRepository.class)
 public class UnregisteredDeviceDaoJpa implements UnregisteredDeviceDao {
@@ -43,5 +45,22 @@ public class UnregisteredDeviceDaoJpa implements UnregisteredDeviceDao {
         UnregisteredDevice unregisteredDevice = jpaRepository.save(foundUnregisteredDevice);
         logger.info("-----------------SUCCESSFUL updateOneUnregisteredDevice-----------------");
         return unregisteredDevice;
+    }
+
+    @Override
+    public UnregisteredDevice findOneUnregisteredDeviceById(String id) {
+
+        logger.info("------------------LOGGING  findOneUnregisteredDeviceById------------------");
+        Optional<UnregisteredDevice> unregisteredDeviceOptional = jpaRepository.findById(id);
+        logger.info("-----------------SUCCESSFUL findOneUnregisteredDeviceById-----------------");
+        return unregisteredDeviceOptional.orElse(null);
+    }
+
+    @Override
+    public void deleteOneUnregisteredDevice(String id) {
+
+        logger.info("------------------LOGGING  deleteOneUnregisteredDevice------------------");
+        jpaRepository.deleteById(id);
+        logger.info("-----------------SUCCESSFUL deleteOneUnregisteredDevice-----------------");
     }
 }

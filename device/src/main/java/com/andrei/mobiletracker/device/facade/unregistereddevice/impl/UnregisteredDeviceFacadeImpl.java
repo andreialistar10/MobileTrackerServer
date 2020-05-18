@@ -2,9 +2,9 @@ package com.andrei.mobiletracker.device.facade.unregistereddevice.impl;
 
 import com.andrei.mobiletracker.beans.converter.Converter;
 import com.andrei.mobiletracker.device.dto.deviceconnectivity.UnregisteredDeviceCredentialsData;
-import com.andrei.mobiletracker.device.dto.unregistereddevice.UnregisteredDeviceDataRequest;
-import com.andrei.mobiletracker.device.dto.unregistereddevice.UnregisteredDeviceDataResponse;
+import com.andrei.mobiletracker.device.dto.unregistereddevice.*;
 import com.andrei.mobiletracker.device.facade.unregistereddevice.UnregisteredDeviceFacade;
+import com.andrei.mobiletracker.device.model.Device;
 import com.andrei.mobiletracker.device.model.UnregisteredDevice;
 import com.andrei.mobiletracker.device.service.unregistereddevice.UnregisteredDeviceService;
 import org.apache.logging.log4j.LogManager;
@@ -27,6 +27,9 @@ public class UnregisteredDeviceFacadeImpl implements UnregisteredDeviceFacade {
     private Converter<UnregisteredDeviceCredentialsData, UnregisteredDevice> unregisteredDeviceFromUnregisteredDeviceCredentialsDataConverter;
 
     @Autowired
+    private Converter<Device,PairingDeviceDataResponse > pairingDeviceDataResponseFromDeviceConverter;
+
+    @Autowired
     private UnregisteredDeviceService unregisteredDeviceService;
 
     @Override
@@ -47,5 +50,30 @@ public class UnregisteredDeviceFacadeImpl implements UnregisteredDeviceFacade {
         UnregisteredDevice storedUnregisteredDevice = unregisteredDeviceService.tryToPairingUnregisteredDevice(unregisteredDevice);
         logger.info("-----------------SUCCESSFUL tryToPairing-----------------");
         return storedUnregisteredDevice;
+    }
+
+    @Override
+    public PairingDeviceDataResponse pairing(PairingDeviceDataRequest pairingDeviceDataRequest, String deviceId) {
+
+        logger.info("------------------LOGGING  pairing------------------");
+
+        UnregisteredDevice unregisteredDevice = UnregisteredDevice.builder()
+                .id(deviceId)
+                .tryingToPairingUsername(pairingDeviceDataRequest.getOwnerUsername())
+                .build();
+        Device savedDevice = unregisteredDeviceService.confirmPairing(unregisteredDevice);
+        logger.info("-----------------SUCCESSFUL pairing-----------------");
+        return pairingDeviceDataResponseFromDeviceConverter.convert(savedDevice);
+    }
+
+    @Override
+    public UnregisteredDevicePasswordData startPairing(String deviceId) {
+
+        logger.info("------------------LOGGING  startPairing------------------");
+        UnregisteredDevice unregisteredDevice = unregisteredDeviceService.startPairing(deviceId);
+        logger.info("-----------------SUCCESSFUL startPairing-----------------");
+        return UnregisteredDevicePasswordData.builder()
+                .password(unregisteredDevice.getPassword())
+                .build();
     }
 }

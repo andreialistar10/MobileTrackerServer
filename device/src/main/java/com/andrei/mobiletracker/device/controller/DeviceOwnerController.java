@@ -30,7 +30,7 @@ public class DeviceOwnerController {
 
     @ApiOperation(value = "Get all my devices")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "SUCCESS", response = UnregisteredDevice.class),
+            @ApiResponse(code = 200, message = "SUCCESS", response = DevicesData.class),
     })
     @RequestMapping(value = "",
             method = RequestMethod.GET,
