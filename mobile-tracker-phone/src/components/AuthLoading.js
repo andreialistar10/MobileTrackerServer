@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from 'react';
 import Loading from './common/Loading';
 import {MobileTrackerPhoneContext} from '../context';
-import {clearLocalStorage} from '../core/localStorage';
+// import {clearLocalStorage} from '../core/localStorage';
 
 const AuthLoading = ({navigation}) => {
   const {initStore} = useContext(MobileTrackerPhoneContext);
@@ -14,7 +14,7 @@ const AuthLoading = ({navigation}) => {
           : 'UnregisteredDevice',
       );
     });
-  }, []);
+  }, [initStore, navigation]);
 
   return <Loading isLoading={true} />;
 };

@@ -37,10 +37,6 @@ const DeviceInformationScreen = ({navigation}) => {
     fontWeight: 'bold',
   };
 
-  React.useEffect(() => {
-    console.log(deviceInformation);
-  }, [deviceInformation]);
-
   return (
     <SafeAreaView>
       <ScrollView style={styleScrollView.style}>

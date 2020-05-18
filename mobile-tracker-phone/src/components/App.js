@@ -13,14 +13,13 @@ import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {MobileTrackerPhoneStore} from '../context/MobileTrackerPhoneStore';
 import UnregisteredDeviceContainer from './unregisteredDevice/UnregisteredDeviceContainer';
 import AuthLoading from './AuthLoading';
-import {Tab} from './registeredDevice';
+import {RegisteredDeviceTabNavigator} from './registeredDevice';
 
 const MainNavigator = createSwitchNavigator(
   {
     AuthLoading,
     UnregisteredDevice: UnregisteredDeviceContainer,
-    // RegisteredDevice,
-    RegisteredDevice: Tab,
+    RegisteredDevice: RegisteredDeviceTabNavigator,
   },
   {initialRouteName: 'AuthLoading'},
 );

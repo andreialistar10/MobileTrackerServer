@@ -3,4 +3,9 @@ export const initialState = {
     id: null,
     name: null,
   },
+  authorization: {
+    token: null,
+    refreshToken: null,
+  },
+  password: null,
 };

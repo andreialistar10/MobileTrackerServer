@@ -2,12 +2,22 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {initialState} from '../context/initialState';
 
 const DEVICE_INFORMATION_KEY = 'DEVICE_INFORMATION';
+const AUTHORIZATION_KEY = 'DEVICE_AUTHORIZATION';
 
 export const saveDeviceInformation = async (deviceInformation) => {
   try {
     await AsyncStorage.setItem(
       DEVICE_INFORMATION_KEY,
       JSON.stringify(deviceInformation),
+    );
+  } catch (e) {}
+};
+
+export const saveAuthorization = async (authorization) => {
+  try {
+    await AsyncStorage.setItem(
+      AUTHORIZATION_KEY,
+      JSON.stringify(authorization),
     );
   } catch (e) {}
 };
@@ -26,9 +36,23 @@ export const getDeviceInformation = async () => {
   }
 };
 
+export const getAuthorization = async () => {
+  try {
+    const deviceInfo = await AsyncStorage.getItem(AUTHORIZATION_KEY);
+    let authorization = JSON.parse(deviceInfo);
+    if (!authorization) {
+      authorization = initialState.authorization;
+    }
+    return authorization;
+  } catch (e) {
+    return initialState.authorization;
+  }
+};
+
 export const getState = async () => {
   const deviceInformation = await getDeviceInformation();
-  return {deviceInformation};
+  const authorization = await getAuthorization();
+  return {deviceInformation, authorization};
 };
 
 export const removeDeviceInformation = async () => {
