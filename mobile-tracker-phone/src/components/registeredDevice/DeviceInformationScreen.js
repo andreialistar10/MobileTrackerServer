@@ -1,6 +1,5 @@
 import React, {useContext, useState} from 'react';
 import {
-  Button,
   Dimensions,
   SafeAreaView,
   ScrollView,
@@ -37,6 +36,11 @@ const DeviceInformationScreen = ({navigation}) => {
     fontSize: 14,
     fontWeight: 'bold',
   };
+
+  React.useEffect(() => {
+    console.log(deviceInformation);
+  }, [deviceInformation]);
+
   return (
     <SafeAreaView>
       <ScrollView style={styleScrollView.style}>

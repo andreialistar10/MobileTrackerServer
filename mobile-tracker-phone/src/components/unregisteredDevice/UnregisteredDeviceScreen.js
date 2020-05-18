@@ -71,7 +71,6 @@ const UnregisteredDeviceScreen = ({onRegisterDevice, deviceNameValidator}) => {
 
   const handleRegisterDevice = () => {
     if (deviceNameValidator(deviceName)) {
-      setModalIsVisible(false);
       onRegisterDevice(deviceName);
     } else {
       setError('Device name could not be blank!');

@@ -19,7 +19,7 @@ const UnregisteredDeviceContainer = ({navigation}) => {
     setLoading(false);
   }, []);
 
-  const notifyError = errorMessage => {
+  const notifyError = (errorMessage) => {
     if (Platform.OS === 'android') {
       ToastAndroid.showWithGravityAndOffset(
         errorMessage,
@@ -33,7 +33,7 @@ const UnregisteredDeviceContainer = ({navigation}) => {
     }
   };
 
-  const registerDevice = name => {
+  const registerDevice = (name) => {
     if (!deviceNameIsValid(name)) {
       return;
     }
@@ -42,17 +42,17 @@ const UnregisteredDeviceContainer = ({navigation}) => {
       .then(() => {
         navigation.navigate('RegisteredDevice');
       })
-      .catch(error => {
+      .catch((errorMessage) => {
         setLoading(false);
-        notifyError(error.message);
+        notifyError(errorMessage);
       });
   };
 
-  const deviceNameIsValid = deviceName => {
+  const deviceNameIsValid = (deviceName) => {
     return !stringIsBlank(deviceName);
   };
 
-  const stringIsBlank = str => {
+  const stringIsBlank = (str) => {
     return !str || /^\s*$/.test(str);
   };
 
