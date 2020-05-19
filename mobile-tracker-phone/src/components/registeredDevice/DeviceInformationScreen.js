@@ -20,7 +20,7 @@ const DeviceInformationScreen = ({navigation}) => {
     width: dimensions.width,
     height: dimensions.height,
   });
-  const {deviceInformation} = useContext(MobileTrackerPhoneContext);
+  const {deviceInformation, password} = useContext(MobileTrackerPhoneContext);
   const getStyleForRoot = () => {
     let {height} = actualRootDimensions;
     height -= HEADER_HEIGHT;
@@ -33,8 +33,13 @@ const DeviceInformationScreen = ({navigation}) => {
   const textStyle = {
     ...styles.text,
     color: 'rgba(210,0,0,1)',
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: 'bold',
+  };
+
+  const passwordStyle = {
+    ...textStyle,
+    fontSize: 18,
   };
 
   return (
@@ -60,10 +65,14 @@ const DeviceInformationScreen = ({navigation}) => {
                 Device Name:
               </Text>
               <Text style={textStyle}>{deviceInformation.name}</Text>
-              <Text style={[styles.text, styles.deviceInformationSubtitle]}>
-                Password:
-              </Text>
-              <Text style={textStyle}>parola mea</Text>
+              {password !== null && password !== undefined && password !== '' && (
+                <>
+                  <Text style={[styles.text, styles.deviceInformationSubtitle]}>
+                    Password:
+                  </Text>
+                  <Text style={passwordStyle}>{password}</Text>
+                </>
+              )}
               <View style={styles.buttonWrapper}>
                 <TouchableOpacity
                   style={[styles.button, styles.turnOnButton]}

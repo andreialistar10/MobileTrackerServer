@@ -1,7 +1,7 @@
 import React, {useReducer} from 'react';
 import {Provider} from './index';
 import {initialState} from './initialState';
-import {registerDevice} from '../core/api';
+import {getPasswordDevice, registerDevice} from '../core/api';
 import {
   getState,
   saveAuthorization,
@@ -10,6 +10,7 @@ import {
 
 const SET_DEVICE_CODE = 'SET_DEVICE_CODE';
 const INIT_STORE = 'INIT_STORE';
+const SET_PASSWORD = 'SET_PASSWORD';
 
 function reducer(state, action) {
   const {type, payload} = action;
@@ -23,6 +24,8 @@ function reducer(state, action) {
     }
     case INIT_STORE:
       return {...payload};
+    case SET_PASSWORD:
+      return {...state, password: payload};
     default:
       return state;
   }
@@ -54,6 +57,14 @@ export const MobileTrackerPhoneStore = ({children}) => {
     });
   };
 
-  const value = {...state, onRegisterDevice, initStore};
+  const startPairing = () => {
+    return getPasswordDevice().then(({password}) => {
+      console.log(password);
+      dispatch({type: SET_PASSWORD, payload: password});
+      return Promise.resolve();
+    });
+  };
+
+  const value = {...state, onRegisterDevice, initStore, startPairing};
   return <Provider value={value}>{children}</Provider>;
 };
