@@ -12,4 +12,6 @@ public interface UnregisteredDeviceService {
     Device confirmPairing(UnregisteredDevice unregisteredDevice);
 
     UnregisteredDevice startPairing(String deviceId);
+
+    void deviceDisconnect(String deviceId);
 }

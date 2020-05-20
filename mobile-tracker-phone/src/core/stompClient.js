@@ -52,6 +52,7 @@ const stompSubscribeOnConnect = (
   topics,
   actionsOnMessageReceived,
   autoReconnect = true,
+  token,
   actionOnConnect = defaultAction,
   onWebSocketClose = defaultAction,
 ) => {
@@ -69,6 +70,10 @@ const stompSubscribeOnConnect = (
       onWebSocketClose();
     }
   };
+  if (token) {
+    client.connectHeaders = {'X-Authorization': token};
+  }
+
   return client;
 };
 
@@ -77,6 +82,7 @@ export const connectToPairingStompBroker = (
   onConnectionError,
   actionOnConnect,
   onMessageReceived,
+  token = null,
   onErrorReceived = defaultActionOnMessageReceive,
 ) => {
   const eventTopic = `/devices/pairing/${id}`;
@@ -85,6 +91,7 @@ export const connectToPairingStompBroker = (
     [eventTopic, errorTopic],
     [onMessageReceived, onErrorReceived],
     false,
+    token,
     actionOnConnect,
     onConnectionError,
   );

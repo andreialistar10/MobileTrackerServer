@@ -7,7 +7,7 @@ import {notifyError} from '../../core/alert';
 import {connectToPairingStompBroker} from '../../core/stompClient';
 
 const RegisteredDeviceContainer = ({navigation}) => {
-  const {startPairing, deviceInformation} = useContext(
+  const {startPairing, deviceInformation, authorization} = useContext(
     MobileTrackerPhoneContext,
   );
   const [pairing, setPairing] = useState(false);
@@ -42,6 +42,8 @@ const RegisteredDeviceContainer = ({navigation}) => {
         deviceInformation.id,
         onStompClientConnectionError,
         openPairingMode,
+        () => {},
+        authorization.token,
       );
       client.activate();
       return () => {

@@ -1,6 +1,6 @@
 package com.andrei.mobiletracker.device.controller;
 
-import com.andrei.mobiletracker.device.config.WebSocketConfig;
+import com.andrei.mobiletracker.device.config.StompConfig;
 import com.andrei.mobiletracker.device.controller.exception.DeviceConnectivityException;
 import com.andrei.mobiletracker.device.dto.deviceconnectivity.UnregisteredDeviceCredentialsData;
 import com.andrei.mobiletracker.device.facade.unregistereddevice.UnregisteredDeviceFacade;
@@ -37,7 +37,7 @@ public class DeviceConnectivityController {
             deviceCredentialsData.setTryingToPairUsername(username);
             unregisteredDeviceFacade.tryToPairing(deviceCredentialsData);
         } catch (DeviceServiceException exception) {
-            String topic = String.format("%s/pairing/%s/user/%s", WebSocketConfig.ERROR_TOPIC, deviceId, username);
+            String topic = String.format("%s/pairing/%s/user/%s", StompConfig.ERROR_TOPIC, deviceId, username);
             throw new DeviceConnectivityException(exception.getMessage(), topic);
         }
 

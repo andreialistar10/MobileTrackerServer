@@ -76,4 +76,12 @@ public class UnregisteredDeviceFacadeImpl implements UnregisteredDeviceFacade {
                 .password(unregisteredDevice.getPassword())
                 .build();
     }
+
+    @Override
+    public void setUnpairedDeviceState(String deviceId) {
+
+        logger.info("------------------LOGGING  setUnpairedDeviceState------------------");
+        unregisteredDeviceService.deviceDisconnect(deviceId);
+        logger.info("-----------------SUCCESSFUL setUnpairedDeviceState-----------------");
+    }
 }

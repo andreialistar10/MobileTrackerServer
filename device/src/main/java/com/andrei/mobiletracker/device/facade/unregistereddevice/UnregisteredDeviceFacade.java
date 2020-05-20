@@ -13,4 +13,6 @@ public interface UnregisteredDeviceFacade {
     PairingDeviceDataResponse pairing(PairingDeviceDataRequest pairingDeviceDataRequest, String deviceId);
 
     UnregisteredDevicePasswordData startPairing(String deviceId);
+
+    void setUnpairedDeviceState(String deviceId);
 }

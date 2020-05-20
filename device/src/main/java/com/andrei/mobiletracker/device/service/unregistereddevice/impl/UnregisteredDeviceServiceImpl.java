@@ -90,18 +90,29 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
 
         logger.info("------------------LOGGING  startPairing------------------");
         UnregisteredDevice unregisteredDevice = unregisteredDeviceDao.findOneUnregisteredDeviceById(deviceId);
-        if (unregisteredDevice == null){
+        if (unregisteredDevice == null) {
             throw new DeviceServiceException("Does not exist a device with id: " + deviceId, HttpStatus.BAD_REQUEST, DeviceExceptionType.INVALID_DATA);
         }
-        if (unregisteredDevice.getState() != UnregisteredDeviceState.UNPAIRED){
+        if (unregisteredDevice.getState() != UnregisteredDeviceState.UNPAIRED) {
             throw new DeviceServiceException("Device: " + deviceId + " already starts pairing!", HttpStatus.BAD_REQUEST, DeviceExceptionType.INVALID_DATA);
         }
         String password = RandomStringUtils.random(PASSWORD_LENGTH, true, true);
         unregisteredDevice.setState(UnregisteredDeviceState.PAIRING);
         unregisteredDevice.setPassword(password);
-//        unregisteredDeviceDao.saveOneUnregisteredDevice(unregisteredDevice);
         logger.info("-----------------SUCCESSFUL startPairing-----------------");
         return unregisteredDevice;
+    }
+
+    @Override
+    @Transactional
+    public void deviceDisconnect(String deviceId) {
+
+        logger.info("------------------LOGGING  deviceDisconnect------------------");
+        UnregisteredDevice unregisteredDevice = unregisteredDeviceDao.findOneUnregisteredDeviceById(deviceId);
+        if (unregisteredDevice != null) {
+            unregisteredDevice.setState(UnregisteredDeviceState.UNPAIRED);
+        }
+        logger.info("-----------------SUCCESSFUL deviceDisconnect-----------------");
     }
 
     private UnregisteredDevice findCompleteAndValidateExistingUnregisteredDeviceOnConfirmPairing(UnregisteredDevice unregisteredDevice) {
