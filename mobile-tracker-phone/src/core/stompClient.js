@@ -81,12 +81,12 @@ export const connectToPairingStompBroker = (
   id,
   onConnectionError,
   actionOnConnect,
-  onMessageReceived,
   token = null,
+  onMessageReceived,
   onErrorReceived = defaultActionOnMessageReceive,
 ) => {
-  const eventTopic = `/devices/pairing/${id}`;
-  const errorTopic = `/errors/pairing/${id}`;
+  const eventTopic = `/devices/${id}/pairing`;
+  const errorTopic = `/errors/pairing-device/${id}`;
   return stompSubscribeOnConnect(
     [eventTopic, errorTopic],
     [onMessageReceived, onErrorReceived],

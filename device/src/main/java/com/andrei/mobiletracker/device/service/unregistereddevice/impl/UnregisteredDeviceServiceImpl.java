@@ -3,8 +3,6 @@ package com.andrei.mobiletracker.device.service.unregistereddevice.impl;
 import com.andrei.mobiletracker.device.dao.device.DeviceDao;
 import com.andrei.mobiletracker.device.dao.devicesettings.DeviceSettingsDao;
 import com.andrei.mobiletracker.device.dao.unregistereddevice.UnregisteredDeviceDao;
-import com.andrei.mobiletracker.device.message.event.pairing.PairingEvent;
-import com.andrei.mobiletracker.device.message.publisher.MobileTrackerMessagePublisher;
 import com.andrei.mobiletracker.device.model.Device;
 import com.andrei.mobiletracker.device.model.DeviceSettings;
 import com.andrei.mobiletracker.device.model.UnregisteredDevice;
@@ -43,9 +41,6 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
 
     @Autowired
     private UnregisteredDeviceCodeGenerator unregisteredDeviceCodeGenerator;
-
-    @Autowired
-    private MobileTrackerMessagePublisher<PairingEvent> pairingPublisher;
 
     @Autowired
     private DeviceTokenGenerator tokenGenerator;
@@ -103,16 +98,33 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
         return unregisteredDevice;
     }
 
+    @Transactional
+    @Override
+    public UnregisteredDevice tryToPairingUnregisteredDevice(UnregisteredDevice unregisteredDevice) {
+
+        logger.info("------------------LOGGING  pairUnregisteredDevice------------------");
+        logger.info("Username: {}", unregisteredDevice.getTryingToPairingUsername());
+
+        verifyTargetDeviceAlreadyExists(unregisteredDevice);
+        UnregisteredDevice foundUnregisteredDevice = tryToPairingOneUnregisteredDevice(unregisteredDevice);
+        logger.info("-----------------SUCCESSFUL pairUnregisteredDevice-----------------");
+        return foundUnregisteredDevice;
+    }
+
     @Override
     @Transactional
-    public void deviceDisconnect(String deviceId) {
+    public String deviceDisconnect(String deviceId) {
 
         logger.info("------------------LOGGING  deviceDisconnect------------------");
         UnregisteredDevice unregisteredDevice = unregisteredDeviceDao.findOneUnregisteredDeviceById(deviceId);
-        if (unregisteredDevice != null) {
-            unregisteredDevice.setState(UnregisteredDeviceState.UNPAIRED);
+        if (unregisteredDevice == null) {
+            throw new DeviceServiceException("Invalid device code!", HttpStatus.BAD_REQUEST, DeviceExceptionType.INVALID_DATA);
         }
+        String tryingToPairingUsername = unregisteredDevice.getTryingToPairingUsername();
+        unregisteredDevice.setState(UnregisteredDeviceState.UNPAIRED);
+        unregisteredDevice.setTryingToPairingUsername(null);
         logger.info("-----------------SUCCESSFUL deviceDisconnect-----------------");
+        return tryingToPairingUsername;
     }
 
     private UnregisteredDevice findCompleteAndValidateExistingUnregisteredDeviceOnConfirmPairing(UnregisteredDevice unregisteredDevice) {
@@ -140,31 +152,6 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
                 .deleted(false)
                 .ownerUsername(unregisteredDevice.getTryingToPairingUsername())
                 .deviceSettings(deviceSettings)
-                .build();
-    }
-
-
-    @Transactional
-    @Override
-    public UnregisteredDevice tryToPairingUnregisteredDevice(UnregisteredDevice unregisteredDevice) {
-
-        logger.info("------------------LOGGING  pairUnregisteredDevice------------------");
-        logger.info("Username: {}", unregisteredDevice.getTryingToPairingUsername());
-
-        verifyTargetDeviceAlreadyExists(unregisteredDevice);
-        UnregisteredDevice foundUnregisteredDevice = tryToPairingOneUnregisteredDevice(unregisteredDevice);
-        PairingEvent pairingEvent = createPairingEvent(unregisteredDevice);
-        pairingPublisher.publish(pairingEvent);
-        logger.info("-----------------SUCCESSFUL pairUnregisteredDevice-----------------");
-        return foundUnregisteredDevice;
-    }
-
-    private PairingEvent createPairingEvent(UnregisteredDevice unregisteredDevice) {
-
-        return PairingEvent.builder()
-                .deviceCode(unregisteredDevice.getId())
-                .ownerUsername(unregisteredDevice.getTryingToPairingUsername())
-                .state(unregisteredDevice.getState())
                 .build();
     }
 

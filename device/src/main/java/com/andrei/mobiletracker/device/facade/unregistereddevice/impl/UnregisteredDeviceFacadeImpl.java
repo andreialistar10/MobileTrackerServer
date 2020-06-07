@@ -78,10 +78,11 @@ public class UnregisteredDeviceFacadeImpl implements UnregisteredDeviceFacade {
     }
 
     @Override
-    public void setUnpairedDeviceState(String deviceId) {
+    public String setUnpairedDeviceState(String deviceId) {
 
         logger.info("------------------LOGGING  setUnpairedDeviceState------------------");
-        unregisteredDeviceService.deviceDisconnect(deviceId);
+        String tryingToPairingUsername = unregisteredDeviceService.deviceDisconnect(deviceId);
         logger.info("-----------------SUCCESSFUL setUnpairedDeviceState-----------------");
+        return tryingToPairingUsername;
     }
 }

@@ -4,6 +4,9 @@ import com.andrei.mobiletracker.device.config.StompConfig;
 import com.andrei.mobiletracker.device.controller.exception.DeviceConnectivityException;
 import com.andrei.mobiletracker.device.dto.deviceconnectivity.UnregisteredDeviceCredentialsData;
 import com.andrei.mobiletracker.device.facade.unregistereddevice.UnregisteredDeviceFacade;
+import com.andrei.mobiletracker.device.message.event.pairing.PairingEvent;
+import com.andrei.mobiletracker.device.message.publisher.MobileTrackerMessagePublisher;
+import com.andrei.mobiletracker.device.model.UnregisteredDevice;
 import com.andrei.mobiletracker.device.service.exception.DeviceServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,8 +29,10 @@ public class DeviceConnectivityController {
     @Autowired
     private UnregisteredDeviceFacade unregisteredDeviceFacade;
 
+    @Autowired
+    private MobileTrackerMessagePublisher<PairingEvent> pairingPublisher;
+
     @MessageMapping("/pairing/{deviceId}/user/{username}")
-//    @SendTo("/devices/pairing/{deviceId}")
     public void pairingDevice(UnregisteredDeviceCredentialsData deviceCredentialsData, @DestinationVariable String deviceId, @DestinationVariable String username) {
 
         logger.info("------------------LOGGING  pairingDevice------------------");
@@ -35,18 +40,24 @@ public class DeviceConnectivityController {
 
         try {
             deviceCredentialsData.setTryingToPairUsername(username);
-            unregisteredDeviceFacade.tryToPairing(deviceCredentialsData);
+            UnregisteredDevice unregisteredDevice = unregisteredDeviceFacade.tryToPairing(deviceCredentialsData);
+            PairingEvent pairingEvent = createPairingEvent(unregisteredDevice);
+            pairingPublisher.publish(pairingEvent);
         } catch (DeviceServiceException exception) {
-            String topic = String.format("%s/pairing/%s/user/%s", StompConfig.ERROR_TOPIC, deviceId, username);
+            String topic = String.format("/pairing-device/%s/user/%s", deviceId, username);
             throw new DeviceConnectivityException(exception.getMessage(), topic);
         }
 
         logger.info("-----------------SUCCESSFUL pairingDevice-----------------");
-//        throw new DeviceConnectivityException("Nu e bun", topic);
-//        PendingPairingData pendingPairingData = PendingPairingData.builder().
-//                username(username).
-//                build();
-//        return pendingPairingData;
+    }
+
+    private PairingEvent createPairingEvent(UnregisteredDevice unregisteredDevice) {
+
+        return PairingEvent.builder()
+                .deviceCode(unregisteredDevice.getId())
+                .ownerUsername(unregisteredDevice.getTryingToPairingUsername())
+                .state(unregisteredDevice.getState())
+                .build();
     }
 
     @MessageExceptionHandler({DeviceConnectivityException.class})
@@ -58,6 +69,7 @@ public class DeviceConnectivityController {
         logger.error("-----------------SUCCESSFUL handleException-----------------");
 
         TextMessage message = new TextMessage(exception.getMessage());
-        simpMessagingTemplate.convertAndSend(exception.getTopic(), message);
+        String topic = StompConfig.ERROR_TOPIC + exception.getTopic();
+        simpMessagingTemplate.convertAndSend(topic, message);
     }
 }

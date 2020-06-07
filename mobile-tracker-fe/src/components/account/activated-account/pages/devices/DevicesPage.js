@@ -99,7 +99,7 @@ const DevicesPage = ({ username }) => {
           url="http://localhost:8082/mobile-tracker/device-connectivity"
           topics={[
             `/users/${username}`,
-            `/errors/pairing/${credentials.id}/user/${username}`,
+            `/errors/pairing-device/${credentials.id}/user/${username}`,
           ]}
           onMessage={(message) => console.log(message)}
           onConnect={() => {

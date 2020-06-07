@@ -42,8 +42,10 @@ const RegisteredDeviceContainer = ({navigation}) => {
         deviceInformation.id,
         onStompClientConnectionError,
         openPairingMode,
-        () => {},
         authorization.token,
+        (message) => {
+          console.log(message);
+        },
       );
       client.activate();
       return () => {
