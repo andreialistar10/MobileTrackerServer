@@ -16,6 +16,7 @@ export const makeDevicesStyle = makeStyles({
   root: {
     minHeight: "100%",
     position: "relative",
+    width:"100%"
   },
   deviceTableAddButton: {
     display: "flex",

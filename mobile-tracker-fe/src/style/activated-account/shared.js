@@ -26,6 +26,7 @@ export const makeSharedStyle = makeStyles({
     paddingLeft: "25%",
     width: "55%",
     color: "rgba(192,192,192,0.35)",
+    zIndex: 0,
   },
   icon: {
     width: "100%",
@@ -173,6 +174,51 @@ export const makeSharedStyle = makeStyles({
     [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
       fontSize: FONT_SIZE_TITLE_PAGE_MAX_WIDTH_500PX,
       marginBottom: FONT_SIZE_TITLE_PAGE_MAX_WIDTH_500PX,
+    },
+  },
+
+  inlineFormLabel: {
+    paddingBottom: "35px",
+  },
+
+  inlineFormTextField: {
+    paddingRight: "40px",
+    [`@media (min-width:1200px)`]: {
+      paddingRight: "45px",
+    },
+    [`@media (min-width:1400px)`]: {
+      paddingRight: "50px",
+    },
+  },
+
+  inlineFormMaterialUITextField: {
+    [`@media (min-width:1200px)`]: {
+      minWidth: "300px",
+    },
+    [`@media (min-width:1400px)`]: {
+      minWidth: "350px",
+    },
+  },
+
+  inlineFormButton: {
+    fontSize: "1rem",
+    textTransform: "capitalize",
+    float: "right",
+    marginRight: "1.2rem",
+    [`@media (max-width:900px)`]: {
+      marginRight: "1rem",
+    },
+    [`@media (max-width:880px)`]: {
+      marginRight: "0.8rem",
+    },
+    [`@media (max-width:850px)`]: {
+      marginRight: "0.7rem",
+    },
+    [`@media (max-width:600px)`]: {
+      marginRight: "0.65rem",
+    },
+    [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
+      marginRight: DEFAULT_BORDER_SPACING_MAX_WIDTH_500px,
     },
   },
 });

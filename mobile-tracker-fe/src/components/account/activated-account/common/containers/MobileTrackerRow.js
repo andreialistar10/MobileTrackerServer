@@ -2,9 +2,9 @@ import React from "react";
 import { makeSharedStyle } from "../../../../../style/activated-account/shared";
 import PropTypes from "prop-types";
 
-const MobileTrackerRow = ({ children, show }) => {
+const MobileTrackerRow = ({ children, show, ...props }) => {
   const { textFieldWrapper } = makeSharedStyle();
-  return show && <div className={textFieldWrapper}>{children}</div>;
+  return show && <div className={textFieldWrapper} {...props}>{children}</div>;
 };
 
 MobileTrackerRow.propTypes = {

@@ -121,11 +121,13 @@ const DevicesTable = ({ handleOnAdd, devices }) => {
 
 DevicesTable.propTypes = {
   handleOnAdd: PropTypes.func.isRequired,
-  devices: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired
-  })).isRequired
+  devices: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default DevicesTable;

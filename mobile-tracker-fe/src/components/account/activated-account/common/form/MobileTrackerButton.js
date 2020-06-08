@@ -8,15 +8,17 @@ const MobileTrackerButton = ({
   text,
   textOnDisable,
   type,
+  className,
   ...props
 }) => {
   const { button } = makeSharedStyle();
+  const classes = !className ? button : `${button} ${className}`;
   return (
     <Button
       type={type}
       disabled={disabled}
       variant="contained"
-      className={button}
+      className={classes}
       {...props}
     >
       {disabled ? textOnDisable : text}
@@ -29,6 +31,7 @@ MobileTrackerButton.propTypes = {
   text: PropTypes.string.isRequired,
   textOnDisable: PropTypes.string.isRequired,
   type: PropTypes.string,
+  className: PropTypes.string,
 };
 
 MobileTrackerButton.defaultProps = {

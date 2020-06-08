@@ -2,9 +2,14 @@ import React from "react";
 import { makeSharedStyle } from "../../../../../style/activated-account/shared";
 import PropTypes from "prop-types";
 
-const MobileTrackerTableContainer = ({ children }) => {
+const MobileTrackerTableContainer = ({ children, className, ...props }) => {
   const { formContainer } = makeSharedStyle();
-  return <div className={formContainer}>{children}</div>;
+  const classes = !className ? formContainer : `${formContainer} ${className}`;
+  return (
+    <div className={classes} {...props}>
+      {children}
+    </div>
+  );
 };
 
 MobileTrackerTableContainer.propTypes = {
@@ -12,6 +17,7 @@ MobileTrackerTableContainer.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
+  className: PropTypes.string,
 };
 
 export default MobileTrackerTableContainer;

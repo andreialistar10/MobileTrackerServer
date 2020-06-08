@@ -54,14 +54,18 @@ export const makeActivatedAccountStyle = makeStyles({
     },
   },
   rightSideContentWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
     position: "relative",
     width: "100%",
     // backgroundColor: "rgba(207, 241, 238, 1)",
     backgroundImage: `linear-gradient(to right, rgba(207, 241, 238, 0.65), rgba(207, 241, 238, 1))`,
-    paddingLeft: '3.5%',
-    paddingRight: '3.5%',
-    paddingTop: '4vh',
-    paddingBottom: '4vh',
+    paddingLeft: "3.5%",
+    paddingRight: "3.5%",
+    paddingTop: "4vh",
+    paddingBottom: "4vh",
     border: "1.4px solid rgb(213, 228, 227)",
     boxSizing: "border-box",
     "-webkit-box-shadow": "0px 1px 6px -2px rgba(0,0,0,0.75)",
@@ -70,7 +74,7 @@ export const makeActivatedAccountStyle = makeStyles({
     minHeight: "85%",
     borderRadius: 6,
     [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
-      paddingLeft: '5%',
-    }
+      paddingLeft: "5%",
+    },
   },
 });
