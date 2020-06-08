@@ -52,28 +52,28 @@ const NavigationMenu = ({ selectedPage }) => {
             <span className={anchorText}>Locations</span>
           </NavLink>
         </li>
-        <li
-          className={
-            selectedPage === "notifications" ? selectedListItemStyle : listItem
-          }
-        >
-          <NavLink to="/account/notifications" className={anchor}>
-            <NotificationsNoneOutlinedIcon className={icon} />
-            <span className={anchorText}>Notifications</span>
-          </NavLink>
-        </li>
-        <li
-          className={
-            selectedPage === "device-settings"
-              ? selectedListItemStyle
-              : listItem
-          }
-        >
-          <NavLink to="/account/device-settings" className={anchor}>
-            <PhonelinkSetupOutlinedIcon className={icon} />
-            <span className={anchorText}>Settings</span>
-          </NavLink>
-        </li>
+        {/*<li*/}
+        {/*  className={*/}
+        {/*    selectedPage === "notifications" ? selectedListItemStyle : listItem*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  <NavLink to="/account/notifications" className={anchor}>*/}
+        {/*    <NotificationsNoneOutlinedIcon className={icon} />*/}
+        {/*    <span className={anchorText}>Notifications</span>*/}
+        {/*  </NavLink>*/}
+        {/*</li>*/}
+        {/*<li*/}
+        {/*  className={*/}
+        {/*    selectedPage === "device-settings"*/}
+        {/*      ? selectedListItemStyle*/}
+        {/*      : listItem*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  <NavLink to="/account/device-settings" className={anchor}>*/}
+        {/*    <PhonelinkSetupOutlinedIcon className={icon} />*/}
+        {/*    <span className={anchorText}>Settings</span>*/}
+        {/*  </NavLink>*/}
+        {/*</li>*/}
       </ul>
     </nav>
   );

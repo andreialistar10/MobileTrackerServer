@@ -51,19 +51,56 @@ export const makeLocationsStyle = makeStyles({
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "center",
-    width: "100%",
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "75%",
     minHeight: "calc(50vh - 1.5rem)",
+    [`@media (max-width:1200px)`]: {
+      width: "80%",
+    },
+    [`@media (max-width:1000px)`]: {
+      width: "90%",
+    },
     [`@media (max-width:700px)`]: {
+      width: "100%",
       minHeight: "calc(45vh - 1.5rem)",
     },
     [`@media (max-width:600px)`]: {
       minHeight: "calc(40vh - 1.5rem)",
     },
   },
-  formTable: {
-    width: "100%",
-  },
   submitButton: {
     alignSelf: "flex-end",
+    textTransform: "none",
+    fontSize: "1.1rem",
+    marginRight: 0,
+  },
+  elementWidth: {
+    width: "100%",
+  },
+  locationFormElement: {
+    boxSizing: "border-box",
+    marginBottom: "1.1rem",
+  },
+  locationModal: {
+    height: "70vh",
+    width: "75%",
+    [`@media (max-width:1200px)`]: {
+      width: "80%",
+    },
+    [`@media (max-width:700px)`]: {
+      width: "90%",
+    },
+    [`@media (max-width:600px)`]: {
+      width: "100%",
+      marginLeft: 0,
+      marginRight: 0,
+    },
+  },
+
+  tableWrapper: {
+    "& .MuiDialogContent-root": {
+      minWidth: "100%",
+    },
   },
 });

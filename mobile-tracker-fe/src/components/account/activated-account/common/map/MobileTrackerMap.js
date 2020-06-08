@@ -9,24 +9,29 @@ const MobileTrackerMap = ({
   center,
   zoom,
   markers,
+  popupProperties,
+  markerIdName,
   ...props
 }) => {
   const { mapRoot } = makeMapStyle();
-  const [selectedDevice, setSelectedDevice] = useState(null);
+  const [selectedLocationKey, setSelectedLocationKey] = useState(null);
   const getCenterByMarkers = () => {
+    const numberOfMarkers = markers.length;
+    if (numberOfMarkers === 0) {
+      return [46, 26];
+    }
     let lat = 0;
     let long = 0;
     markers.forEach(({ latitude, longitude }) => {
       lat += latitude;
       long += longitude;
     });
-    const numberOfMarkers = markers.length;
     return [lat / numberOfMarkers, long / numberOfMarkers];
   };
   const centerCoords = center ? center : getCenterByMarkers();
 
-  const handleOnClick = (deviceCode) => {
-    setSelectedDevice(deviceCode);
+  const handleOnClick = (selectedLocationKey) => {
+    setSelectedLocationKey(selectedLocationKey);
   };
   return (
     <Map
@@ -34,17 +39,16 @@ const MobileTrackerMap = ({
       zoom={zoom}
       className={mapRoot}
       {...props}
-      onPopupClose={() => {handleOnClick(null)}}
+      onPopupClose={() => {
+        handleOnClick(null);
+      }}
     >
       <TileLayer
         attribution=""
         url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"
       />
-      {markers.map(
-        ({
-          deviceCode,
-          name,
-          timestamp,
+      {markers.map((marker, index) => {
+        const {
           latitude,
           longitude,
           circleColor,
@@ -54,12 +58,13 @@ const MobileTrackerMap = ({
           mediumCircleRadius,
           bigCircleOpacity,
           bigCircleRadius,
-        }) => (
+          ...otherProps
+        } = marker;
+        const id = markerIdName ? marker[markerIdName] : index;
+        return (
           <MobileTrackerMarker
-            key={deviceCode}
-            deviceCode={deviceCode}
-            name={name}
-            timestamp={timestamp}
+            key={id}
+            popupProperties={popupProperties}
             latitude={latitude}
             longitude={longitude}
             circleColor={circleColor}
@@ -69,11 +74,13 @@ const MobileTrackerMap = ({
             mediumCircleRadius={mediumCircleRadius}
             bigCircleOpacity={bigCircleOpacity}
             bigCircleRadius={bigCircleRadius}
-            selected={clickableMarkers && deviceCode === selectedDevice}
+            selected={clickableMarkers && selectedLocationKey === id}
+            id={id}
             onClick={handleOnClick}
+            {...otherProps}
           />
-        )
-      )}
+        );
+      })}
     </Map>
   );
 };
@@ -84,9 +91,6 @@ MobileTrackerMap.propTypes = {
   clickableMarkers: PropTypes.bool,
   markers: PropTypes.arrayOf(
     PropTypes.shape({
-      deviceCode: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      timestamp: PropTypes.number.isRequired,
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired,
       circleColor: PropTypes.string,
@@ -97,12 +101,21 @@ MobileTrackerMap.propTypes = {
       bigCircleOpacity: PropTypes.number,
       bigCircleRadius: PropTypes.number,
     })
-  ).isRequired,
+  ),
+  popupProperties: PropTypes.arrayOf(
+    PropTypes.shape({
+      propertyName: PropTypes.string.isRequired,
+      propertyTitle: PropTypes.string.isRequired,
+    })
+  ),
+  markerIdName: PropTypes.string,
 };
 
 MobileTrackerMap.defaultProps = {
   zoom: 14,
   clickableMarkers: true,
+  popupProperties: [],
+  markers: [],
 };
 
 export default MobileTrackerMap;

@@ -2,12 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { CircleMarker, Popup } from "react-leaflet";
 import { makeMapStyle } from "../../../../../style/activated-account/map";
-const moment = require("moment");
 
 const MobileTrackerMarker = ({
-  deviceCode,
-  name,
-  timestamp,
+  id,
+  popupProperties,
   latitude: lat,
   longitude: lng,
   circleColor,
@@ -22,7 +20,6 @@ const MobileTrackerMarker = ({
   ...props
 }) => {
   const { popupText } = makeMapStyle();
-  const date = moment.unix(timestamp / 1000);
   return (
     <>
       <CircleMarker
@@ -48,32 +45,28 @@ const MobileTrackerMarker = ({
         radius={bigCircleRadius}
         stroke={false}
         fillOpacity={bigCircleOpacity}
-        onClick={() => onClick(deviceCode)}
+        onClick={() => onClick(id)}
         {...props}
       >
-        <Popup>
-          <div className={popupText}>
-            <strong>ID:{" "}</strong>
-            {deviceCode}
-          </div>
-          <div className={popupText}>
-            <strong>Name:{" "}</strong>
-            {name}
-          </div>
-          <div className={popupText}>
-            <strong>Date:{" "}</strong>
-            {date.format("DD-MM-YYYY HH:mm")}
-          </div>
-        </Popup>
+        {popupProperties.length !== 0 && (
+          <Popup>
+            {popupProperties.map((property) => {
+              return (
+                <div className={popupText} key={property.propertyName}>
+                  <strong>{`${property.propertyTitle} `}</strong>
+                  {props[property.propertyName]}
+                </div>
+              );
+            })}
+          </Popup>
+        )}
       </CircleMarker>
     </>
   );
 };
 
 MobileTrackerMarker.propTypes = {
-  deviceCode: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  timestamp: PropTypes.number.isRequired,
+  id: PropTypes.any.isRequired,
   latitude: PropTypes.number.isRequired,
   longitude: PropTypes.number.isRequired,
   circleColor: PropTypes.string,
@@ -85,10 +78,16 @@ MobileTrackerMarker.propTypes = {
   bigCircleRadius: PropTypes.number,
   selected: PropTypes.bool,
   onClick: PropTypes.func,
+  popupProperties: PropTypes.arrayOf(
+    PropTypes.shape({
+      propertyName: PropTypes.string.isRequired,
+      propertyTitle: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 MobileTrackerMarker.defaultProps = {
-  circleColor: "red",
+  circleColor: "rgb(35,125,210)",
   smallCircleRadius: 6,
   smallCircleOpacity: 1,
   mediumCircleOpacity: 0.5,

@@ -155,6 +155,7 @@ const AddDeviceForm = ({ loading, handleSubmit, devices }) => {
               <SelectDeviceDialog
                 devices={devices}
                 onSelect={onReplacedDeviceChange}
+                title="Replace one of your devices"
               />
             </MobileTrackerCell>
           </MobileTrackerRow>

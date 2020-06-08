@@ -43,8 +43,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SelectDeviceDialog = ({ devices, onSelect }) => {
+const SelectDeviceDialog = ({ devices, onSelect, title, className }) => {
   const classes = useStyles();
+  const rootClasses = !className ? classes : `${classes} ${className}`;
   const [dropDownIsOpen, setDropDownIsOpen] = React.useState(false);
   const [replacedDevice, setReplacedDevice] = React.useState({
     name: "",
@@ -64,7 +65,7 @@ const SelectDeviceDialog = ({ devices, onSelect }) => {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={rootClasses}>
       <ListItem
         button
         divider
@@ -93,7 +94,7 @@ const SelectDeviceDialog = ({ devices, onSelect }) => {
         keepMounted
         open={dropDownIsOpen}
         onClose={handleOnClose}
-        title="Replace one of your devices"
+        title={title}
         data={{
           keyProp: "id",
           valueProp: "name",
@@ -114,6 +115,8 @@ SelectDeviceDialog.propTypes = {
     })
   ).isRequired,
   onSelect: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default SelectDeviceDialog;

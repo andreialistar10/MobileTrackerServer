@@ -10,7 +10,7 @@ const MobileTrackerModal = ({
   isOpen,
   title,
   handleOnClose,
-  bodyClassName,
+  className,
   children,
   closeIsDisabled,
 }) => {
@@ -20,14 +20,16 @@ const MobileTrackerModal = ({
     modalWrapper,
     modalCloseIcon,
   } = makeSharedStyle();
-  const bodyClass =
-    bodyClassName !== undefined ? bodyClassName : defaultModalBody;
+  const classes = !className
+    ? defaultModalBody
+    : `${defaultModalBody} ${className}`;
+
   return (
     <Dialog
       open={isOpen}
       onClose={handleOnClose}
       maxWidth={false}
-      PaperProps={{ className: bodyClass }}
+      PaperProps={{ className: classes }}
     >
       <div className={modalWrapper}>
         <h1 className={modalTitle}>{title}</h1>
@@ -49,7 +51,7 @@ MobileTrackerModal.propTypes = {
   closeIsDisabled: PropTypes.bool,
   title: PropTypes.string.isRequired,
   handleOnClose: PropTypes.func.isRequired,
-  bodyClassName: PropTypes.object,
+  className: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
