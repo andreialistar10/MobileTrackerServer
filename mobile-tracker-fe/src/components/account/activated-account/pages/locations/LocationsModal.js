@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import MobileTrackerModal from "../../common/modals/MobileTrackerModal";
 import MaterialTable from "material-table";
-import { COLOR_TITLE_PAGE } from "../../../../../style/activated-account/constants";
+import {
+  COLOR_TITLE_PAGE,
+  FONT_FAMILY,
+} from "../../../../../style/activated-account/constants";
 import { makeLocationsStyle } from "../../../../../style/activated-account/pages/locations";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { compose, setDisplayName } from "recompose";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
 import MobileTrackerMap from "../../common/map/MobileTrackerMap";
 
 const popupProperties = [
@@ -45,13 +47,13 @@ const columns = [
 ];
 
 const headerStyle = {
-  color: COLOR_TITLE_PAGE,
-  textTransform: "uppercase",
+  color: "#ffffff",
+  textTransform: "capitalize",
   fontWeight: "bold",
-  fontFamily: "Rubik-Regular",
+  fontFamily: FONT_FAMILY,
   textAlign: "center",
   fontSize: "1.1rem",
-  backgroundColor: "#156082",
+  backgroundColor: "transparent",
 };
 const cellStyle = {};
 
@@ -69,7 +71,7 @@ const theme = createMuiTheme({
     },
     MuiTableCell: {
       alignLeft: {
-        fontFamily: "Rubik-Regular",
+        fontFamily: FONT_FAMILY,
         fontWeight: "500",
         fontSize: "1.1rem",
         textAlign: "center",
@@ -114,8 +116,8 @@ const LocationsModal = ({ locations, open, deviceName, onClose }) => {
           options={{
             search: false,
             minBodyWidth: 350,
-            minBodyHeight: 400,
-            maxBodyHeight: 400,
+            minBodyHeight: "50vh",
+            maxBodyHeight: "50vh",
             emptyRowsWhenPaging: false,
             draggable: false,
             showTitle: false,

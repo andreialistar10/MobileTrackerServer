@@ -6,6 +6,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import PropTypes from "prop-types";
 import { makeSharedStyle } from "../../../../../style/activated-account/shared";
+import {FONT_FAMILY} from "../../../../../style/activated-account/constants";
 
 const MobileTrackerAlertModal = ({
   open,
@@ -29,7 +30,7 @@ const MobileTrackerAlertModal = ({
       <DialogTitle className={modalTitlePage} style={{ fontWeight: "bold" }}>
         {title}
       </DialogTitle>
-      <DialogContent style={{ fontFamily: "Rubik-Regular" }}>
+      <DialogContent style={{ fontFamily: FONT_FAMILY }}>
         {message}
       </DialogContent>
       <DialogActions>

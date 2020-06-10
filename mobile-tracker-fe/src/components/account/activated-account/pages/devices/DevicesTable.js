@@ -1,6 +1,9 @@
 import React from "react";
 import MaterialTable from "material-table";
-import { COLOR_TITLE_PAGE } from "../../../../../style/activated-account/constants";
+import {
+  COLOR_TITLE_PAGE,
+  FONT_FAMILY,
+} from "../../../../../style/activated-account/constants";
 import { compose, setDisplayName } from "recompose";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { makeDevicesStyle } from "../../../../../style/activated-account/pages/devices";
@@ -18,10 +21,11 @@ const DevicesTable = ({ handleOnAdd, devices }) => {
     color: COLOR_TITLE_PAGE,
     textTransform: "uppercase",
     fontWeight: "bold",
-    fontFamily: "Rubik-Regular",
+    fontFamily: FONT_FAMILY,
+    // backgroundColor: "rgba(255,255,255,0.6)",
   };
   const cellStyle = {
-    fontFamily: "Rubik-Regular",
+    fontFamily: FONT_FAMILY,
     fontWeight: "500",
     fontSize: "0.9rem",
   };
@@ -61,7 +65,7 @@ const DevicesTable = ({ handleOnAdd, devices }) => {
       options={{
         minBodyHeight: 295,
         maxBodyHeight: 295,
-        doubleHorizontalScroll: true,
+        // doubleHorizontalScroll: true,
         emptyRowsWhenPaging: false,
         draggable: false,
         showTitle: false,

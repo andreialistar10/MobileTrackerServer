@@ -3,6 +3,7 @@ import { makeHeaderStyle } from "../../../style/activated-account/header";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import PropTypes from "prop-types";
 import IconButton from "@material-ui/core/IconButton";
+import { Tooltip } from "@material-ui/core";
 
 const Header = ({ logout }) => {
   const style = makeHeaderStyle();
@@ -29,13 +30,15 @@ const Header = ({ logout }) => {
         <span className={`${headerText} ${suffixHeaderText}`}>Tracker</span>
       </h1>
       <div className={logoutButtonContainer}>
-        <IconButton
-          aria-label="Sign out"
-          className={logoutButton}
-          onClick={logout}
-        >
-          <ExitToAppOutlinedIcon className={logoutIcon} />
-        </IconButton>
+        <Tooltip title="Logout">
+          <IconButton
+            aria-label="Sign out"
+            className={logoutButton}
+            onClick={logout}
+          >
+            <ExitToAppOutlinedIcon className={logoutIcon} />
+          </IconButton>
+        </Tooltip>
       </div>
     </div>
   );

@@ -23,34 +23,39 @@ const DevicesPage = ({ username }) => {
   });
   const [devices, setDevices] = React.useState([
     {
-      id: "MOTR_1",
-      name: "Baran1",
+      id: "MOTR_112312313_1312312313211",
+      name: "Andrei",
       date: new Date().toDateString(),
     },
     {
-      id: "MOTR_2",
-      name: "Baran2",
-      date: new Date(23).toDateString(),
+      id: "MOTR_23123123123_31231231232",
+      name: "Andreea",
+      date: new Date(1584567891111).toDateString(),
     },
     {
-      id: "MOTR_3",
-      name: "Baran3",
-      date: new Date(23).toDateString(),
+      id: "MOTR_342342342_4234234234234",
+      name: "Cosmin",
+      date: new Date(1584569891111).toDateString(),
     },
     {
-      id: "MOTR_4",
-      name: "Baran4",
-      date: new Date(23).toDateString(),
+      id: "MOTR_431231231_3123123123131",
+      name: "Mihai",
+      date: new Date(1584667891111).toDateString(),
     },
     {
-      id: "MOTR_5",
-      name: "Baran5",
-      date: new Date(23).toDateString(),
+      id: "MOTR_546231231_3123123123131",
+      name: "Radu",
+      date: new Date(1584577891111).toDateString(),
     },
     {
-      id: "MOTR_6",
-      name: "Baran6",
-      date: new Date(23).toDateString(),
+      id: "MOTR_665231231_3123123123131",
+      name: "Marius",
+      date: new Date(1584567891111).toDateString(),
+    },
+    {
+      id: "MOTR_665231231_3123123123131",
+      name: "Marius",
+      date: new Date(1584567891111).toDateString(),
     },
   ]);
   const sockJsClientRef = React.createRef(null);
@@ -86,7 +91,7 @@ const DevicesPage = ({ username }) => {
       <div className={behindContent}>
         <PhoneAndroidOutlinedIcon className={icon} />
       </div>
-      <DevicesTable handleOnAdd={handleAddDevice} devices={devices}/>
+      <DevicesTable handleOnAdd={handleAddDevice} devices={devices} />
       <DeviceModal
         isOpen={isOpen}
         handleOnClose={handleClose}

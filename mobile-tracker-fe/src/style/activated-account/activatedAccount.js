@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 import {
   DEFAULT_HEADER_HEIGHT_VALUE,
+  FONT_FAMILY,
   FONT_SIZE_TITLE_PAGE_MAX_WIDTH_500PX,
   HEADER_HEIGHT_VALUE_MAX_WIDTH_500PX,
   RIGHT_SIDE_PADDING,
@@ -12,7 +13,7 @@ export const makeActivatedAccountStyle = makeStyles({
     margin: "0",
     minHeight: "100%",
     height: "100%",
-    fontFamily: "Rubik Regular",
+    fontFamily: FONT_FAMILY,
   },
   header: {
     height: DEFAULT_HEADER_HEIGHT_VALUE,
@@ -30,6 +31,7 @@ export const makeActivatedAccountStyle = makeStyles({
     },
   },
   leftSide: {
+    borderRight: "1px white solid",
     width: DEFAULT_HEADER_HEIGHT_VALUE,
     fontSize: "0.9em",
     [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
@@ -38,7 +40,8 @@ export const makeActivatedAccountStyle = makeStyles({
     },
   },
   rightSide: {
-    backgroundColor: "rgba(226,223,178,0.26)",
+    // backgroundColor: "rgba(226,223,178,0.26)",
+    backgroundColor: "#231f20",
     position: "relative",
     boxSizing: "border-box",
     paddingLeft: RIGHT_SIDE_PADDING,
@@ -61,7 +64,8 @@ export const makeActivatedAccountStyle = makeStyles({
     position: "relative",
     width: "100%",
     // backgroundColor: "rgba(207, 241, 238, 1)",
-    backgroundImage: `linear-gradient(to right, rgba(207, 241, 238, 0.65), rgba(207, 241, 238, 1))`,
+    // backgroundImage: `linear-gradient(to right, rgba(207, 241, 238, 0.65), rgba(207, 241, 238, 1))`,
+    backgroundColor: "#0b2647de",
     paddingLeft: "3.5%",
     paddingRight: "3.5%",
     paddingTop: "4vh",

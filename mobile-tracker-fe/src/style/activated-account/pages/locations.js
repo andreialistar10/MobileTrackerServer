@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { COLOR_TITLE_PAGE } from "../constants";
+import { COLOR_TITLE_PAGE, FONT_FAMILY } from "../constants";
 
 export const makeLocationsStyle = makeStyles({
   wrapper: {
@@ -23,7 +23,8 @@ export const makeLocationsStyle = makeStyles({
   },
   rightSide: {
     width: "30%",
-    backgroundColor: "#ffffff9f",
+    // backgroundColor: "#ffffff9f",
+    backgroundColor: "#383030ba",
     minHeight: "55vh",
     margin: 0,
     padding: "1%",
@@ -41,7 +42,7 @@ export const makeLocationsStyle = makeStyles({
   },
   formTitle: {
     color: COLOR_TITLE_PAGE,
-    fontFamily: "Rubik-Regular",
+    fontFamily: FONT_FAMILY,
     fontWeight: "bold",
     fontSize: "1.5rem",
     textAlign: "center",
@@ -69,6 +70,12 @@ export const makeLocationsStyle = makeStyles({
       minHeight: "calc(40vh - 1.5rem)",
     },
   },
+  selectInput: {
+    color: "#f1e9ea",
+  },
+  secondSelectInput: {
+    color: "#03d0ffeb",
+  },
   submitButton: {
     alignSelf: "flex-end",
     textTransform: "none",
@@ -83,13 +90,13 @@ export const makeLocationsStyle = makeStyles({
     marginBottom: "1.1rem",
   },
   locationModal: {
-    height: "70vh",
+    height: "75vh",
     width: "75%",
     [`@media (max-width:1200px)`]: {
-      width: "80%",
+      width: "85%",
     },
     [`@media (max-width:700px)`]: {
-      width: "90%",
+      width: "95%",
     },
     [`@media (max-width:600px)`]: {
       width: "100%",

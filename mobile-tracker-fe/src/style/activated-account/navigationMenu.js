@@ -14,7 +14,8 @@ export const makeNavigationMenuStyle = makeStyles({
     minHeight: "100%",
     display: "flex",
     flexDirection: "column",
-    backgroundImage: `linear-gradient(to bottom, ${HEADER_GRADIENT_COLOR})`,
+    // backgroundImage: `linear-gradient(to bottom, ${HEADER_GRADIENT_COLOR})`,
+    backgroundColor: "#2e303e",
     "-webkit-box-shadow": "1px 3px 6px -3px rgba(0,0,0,0.75)",
     "-moz-box-shadow": "1px 3px 6px -3px rgba(0,0,0,0.75)",
     "box-shadow": "1px 3px 6px -3px rgba(0,0,0,0.75)",
@@ -47,7 +48,7 @@ export const makeNavigationMenuStyle = makeStyles({
     display: "flex",
     "&:hover": {
       color: "#007bff",
-    }
+    },
   },
   icon: {
     width: "2rem",

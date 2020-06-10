@@ -21,7 +21,9 @@ export const makeHeaderStyle = makeStyles({
     display: "flex",
     width: "100%",
     height: "100%",
-    backgroundImage: `linear-gradient(to right, ${HEADER_GRADIENT_COLOR})`,
+    borderBottom: "1px white solid",
+    // backgroundImage: `linear-gradient(to right, ${HEADER_GRADIENT_COLOR})`,
+    backgroundColor: "#2e303e",
     paddingLeft: `calc(${DEFAULT_HEADER_HEIGHT_VALUE} + ${RIGHT_SIDE_PADDING} + ${PADDING_LEFT_TITLE_PAGE})`,
     boxSizing: "border-box",
     "-webkit-box-shadow": "0px 1px 6px -3px rgba(0,0,0,0.75)",
@@ -55,7 +57,7 @@ export const makeHeaderStyle = makeStyles({
     verticalAlign: "top",
   },
   prefixHeaderText: {
-    color: "rgba(15, 10, 190, 1)",
+    color: "rgb(7, 221, 255)",
   },
   suffixHeaderText: {
     color: COLOR_TITLE_PAGE,
@@ -80,6 +82,7 @@ export const makeHeaderStyle = makeStyles({
   logoutButton: {
     width: DEFAULT_HEADER_LOGO_DIMENSIONS,
     height: DEFAULT_HEADER_LOGO_DIMENSIONS,
+    color: COLOR_TITLE_PAGE,
     padding: 0,
     "&:focus": {
       outline: "none",

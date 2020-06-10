@@ -32,7 +32,7 @@ const DeviceInformationScreen = ({navigation}) => {
   };
   const textStyle = {
     ...styles.text,
-    color: 'rgba(210,0,0,1)',
+    color: 'rgba(109,109,100,1)',
     fontSize: 15,
     fontWeight: 'bold',
   };

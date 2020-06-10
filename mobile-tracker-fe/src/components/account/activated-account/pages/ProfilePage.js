@@ -7,11 +7,11 @@ import MobileTrackerLabel from "../common/form/MobileTrackerLabel";
 import MobileTrackerCell from "../common/containers/MobileTrackerCell";
 import MobileTrackerTextField from "../common/form/MobileTrackerTextField";
 import MobileTrackerButton from "../common/form/MobileTrackerButton";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 const initialProfileDetails = {
-  username: "username",
-  email: "e-mail",
+  username: "andrei.test",
+  email: "andrei.alistar98@gmail.com",
   firstName: "",
   lastName: "",
 };
@@ -23,6 +23,7 @@ const ProfilePage = () => {
     inlineFormTextField,
     inlineFormButton,
     inlineFormMaterialUITextField,
+    whiteColor,
   } = makeSharedStyle();
   const labelProps = { className: inlineFormLabel };
   const rightSideTextFieldProps = { className: inlineFormLabel };
@@ -43,7 +44,7 @@ const ProfilePage = () => {
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    toast.success("You successfully update your profile!")
+    toast.success("You successfully update your profile!");
   };
   return (
     <>
@@ -83,6 +84,7 @@ const ProfilePage = () => {
               textFieldProps={leftSideTextFieldProps}
               className={inlineFormMaterialUITextField}
               name="firstName"
+              inputClassName={whiteColor}
             />
             <MobileTrackerTextField
               value={profileDetails.lastName}
@@ -92,6 +94,7 @@ const ProfilePage = () => {
               textFieldProps={rightSideTextFieldProps}
               className={inlineFormMaterialUITextField}
               name="lastName"
+              inputClassName={whiteColor}
             />
           </MobileTrackerRow>
         </MobileTrackerTableContainer>

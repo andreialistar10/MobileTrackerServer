@@ -26,6 +26,11 @@ const theme = createMuiTheme({
         backgroundColor: "rgb(30, 114, 162)",
       },
     },
+    MuiInput: {
+      input: {
+        color: "#f1e9ea",
+      },
+    },
   },
   pickersToolbar: {
     toolbar: {
@@ -50,6 +55,8 @@ const FilterLocationForm = ({
     submitButton,
     locationFormElement,
     elementWidth,
+    selectInput,
+    secondSelectInput,
   } = makeLocationsStyle();
   return (
     <>
@@ -60,6 +67,8 @@ const FilterLocationForm = ({
           devices={devices}
           className={`${locationFormElement} ${elementWidth}`}
           title="Select one of your device"
+          primaryTypographyClassName={selectInput}
+          secondaryTypographyClassName={secondSelectInput}
         />
         <MuiThemeProvider theme={theme}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>

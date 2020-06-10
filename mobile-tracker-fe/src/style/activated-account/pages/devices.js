@@ -7,7 +7,7 @@ import {
   FIELD_BORDER,
   FIELD_BORDER_RADIUS,
   FIELD_COLOR,
-  FIELD_HEIGHT,
+  FIELD_HEIGHT, FONT_FAMILY,
   LABEL_COLOR,
   SMALL_DEVICE_MAX_WIDTH,
 } from "../constants";
@@ -16,7 +16,7 @@ export const makeDevicesStyle = makeStyles({
   root: {
     minHeight: "100%",
     position: "relative",
-    width:"100%"
+    width: "100%",
   },
   deviceTableAddButton: {
     display: "flex",
@@ -26,8 +26,8 @@ export const makeDevicesStyle = makeStyles({
     fontSize: "1rem",
     marginLeft: "0.7rem",
     marginRight: "calc(0.7rem - 8px)",
-    fontFamily: "Rubik-Regular",
-    color: COLOR_TITLE_PAGE,
+    fontFamily: FONT_FAMILY,
+    color: "rgb(17, 22, 31)",
     [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
       fontSize: "0.7rem",
       marginLeft: "calc(0.5rem - 8px)",
@@ -76,7 +76,7 @@ export const makeDevicesStyle = makeStyles({
     margin: 0,
     marginRight: "0!important",
     userSelect: "none",
-    fontFamily: "Rubik-Regular",
+    fontFamily: FONT_FAMILY,
     textAlign: "right",
     color: LABEL_COLOR,
     fontWeight: "bold",

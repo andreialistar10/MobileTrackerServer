@@ -13,6 +13,7 @@ import {
   LABEL_COLOR,
   COLOR_TITLE_PAGE,
   FONT_SIZE_TITLE_PAGE_MAX_WIDTH_500PX,
+  FONT_FAMILY,
 } from "./constants";
 
 export const makeSharedStyle = makeStyles({
@@ -64,7 +65,7 @@ export const makeSharedStyle = makeStyles({
     color: "rgb(101, 92, 92)",
     marginTop: "3vh",
     marginBottom: "3vh",
-    fontFamily: "Rubik-Regular",
+    fontFamily: FONT_FAMILY,
     // color: "rgba(15, 10, 190, 1)",
     textAlign: "center",
   },
@@ -87,7 +88,8 @@ export const makeSharedStyle = makeStyles({
 
   label: {
     fontWeight: "bold",
-    fontFamily: "Rubik-Regular",
+    fontFamily: FONT_FAMILY,
+    // fontFamily: "Segoe UI",
     fontSize: "1.2rem",
     color: LABEL_COLOR,
     display: "table-cell",
@@ -122,7 +124,7 @@ export const makeSharedStyle = makeStyles({
     fontSize: "1.2rem",
     fontWeight: "500",
     color: FIELD_COLOR,
-    fontFamily: "Rubik-Regular",
+    fontFamily: FONT_FAMILY,
   },
   textFieldWrapper: {
     display: "table-row",
@@ -169,7 +171,7 @@ export const makeSharedStyle = makeStyles({
 
   modalTitlePage: {
     color: COLOR_TITLE_PAGE,
-    fontFamily: "Rubik-Regular",
+    fontFamily: FONT_FAMILY,
     fontSize: DEFAULT_FONT_SIZE_TITLE_PAGE,
     [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
       fontSize: FONT_SIZE_TITLE_PAGE_MAX_WIDTH_500PX,
@@ -179,6 +181,7 @@ export const makeSharedStyle = makeStyles({
 
   inlineFormLabel: {
     paddingBottom: "35px",
+    color: COLOR_TITLE_PAGE,
   },
 
   inlineFormTextField: {
@@ -220,5 +223,8 @@ export const makeSharedStyle = makeStyles({
     [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
       marginRight: DEFAULT_BORDER_SPACING_MAX_WIDTH_500px,
     },
+  },
+  whiteColor: {
+    color: "white",
   },
 });

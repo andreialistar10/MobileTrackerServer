@@ -14,12 +14,13 @@ const MobileTrackerTextField = ({
   textFieldProps,
   className,
   name,
+  inputClassName,
   ...props
 }) => {
   const { textField, input, primitiveInput } = makeSharedStyle();
   const classes = !className ? textField : `${textField} ${className}`;
   const inputProps = {
-    className: primitiveInput,
+    className:  !inputClassName ? primitiveInput : `${primitiveInput} ${inputClassName}`,
     autoComplete: "off",
   };
   if (name) {
@@ -56,6 +57,7 @@ MobileTrackerTextField.propTypes = {
   readOnly: PropTypes.bool,
   className: PropTypes.string,
   name: PropTypes.string,
+  inputClassName: PropTypes.string,
 };
 
 MobileTrackerTextField.defaultProps = {

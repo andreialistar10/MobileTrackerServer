@@ -9,6 +9,7 @@ import {
   FIELD_BORDER,
   FIELD_BORDER_RADIUS,
   FIELD_COLOR,
+  FONT_FAMILY,
 } from "../../../../../style/activated-account/constants";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,19 +34,32 @@ const useStyles = makeStyles((theme) => ({
     color: FIELD_COLOR,
     fontSize: "1rem",
     fontWeight: "bold",
-    fontFamily: "Rubik-Regular",
+    fontFamily: FONT_FAMILY,
   },
   secondary: {
-    fontFamily: "Rubik-Regular",
+    fontFamily: FONT_FAMILY,
     fontSize: "0.8rem",
     fontWeight: "bold",
     color: "#ff0303eb",
   },
 }));
 
-const SelectDeviceDialog = ({ devices, onSelect, title, className }) => {
+const SelectDeviceDialog = ({
+  devices,
+  onSelect,
+  title,
+  className,
+  primaryTypographyClassName,
+  secondaryTypographyClassName,
+}) => {
   const classes = useStyles();
   const rootClasses = !className ? classes : `${classes} ${className}`;
+  const primaryTypographyClasses = !primaryTypographyClassName
+    ? classes.primary
+    : `${classes.primary} ${primaryTypographyClassName}`;
+  const secondaryTypographyClasses = !secondaryTypographyClassName
+    ? classes.secondary
+    : `${classes.secondary} ${secondaryTypographyClassName}`;
   const [dropDownIsOpen, setDropDownIsOpen] = React.useState(false);
   const [replacedDevice, setReplacedDevice] = React.useState({
     name: "",
@@ -77,10 +91,10 @@ const SelectDeviceDialog = ({ devices, onSelect, title, className }) => {
       >
         <ListItemText
           primaryTypographyProps={{
-            className: classes.primary,
+            className: primaryTypographyClasses,
           }}
           secondaryTypographyProps={{
-            className: classes.secondary,
+            className: secondaryTypographyClasses,
           }}
           primary={replacedDevice.name || "Please select a device"}
           secondary={replacedDevice.id}
@@ -117,6 +131,8 @@ SelectDeviceDialog.propTypes = {
   onSelect: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   className: PropTypes.string,
+  primaryTypographyClassName: PropTypes.string,
+  secondaryTypographyClassName: PropTypes.string,
 };
 
 export default SelectDeviceDialog;
