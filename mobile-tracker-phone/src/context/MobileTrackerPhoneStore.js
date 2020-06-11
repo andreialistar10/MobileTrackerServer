@@ -1,11 +1,11 @@
 import React, {useReducer} from 'react';
 import {Provider} from './index';
 import {initialState} from './initialState';
-import {getPasswordDevice, registerDevice} from '../core/api';
+import {confirmPairing, getPasswordDevice, registerDevice} from '../core/api';
 import {
   getState,
   saveAuthorization,
-  saveDeviceInformation,
+  saveDeviceInformation, saveDeviceSettings,
 } from '../core/localStorage';
 
 const SET_DEVICE_CODE = 'SET_DEVICE_CODE';
@@ -65,6 +65,28 @@ export const MobileTrackerPhoneStore = ({children}) => {
     });
   };
 
-  const value = {...state, onRegisterDevice, initStore, startPairing};
+  const confirmDevicePairing = async ownerUsername => {
+    const {
+      tokenApi,
+      timeInterval,
+      refreshToken,
+      deviceId,
+      name,
+    } = await confirmPairing(ownerUsername);
+    const authorization = {refreshToken, token: tokenApi};
+    const deviceInformation = {id: deviceId, name: name, ownerUsername};
+    const deviceSettings = {timeInterval};
+    await saveDeviceSettings(deviceSettings);
+    await saveDeviceInformation(deviceInformation);
+    await saveAuthorization(authorization);
+    const newState = {authorization, deviceInformation, deviceSettings};
+    dispatch({
+      type: INIT_STORE,
+      payload: newState,
+    });
+    return newState;
+  };
+
+  const value = {...state, onRegisterDevice, initStore, startPairing, confirmDevicePairing};
   return <Provider value={value}>{children}</Provider>;
 };

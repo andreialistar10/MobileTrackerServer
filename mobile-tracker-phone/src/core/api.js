@@ -42,20 +42,6 @@ export function registerDevice(deviceInformation) {
 }
 
 export async function getPasswordDevice() {
-  // try {
-  //   const {token} = await getAuthorization();
-  //   const config = {
-  //     method: 'POST',
-  //     headers: {accept: 'application/json', authorization: `Bearer ${token}`},
-  //   };
-  //   return setTimeoutFetch(
-  //     `${BACKEND_URL_API}/unregistered-devices/startPairing`,
-  //     config,
-  //   );
-  // } catch (error) {
-  //   console.log(error);
-  //   return Promise.reject('Something went wrong! Please try again later!');
-  // }
   return getAuthorization().then(({token}) => {
     const config = {
       method: 'POST',
@@ -63,6 +49,28 @@ export async function getPasswordDevice() {
     };
     return setTimeoutFetch(
       `${ROOT_BACKEND_URL_API}/unregistered-devices/start-pairing`,
+      config,
+    ).catch((error) => {
+      console.log(error);
+      return Promise.reject('Something went wrong! Please try again later!');
+    });
+  });
+}
+
+export function confirmPairing(ownerUsername) {
+  return getAuthorization().then(({token}) => {
+    const config = {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        accept: 'application/json',
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ownerUsername}),
+    };
+    console.log(config.body);
+    return setTimeoutFetch(
+      `${ROOT_BACKEND_URL_API}/unregistered-devices/confirm-pairing`,
       config,
     ).catch((error) => {
       console.log(error);

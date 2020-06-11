@@ -3,6 +3,7 @@ import {initialState} from '../context/initialState';
 
 const DEVICE_INFORMATION_KEY = 'DEVICE_INFORMATION';
 const AUTHORIZATION_KEY = 'DEVICE_AUTHORIZATION';
+const DEVICE_SETTINGS_KEY = 'DEVICE_SETTINGS';
 
 export const saveDeviceInformation = async (deviceInformation) => {
   try {
@@ -18,6 +19,15 @@ export const saveAuthorization = async (authorization) => {
     await AsyncStorage.setItem(
       AUTHORIZATION_KEY,
       JSON.stringify(authorization),
+    );
+  } catch (e) {}
+};
+
+export const saveDeviceSettings = async (deviceSettings) => {
+  try {
+    await AsyncStorage.setItem(
+      DEVICE_SETTINGS_KEY,
+      JSON.stringify(deviceSettings),
     );
   } catch (e) {}
 };
@@ -49,10 +59,24 @@ export const getAuthorization = async () => {
   }
 };
 
+export const getDeviceSettings = async () => {
+  try {
+    const deviceSettings = await AsyncStorage.getItem(DEVICE_SETTINGS_KEY);
+    let settings = JSON.parse(deviceSettings);
+    if (!settings) {
+      settings = initialState.deviceSettings;
+    }
+    return deviceSettings;
+  } catch (e) {
+    return initialState.deviceSettings;
+  }
+};
+
 export const getState = async () => {
   const deviceInformation = await getDeviceInformation();
   const authorization = await getAuthorization();
-  return {deviceInformation, authorization};
+  const deviceSettings = await getDeviceSettings();
+  return {deviceInformation, authorization, deviceSettings};
 };
 
 export const removeDeviceInformation = async () => {

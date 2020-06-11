@@ -44,7 +44,10 @@ const defaultActionOnMessageReceive = (message) => {
 
 const subscribeToTopics = (client, topics, actionsOnMessageReceived) => {
   for (let index = 0; index < topics.length; ++index) {
-    client.subscribe(topics[index], actionsOnMessageReceived[index]);
+    client.subscribe(topics[index], message => {
+      const messageBody = JSON.parse(message.body);
+      actionsOnMessageReceived[index](messageBody);
+    });
   }
 };
 

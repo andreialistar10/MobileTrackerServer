@@ -59,7 +59,7 @@ public class UnregisteredDeviceController {
         return new ResponseEntity<>(unregisteredDeviceDataResponse, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Pair a new device")
+    @ApiOperation(value = "Finalize pairing operation")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "SUCCESS", response = PairingDeviceDataResponse.class),
             @ApiResponse(code = 400, message = "INVALID_DATA", response = DeviceExceptionType.class),
@@ -67,8 +67,7 @@ public class UnregisteredDeviceController {
     @RequestMapping(value = "/confirm-pairing",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @Transactional
-    public ResponseEntity<PairingDeviceDataResponse> pairDevice(@Validated PairingDeviceDataRequest pairingDeviceDataRequest, BindingResult result, Principal principal) {
+    public ResponseEntity<PairingDeviceDataResponse> pairDevice(@RequestBody @Validated PairingDeviceDataRequest pairingDeviceDataRequest, BindingResult result, Principal principal) {
 
         logger.info("------------------LOGGING  addUnregisteredDevice------------------");
         logger.info("Device ID:      {}", principal.getName());

@@ -29,9 +29,6 @@ public class DeviceConnectivityController {
     @Autowired
     private UnregisteredDeviceFacade unregisteredDeviceFacade;
 
-    @Autowired
-    private MobileTrackerMessagePublisher<PairingEvent> pairingPublisher;
-
     @MessageMapping("/pairing/{deviceId}/user/{username}")
     public void pairingDevice(UnregisteredDeviceCredentialsData deviceCredentialsData, @DestinationVariable String deviceId, @DestinationVariable String username) {
 
@@ -40,24 +37,13 @@ public class DeviceConnectivityController {
 
         try {
             deviceCredentialsData.setTryingToPairUsername(username);
-            UnregisteredDevice unregisteredDevice = unregisteredDeviceFacade.tryToPairing(deviceCredentialsData);
-            PairingEvent pairingEvent = createPairingEvent(unregisteredDevice);
-            pairingPublisher.publish(pairingEvent);
+            unregisteredDeviceFacade.tryToPairing(deviceCredentialsData);
         } catch (DeviceServiceException exception) {
             String topic = String.format("/pairing-device/%s/user/%s", deviceId, username);
-            throw new DeviceConnectivityException(exception.getMessage(), topic);
+            throw new DeviceConnectivityException(exception.getReason(), topic);
         }
 
         logger.info("-----------------SUCCESSFUL pairingDevice-----------------");
-    }
-
-    private PairingEvent createPairingEvent(UnregisteredDevice unregisteredDevice) {
-
-        return PairingEvent.builder()
-                .deviceCode(unregisteredDevice.getId())
-                .ownerUsername(unregisteredDevice.getTryingToPairingUsername())
-                .state(unregisteredDevice.getState())
-                .build();
     }
 
     @MessageExceptionHandler({DeviceConnectivityException.class})

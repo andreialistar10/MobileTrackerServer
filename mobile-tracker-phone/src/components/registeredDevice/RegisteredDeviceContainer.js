@@ -7,14 +7,28 @@ import {notifyError} from '../../core/alert';
 import {connectToPairingStompBroker} from '../../core/stompClient';
 
 const RegisteredDeviceContainer = ({navigation}) => {
-  const {startPairing, deviceInformation, authorization} = useContext(
-    MobileTrackerPhoneContext,
-  );
+  const {
+    startPairing,
+    deviceInformation,
+    authorization,
+    confirmDevicePairing,
+  } = useContext(MobileTrackerPhoneContext);
   const [pairing, setPairing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [phoneIsVisibleForPairing, setPhoneIsVisibleForPairing] = useState(
     false,
   );
+
+  const handleTurnOnPress = () => {
+    setPairing(true);
+    setLoading(true);
+  };
+
+  const handleTurnOffPress = React.useCallback(() => {
+    setPairing(false);
+    setPhoneIsVisibleForPairing(false);
+    navigation.navigate('RegisteredDeviceContainer', {pairing: false});
+  }, [navigation]);
 
   const openPairingMode = React.useCallback(() => {
     startPairing()
@@ -22,7 +36,7 @@ const RegisteredDeviceContainer = ({navigation}) => {
         setPhoneIsVisibleForPairing(true);
         navigation.setParams({pairing: true});
       })
-      .catch((errorMessage) => {
+      .catch(errorMessage => {
         setPairing(false);
         notifyError(errorMessage);
       })
@@ -36,6 +50,22 @@ const RegisteredDeviceContainer = ({navigation}) => {
     notifyError('Could not connect to server! Please try again later!');
   }, []);
 
+  const onStompClientMessage = React.useCallback(
+    message => {
+      console.log(message);
+      const {state, ownerUsername} = message;
+      console.log(ownerUsername);
+      if (state === 'TRYING_TO_PAIR') {
+        confirmDevicePairing(ownerUsername).catch((err) => {
+          console.log(err);
+          notifyError('Something went wrong, please try again later');
+          handleTurnOffPress();
+        });
+      }
+    },
+    [confirmDevicePairing, handleTurnOffPress],
+  );
+
   useEffect(() => {
     if (pairing === true) {
       const client = connectToPairingStompBroker(
@@ -43,9 +73,7 @@ const RegisteredDeviceContainer = ({navigation}) => {
         onStompClientConnectionError,
         openPairingMode,
         authorization.token,
-        (message) => {
-          console.log(message);
-        },
+        onStompClientMessage,
       );
       client.activate();
       return () => {
@@ -55,21 +83,11 @@ const RegisteredDeviceContainer = ({navigation}) => {
   }, [pairing]);
 
   useEffect(() => {
-    console.log('AICI');
-    return () => {
-      console.log('IES');
-    };
-  }, []);
-
-  const handleTurnOnPress = () => {
-    setPairing(true);
-    setLoading(true);
-  };
-  const handleTurnOffPress = () => {
-    setPairing(false);
-    setPhoneIsVisibleForPairing(false);
-    navigation.navigate('RegisteredDeviceContainer', {pairing: false});
-  };
+    const {refreshToken} = authorization;
+    if (refreshToken !== null) {
+      navigation.navigate('PairedDeviceContainer');
+    }
+  }, [authorization, navigation]);
   return (
     <SafeAreaView>
       <ScrollView style={styles.scrollView}>

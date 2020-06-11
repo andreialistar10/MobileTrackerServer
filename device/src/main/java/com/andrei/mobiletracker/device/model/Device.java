@@ -28,10 +28,10 @@ public class Device {
     @Column(name = "REGISTERED_ON", nullable = false)
     private Long registeredOn;
 
-    @Transient
+    @Column(name = "TOKEN_API", nullable = false)
     private String tokenApi;
 
-    @Transient
+    @Column(name = "REFRESH_TOKEN", nullable = false)
     private String refreshToken;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, targetEntity = DeviceSettings.class)

@@ -7,6 +7,8 @@ import DeviceModal from "./DevicesModal";
 import SockJsClient from "react-stomp";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import MobileTrackerErrorModal from "../../common/modals/MobileTrackerErrorModal";
+import MobileTrackerInfoModal from "../../common/modals/MobileTrackerInfoModal";
 
 const initialCredentials = {
   id: "",
@@ -21,6 +23,11 @@ const DevicesPage = ({ username }) => {
   const [credentials, setCredentials] = React.useState({
     ...initialCredentials,
   });
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const [
+    successfullyPairingMessage,
+    setSuccessfullyPairingMessage,
+  ] = React.useState("");
   const [devices, setDevices] = React.useState([
     {
       id: "MOTR_112312313_1312312313211",
@@ -71,7 +78,6 @@ const DevicesPage = ({ username }) => {
   };
 
   const handlePairing = (credentials) => {
-    console.log(credentials);
     setCredentials(credentials);
     setPairingLoading(true);
   };
@@ -86,27 +92,72 @@ const DevicesPage = ({ username }) => {
     }
   };
 
+  const handleOnMessageArrive = (message, topic) => {
+    console.log(message);
+    if (topic.startsWith("/errors")) {
+      handleOnErrorMessageArrive(message);
+    } else {
+      handleOnSuccessMessageArrive(message);
+    }
+  };
+
+  const handleOnSuccessMessageArrive = (message) => {
+    console.log(message);
+    const {
+      deviceCode: id,
+      state,
+      deviceName: name,
+      registeredOn: date,
+    } = message;
+    if (state === "PAIRED") {
+      setSuccessfullyPairingMessage(
+        "Now you can track the locations of Test's smartphone."
+      );
+      setDevices((prevState) => {
+        const newDevice = { id, name, date };
+        return Array.isArray(devices) ? prevState.concat(newDevice) : newDevice;
+      });
+      setPairingLoading(false);
+      setIsOpen(false);
+    }
+  };
+
+  const getErrorMessage = (message) => {
+    const { state } = message;
+    if (state === "UNPAIRED") {
+      return "The pairing mode has been turned off or your device was disconnected. Make sure that your smartphone is connected to the internet and pairing mode is turned on.";
+    }
+    return "Something went wrong. Please try again later!";
+  };
+
+  const handleOnErrorMessageArrive = (message) => {
+    const messageErrorText = message.payload
+      ? message.payload
+      : getErrorMessage(message);
+    setPairingLoading(false);
+    setErrorMessage(messageErrorText);
+  };
+
   return (
     <div className={root}>
       <div className={behindContent}>
         <PhoneAndroidOutlinedIcon className={icon} />
       </div>
       <DevicesTable handleOnAdd={handleAddDevice} devices={devices} />
-      <DeviceModal
-        isOpen={isOpen}
-        handleOnClose={handleClose}
-        handleSubmit={handlePairing}
-        loading={pairingLoading}
-        devices={devices}
+      <MobileTrackerInfoModal
+        isOpen={successfullyPairingMessage !== ""}
+        handleOnClose={() => setSuccessfullyPairingMessage("")}
+        title={"Successfully Pairing"}
+        message={successfullyPairingMessage}
       />
       {pairingLoading && (
         <SockJsClient
           url="http://localhost:8082/mobile-tracker/device-connectivity"
           topics={[
-            `/users/${username}`,
+            `/users/${username}/pairing-device/${credentials.id}`,
             `/errors/pairing-device/${credentials.id}/user/${username}`,
           ]}
-          onMessage={(message) => console.log(message)}
+          onMessage={handleOnMessageArrive}
           onConnect={() => {
             console.log("CONNECTED");
             sendMessage();
@@ -116,6 +167,19 @@ const DevicesPage = ({ username }) => {
           }}
         />
       )}
+      <DeviceModal
+        isOpen={isOpen}
+        handleOnClose={handleClose}
+        handleSubmit={handlePairing}
+        loading={pairingLoading}
+        devices={devices}
+      />
+      <MobileTrackerErrorModal
+          isOpen={errorMessage !== ""}
+          title="Pairing Error"
+          handleOnClose={() => setErrorMessage("")}
+          message={errorMessage}
+      />
     </div>
   );
 };

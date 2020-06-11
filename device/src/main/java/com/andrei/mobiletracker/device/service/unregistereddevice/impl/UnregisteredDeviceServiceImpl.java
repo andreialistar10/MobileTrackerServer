@@ -67,14 +67,14 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
 
         logger.info("------------------LOGGING  confirmPairing------------------");
         UnregisteredDevice foundUnregisteredDevice = findCompleteAndValidateExistingUnregisteredDeviceOnConfirmPairing(unregisteredDevice);
-        Device device = convertUnregisteredDeviceToDevice(foundUnregisteredDevice);
+        Device device = createDeviceByUnregisteredDeviceInformation(foundUnregisteredDevice);
         String apiToken = tokenGenerator.generateApiToken(device.getCode(), DeviceAuthority.REGISTERED_DEVICE);
         String refreshToken = tokenGenerator.generateRefreshToken(device.getCode());
         device.setTokenApi(apiToken);
         device.setRefreshToken(refreshToken);
-        device = deviceDao.saveOrUpdateOneDevice(device);
+        device.setRegisteredOn(System.currentTimeMillis());
         unregisteredDeviceDao.deleteOneUnregisteredDevice(unregisteredDevice.getId());
-
+        deviceDao.saveOrUpdateOneDevice(device);
         logger.info("-----------------SUCCESSFUL confirmPairing-----------------");
         return device;
     }
@@ -134,13 +134,13 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
             throw new DeviceServiceException("Does not exist a device with id: " + unregisteredDevice.getId(), HttpStatus.BAD_REQUEST, DeviceExceptionType.INVALID_DATA);
         }
         String tryingToPairUsername = foundUnregisteredDevice.getTryingToPairingUsername();
-        if (foundUnregisteredDevice.getState() != UnregisteredDeviceState.PAIRED || !unregisteredDevice.getTryingToPairingUsername().equals(tryingToPairUsername)) {
+        if (foundUnregisteredDevice.getState() != UnregisteredDeviceState.TRYING_TO_PAIR || !unregisteredDevice.getTryingToPairingUsername().equals(tryingToPairUsername)) {
             throw new DeviceServiceException("Device is not on PAIRED state or incorrect tryingToPairingUsername", HttpStatus.BAD_REQUEST, DeviceExceptionType.INVALID_DATA);
         }
         return foundUnregisteredDevice;
     }
 
-    private Device convertUnregisteredDeviceToDevice(UnregisteredDevice unregisteredDevice) {
+    private Device createDeviceByUnregisteredDeviceInformation(UnregisteredDevice unregisteredDevice) {
 
         DeviceSettings deviceSettings = DeviceSettings.builder()
                 .name(unregisteredDevice.getName())
@@ -162,8 +162,7 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
         UnregisteredDevice foundUnregisteredDevice = unregisteredDeviceDao.findOneUnregisteredDeviceByIdAndPasswordAndState(deviceId, devicePassword, UnregisteredDeviceState.PAIRING);
         if (foundUnregisteredDevice == null) {
             throw new DeviceServiceException(
-                    "Credentials don't match any unpaired devices set to visible or someone else has already tried to pair your phone. Make sure your phone is set visible, otherwise you cannot pair it.",
-                    HttpStatus.BAD_REQUEST,
+                    "Credentials do not match any unpaired device or someone else has already tried to pair your smartphone before you. Make sure your smartphone is set to visible, otherwise you can't pair it.", HttpStatus.BAD_REQUEST,
                     DeviceExceptionType.INVALID_DATA
             );
         }
@@ -177,7 +176,7 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
     private void verifyTargetDeviceAlreadyExists(UnregisteredDevice unregisteredDevice) {
 
         String currentId = unregisteredDevice.getId();
-        String targetId = unregisteredDevice.getId();
+        String targetId = unregisteredDevice.getIdAfterPairing();
         if (currentId.equals(targetId)) {
             return;
         }

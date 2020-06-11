@@ -13,6 +13,7 @@ const MobileTrackerModal = ({
   className,
   children,
   closeIsDisabled,
+  closeButton,
 }) => {
   const {
     defaultModalBody,
@@ -32,15 +33,19 @@ const MobileTrackerModal = ({
       PaperProps={{ className: classes }}
     >
       <div className={modalWrapper}>
-        <h1 className={modalTitle}>{title}</h1>
+        {title !== null && title !== undefined && (
+          <h1 className={modalTitle}>{title}</h1>
+        )}
         <DialogContent>{children}</DialogContent>
-        <IconButton
-          onClick={handleOnClose}
-          className={modalCloseIcon}
-          disabled={closeIsDisabled}
-        >
-          <CloseIcon />
-        </IconButton>
+        {closeButton && (
+          <IconButton
+            onClick={handleOnClose}
+            className={modalCloseIcon}
+            disabled={closeIsDisabled}
+          >
+            <CloseIcon />
+          </IconButton>
+        )}
       </div>
     </Dialog>
   );
@@ -49,17 +54,19 @@ const MobileTrackerModal = ({
 MobileTrackerModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   closeIsDisabled: PropTypes.bool,
-  title: PropTypes.string.isRequired,
   handleOnClose: PropTypes.func.isRequired,
   className: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
+  title: PropTypes.string,
+  closeButton: PropTypes.bool,
 };
 
 MobileTrackerModal.defaultProps = {
   closeIsDisabled: false,
+  closeButton: true,
 };
 
 export default MobileTrackerModal;

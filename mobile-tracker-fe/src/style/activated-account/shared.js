@@ -202,7 +202,6 @@ export const makeSharedStyle = makeStyles({
       minWidth: "350px",
     },
   },
-
   inlineFormButton: {
     fontSize: "1rem",
     textTransform: "capitalize",
