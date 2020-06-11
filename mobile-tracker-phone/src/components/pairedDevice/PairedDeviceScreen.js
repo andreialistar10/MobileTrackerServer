@@ -66,7 +66,7 @@ export const PairedDeviceScreen = ({navigation}) => {
                 latitude: coords.latitude,
                 longitude: coords.longitude,
                 latitudeDelta: 0.004,
-                longitudeDelta: 0.09,
+                longitudeDelta: 0.009,
               }}
               showsUserLocation={true}
             />

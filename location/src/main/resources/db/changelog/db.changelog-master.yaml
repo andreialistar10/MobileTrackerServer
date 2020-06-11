@@ -4,7 +4,7 @@ databaseChangeLog:
       author: Andrei Alistar
       changes:
         - sqlFile:
-            path: changes/changelog_device_v1.sql
+            path: changes/changelog_location_v1.sql
             relativeToChangelogFile: true
             splitStatements: true
             stripComments: true

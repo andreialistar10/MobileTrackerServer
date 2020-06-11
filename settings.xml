@@ -17,6 +17,7 @@
             <properties>
                 <worker-microservice.spring-activated-profiles>production,discovery-client,user-authorization,jpa,liquibase</worker-microservice.spring-activated-profiles>
                 <device-microservice.spring-activated-profiles>rabbitmq,pairing-topic,device-authorization</device-microservice.spring-activated-profiles>
+                <location-microservice.spring-activated-profiles>device-authorization</location-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>mobiletracker</db.username>
                 <db.password>mobiletrackerpassword</db.password>
@@ -26,9 +27,9 @@
                 <notification.db.url>jdbc:mysql://localhost:3306/mobile_tracker_notification</notification.db.url>
                 <user.db.url>jdbc:mysql://localhost:3306/mobile_tracker_user</user.db.url>
                 <gmail.username>andreianw98@gmail.com</gmail.username>
-                <gmail.password>libidou10a</gmail.password>
-                <git.username>andreialistar10</git.username>
-                <git.password>te-amda123fac</git.password>
+                <gmail.password></gmail.password>
+                <git.username></git.username>
+                <git.password></git.password>
             </properties>
         </profile>
 
@@ -44,6 +45,7 @@
             <properties>
                 <worker-microservice.spring-activated-profiles>development,discovery-client,user-authorization,jpa,liquibase</worker-microservice.spring-activated-profiles>
                 <device-microservice.spring-activated-profiles>rabbitmq,pairing-topic,device-authorization</device-microservice.spring-activated-profiles>
+                <location-microservice.spring-activated-profiles>device-authorization</location-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>mobiletracker</db.username>
                 <db.password>mobiletrackerpassword</db.password>
@@ -53,9 +55,9 @@
                 <notification.db.url>jdbc:mysql://localhost:3306/mobile_tracker_notification_development</notification.db.url>
                 <user.db.url>jdbc:mysql://localhost:3306/mobile_tracker_user_development</user.db.url>
                 <gmail.username>andreianw98@gmail.com</gmail.username>
-                <gmail.password>libidou10a</gmail.password>
-                <git.username>andreialistar10</git.username>
-                <git.password>te-amda123fac</git.password>
+                <gmail.password></gmail.password>
+                <git.username></git.username>
+                <git.password></git.password>
             </properties>
         </profile>
 
@@ -71,6 +73,7 @@
             <properties>
                 <worker-microservice.spring-activated-profiles>test,jpa,liquibase,user-authorization</worker-microservice.spring-activated-profiles>
                 <device-microservice.spring-activated-profiles>application-device-authorization</device-microservice.spring-activated-profiles>
+                <location-microservice.spring-activated-profiles>device-authorization</location-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>mobiletracker</db.username>
                 <db.password>mobiletrackerpassword</db.password>
@@ -80,9 +83,9 @@
                 <notification.db.url>jdbc:mysql://localhost:3306/mobile_tracker_notification_test</notification.db.url>
                 <user.db.url>jdbc:mysql://localhost:3306/mobile_tracker_user_test</user.db.url>
                 <gmail.username>andreianw98@gmail.com</gmail.username>
-                <gmail.password>libidou10a</gmail.password>
-                <git.username>andreialistar10</git.username>
-                <git.password>te-amda123fac</git.password>
+                <gmail.password></gmail.password>
+                <git.username></git.username>
+                <git.password></git.password>
             </properties>
         </profile>
 
