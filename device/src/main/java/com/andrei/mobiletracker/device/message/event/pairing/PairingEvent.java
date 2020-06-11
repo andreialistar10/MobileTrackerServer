@@ -14,4 +14,7 @@ public class PairingEvent implements MobileTrackerMessageEvent {
     private UnregisteredDeviceState state;
     private String ownerUsername;
     private String deviceCode;
+    private String deviceName;
+    private Long registeredOn;
+    private String deviceCodeAfterPairing;
 }

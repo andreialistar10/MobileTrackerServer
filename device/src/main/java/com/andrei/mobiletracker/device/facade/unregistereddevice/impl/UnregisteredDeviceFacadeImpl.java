@@ -4,7 +4,6 @@ import com.andrei.mobiletracker.beans.converter.Converter;
 import com.andrei.mobiletracker.device.dto.deviceconnectivity.UnregisteredDeviceCredentialsData;
 import com.andrei.mobiletracker.device.dto.unregistereddevice.*;
 import com.andrei.mobiletracker.device.facade.unregistereddevice.UnregisteredDeviceFacade;
-import com.andrei.mobiletracker.device.message.event.pairing.PairedDeviceEvent;
 import com.andrei.mobiletracker.device.message.event.pairing.PairingEvent;
 import com.andrei.mobiletracker.device.message.publisher.MobileTrackerMessagePublisher;
 import com.andrei.mobiletracker.device.model.Device;
@@ -79,12 +78,13 @@ public class UnregisteredDeviceFacadeImpl implements UnregisteredDeviceFacade {
 
     private PairingEvent generatePairingEvent(Device savedDevice, String deviceId) {
 
-        PairedDeviceEvent pairedDeviceEvent = new PairedDeviceEvent();
+        PairingEvent pairedDeviceEvent = new PairingEvent();
         pairedDeviceEvent.setDeviceCode(deviceId);
         pairedDeviceEvent.setDeviceName(savedDevice.getDeviceSettings().getName());
         pairedDeviceEvent.setRegisteredOn(savedDevice.getRegisteredOn());
         pairedDeviceEvent.setState(UnregisteredDeviceState.PAIRED);
         pairedDeviceEvent.setOwnerUsername(savedDevice.getOwnerUsername());
+        pairedDeviceEvent.setDeviceCodeAfterPairing(savedDevice.getCode());
         return pairedDeviceEvent;
     }
 

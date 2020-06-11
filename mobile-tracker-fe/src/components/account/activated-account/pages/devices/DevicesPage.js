@@ -30,37 +30,37 @@ const DevicesPage = ({ username }) => {
   ] = React.useState("");
   const [devices, setDevices] = React.useState([
     {
-      id: "MOTR_112312313_1312312313211",
+      id: "MOTR_000000000000000602558016_0005",
       name: "Andrei",
       date: new Date().toDateString(),
     },
     {
-      id: "MOTR_23123123123_31231231232",
+      id: "MOTR_000000000000000602558016_0010",
       name: "Andreea",
       date: new Date(1584567891111).toDateString(),
     },
     {
-      id: "MOTR_342342342_4234234234234",
+      id: "MOTR_000000000000000602558016_0012",
       name: "Cosmin",
       date: new Date(1584569891111).toDateString(),
     },
     {
-      id: "MOTR_431231231_3123123123131",
+      id: "MOTR_000000000000000602558016_0013",
       name: "Mihai",
       date: new Date(1584667891111).toDateString(),
     },
     {
-      id: "MOTR_546231231_3123123123131",
+      id: "MOTR_000000000000000602558016_0014",
       name: "Radu",
       date: new Date(1584577891111).toDateString(),
     },
     {
-      id: "MOTR_665231231_3123123123131",
-      name: "Marius",
+      id: "MOTR_000000000000000602558016_0015",
+      name: "Marian",
       date: new Date(1584567891111).toDateString(),
     },
     {
-      id: "MOTR_665231231_3123123123131",
+      id: "MOTR_000000000000000602558016_0020",
       name: "Marius",
       date: new Date(1584567891111).toDateString(),
     },
@@ -78,6 +78,7 @@ const DevicesPage = ({ username }) => {
   };
 
   const handlePairing = (credentials) => {
+    console.log(credentials);
     setCredentials(credentials);
     setPairingLoading(true);
   };
@@ -104,18 +105,32 @@ const DevicesPage = ({ username }) => {
   const handleOnSuccessMessageArrive = (message) => {
     console.log(message);
     const {
-      deviceCode: id,
+      deviceCode,
       state,
       deviceName: name,
       registeredOn: date,
+      deviceCodeAfterPairing: id,
     } = message;
     if (state === "PAIRED") {
       setSuccessfullyPairingMessage(
-        "Now you can track the locations of Test's smartphone."
+        `Now you can track the locations of ${name}'s smartphone.`
       );
       setDevices((prevState) => {
-        const newDevice = { id, name, date };
-        return Array.isArray(devices) ? prevState.concat(newDevice) : newDevice;
+        const newDevice = { id, name, date: new Date(date).toDateString() };
+        let newDevices = [];
+        if (id === deviceCode) {
+          newDevices = Array.isArray(devices)
+            ? prevState.concat(newDevice)
+            : [newDevice];
+        } else {
+          newDevices = prevState.map((currentDevice) => {
+            if (currentDevice.id === id) {
+              return newDevice;
+            }
+            return currentDevice;
+          });
+        }
+        return newDevices;
       });
       setPairingLoading(false);
       setIsOpen(false);
@@ -147,7 +162,7 @@ const DevicesPage = ({ username }) => {
       <MobileTrackerInfoModal
         isOpen={successfullyPairingMessage !== ""}
         handleOnClose={() => setSuccessfullyPairingMessage("")}
-        title={"Successfully Pairing"}
+        title={"Successfully Paired"}
         message={successfullyPairingMessage}
       />
       {pairingLoading && (
@@ -175,10 +190,10 @@ const DevicesPage = ({ username }) => {
         devices={devices}
       />
       <MobileTrackerErrorModal
-          isOpen={errorMessage !== ""}
-          title="Pairing Error"
-          handleOnClose={() => setErrorMessage("")}
-          message={errorMessage}
+        isOpen={errorMessage !== ""}
+        title="Pairing Error"
+        handleOnClose={() => setErrorMessage("")}
+        message={errorMessage}
       />
     </div>
   );
