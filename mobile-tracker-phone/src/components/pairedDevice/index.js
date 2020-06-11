@@ -6,9 +6,14 @@ export const PairedDeviceTabNavigator = createMaterialTopTabNavigator(
   {
     DeviceInformation: {
       screen: DeviceInformationScreen,
-      navigationOptions: {gestureEnabled: false},
+      // navigationOptions: {gestureEnabled: false},
     },
-    PairedDeviceContainer: {screen: PairedDeviceContainer},
+    PairedDeviceContainer: {
+      screen: PairedDeviceContainer,
+      navigationOptions: {
+        swipeEnabled: false,
+      },
+    },
   },
   {
     initialRouteName: 'PairedDeviceContainer',
