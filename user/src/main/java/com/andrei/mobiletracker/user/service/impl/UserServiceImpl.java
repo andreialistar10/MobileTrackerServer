@@ -3,8 +3,10 @@ package com.andrei.mobiletracker.user.service.impl;
 import com.andrei.mobiletracker.user.dao.notactivatedaccount.NotActivatedAccountDao;
 import com.andrei.mobiletracker.user.dao.user.UserDao;
 import com.andrei.mobiletracker.user.dao.userdetail.UserDetailDao;
-import com.andrei.mobiletracker.user.dto.ActivatedUserDto;
-import com.andrei.mobiletracker.user.dto.UserAccountDetailRequestDto;
+import com.andrei.mobiletracker.user.dto.user.ActivatedUserDto;
+import com.andrei.mobiletracker.user.dto.user.UpdatableUserAccountDetailsData;
+import com.andrei.mobiletracker.user.dto.user.UserAccountDetailRequestDto;
+import com.andrei.mobiletracker.user.dto.user.UserAccountDetailsData;
 import com.andrei.mobiletracker.user.model.NotActivatedAccount;
 import com.andrei.mobiletracker.user.model.UserAccount;
 import com.andrei.mobiletracker.user.model.UserAccountDetails;
@@ -90,6 +92,40 @@ public class UserServiceImpl implements UserService {
                 .destinationEmail(userAccountDetails.getEmail())
                 .build());
         logger.info("-----------------SUCCESSFUL resendRegistrationAccount-----------------");
+    }
+
+    @Override
+    @Transactional
+    public UserAccountDetailsData getUserAccountDetails(String username) {
+
+        logger.info("------------------LOGGING  getMyUserDetails------------------");
+        UserAccountDetails userAccountDetails = userDetailDao.findOneMyUserDetailByUsername(username);
+        UserAccount userAccount = userAccountDetails.getUser();
+        logger.info("-----------------SUCCESSFUL getMyUserDetails-----------------");
+        return UserAccountDetailsData.builder()
+                .email(userAccountDetails.getEmail())
+                .firstName(userAccountDetails.getFirstName())
+                .lastName(userAccountDetails.getLastName())
+                .username(userAccount.getUsername())
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public UserAccountDetailsData updateUserAccountDetails(UpdatableUserAccountDetailsData updatableUserAccountDetailsData, String username) {
+
+        logger.info("------------------LOGGING  updateUserAccountDetails------------------");
+        UserAccountDetails userAccountDetails = userDetailDao.findOneMyUserDetailByUsername(username);
+        userAccountDetails.setFirstName(updatableUserAccountDetailsData.getFirstName());
+        userAccountDetails.setLastName(updatableUserAccountDetailsData.getLastName());
+        userDetailDao.saveOneUserDetail(userAccountDetails);
+        logger.info("-----------------SUCCESSFUL updateUserAccountDetails-----------------");
+        return UserAccountDetailsData.builder()
+                .email(userAccountDetails.getEmail())
+                .firstName(userAccountDetails.getFirstName())
+                .lastName(userAccountDetails.getLastName())
+                .username(username)
+                .build();
     }
 
     private UserAccount addUser(String username, String password) {

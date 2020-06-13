@@ -1,4 +1,4 @@
-package com.andrei.mobiletracker.user.dto;
+package com.andrei.mobiletracker.user.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.andrei.mobiletracker.user.dto;
+package com.andrei.mobiletracker.user.dto.user;
 
 import com.andrei.mobiletracker.user.beans.annotation.constraint.dtoConstraint.UserAccountDetailRequestDtoConstraint;
 import com.andrei.mobiletracker.user.beans.annotation.constraint.fieldConstraint.NameConstraint;

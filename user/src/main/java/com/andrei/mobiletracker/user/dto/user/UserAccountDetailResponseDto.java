@@ -1,4 +1,4 @@
-package com.andrei.mobiletracker.user.dto;
+package com.andrei.mobiletracker.user.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,11 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActivatedUserDto {
+@Builder
+public class UserAccountDetailResponseDto {
 
     private String username;
-    private String role;
+    private String firstName;
+    private String lastName;
+    private String email;
 }

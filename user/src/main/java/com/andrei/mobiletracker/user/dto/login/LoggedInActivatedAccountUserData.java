@@ -1,4 +1,4 @@
-package com.andrei.mobiletracker.user.dto;
+package com.andrei.mobiletracker.user.dto.login;
 
 import lombok.*;
 

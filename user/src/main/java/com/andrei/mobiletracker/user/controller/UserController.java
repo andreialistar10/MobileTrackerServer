@@ -1,8 +1,6 @@
 package com.andrei.mobiletracker.user.controller;
 
-import com.andrei.mobiletracker.user.dto.ActivatedUserDto;
-import com.andrei.mobiletracker.user.dto.UserAccountDetailRequestDto;
-import com.andrei.mobiletracker.user.dto.UserAccountDetailResponseDto;
+import com.andrei.mobiletracker.user.dto.user.*;
 import com.andrei.mobiletracker.user.model.UserAccountDetails;
 import com.andrei.mobiletracker.user.service.UserService;
 import com.andrei.mobiletracker.user.service.exception.UserExceptionType;
@@ -16,7 +14,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -91,6 +91,43 @@ public class UserController {
         userService.resendRegistrationAccount(principal.getName());
         logger.info("-----------------SUCCESSFUL resendRegistrationAccount-----------------");
         return new ResponseEntity<>(UserExceptionType.SUCCESS, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Retrieve my user details")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "SUCCESS", response = UserDetails.class)
+    })
+    @RequestMapping(value = "",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserAccountDetailsData> getMyUserDetails(Principal principal) {
+
+        logger.info("------------------LOGGING  getMyUserDetails------------------");
+        logger.info("username: {}", principal.getName());
+        UserAccountDetailsData userAccountDetailsData = userService.getUserAccountDetails(principal.getName());
+        logger.info("-----------------SUCCESSFUL getMyUserDetails-----------------");
+        return new ResponseEntity <>(userAccountDetailsData, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Update my user details")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "SUCCESS", response = UserDetails.class),
+            @ApiResponse(code = 400, message = "INVALID_USER_DETAILS", response = UserExceptionType.class)
+    })
+    @RequestMapping(value = "",
+            method = RequestMethod.PUT,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserAccountDetailsData> updateUserDetails(@Validated @RequestBody UpdatableUserAccountDetailsData updatableUserAccountDetailsData, BindingResult result, Principal principal) {
+
+        logger.info("------------------LOGGING  updateUserDetails------------------");
+        logger.info("username: {}", principal.getName());
+        if (result.hasErrors()){
+            throw new UserServiceException("User details for user: " + principal.getName() + "are invalid", HttpStatus.BAD_REQUEST, UserExceptionType.INVALID_USER_DETAILS);
+        }
+        UserAccountDetailsData userAccountDetailsData = userService.updateUserAccountDetails(updatableUserAccountDetailsData, principal.getName());
+        logger.info("-----------------SUCCESSFUL updateUserDetails-----------------");
+        return new ResponseEntity <>(userAccountDetailsData, HttpStatus.OK);
     }
 
     private void logMyUserDetailRequestDto(UserAccountDetailRequestDto userAccountDetailRequestDto) {

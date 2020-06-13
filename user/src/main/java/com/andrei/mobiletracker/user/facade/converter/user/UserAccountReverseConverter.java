@@ -1,6 +1,6 @@
 package com.andrei.mobiletracker.user.facade.converter.user;
 
-import com.andrei.mobiletracker.user.dto.UserAccountData;
+import com.andrei.mobiletracker.user.dto.user.UserAccountData;
 import com.andrei.mobiletracker.user.facade.converter.Converter;
 import com.andrei.mobiletracker.user.facade.populator.Populator;
 import com.andrei.mobiletracker.user.model.UserAccount;
