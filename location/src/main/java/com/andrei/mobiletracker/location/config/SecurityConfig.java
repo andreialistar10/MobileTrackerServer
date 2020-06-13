@@ -1,17 +1,19 @@
-package com.andrei.mobiletracker.device.config;
+package com.andrei.mobiletracker.location.config;
 
-import com.andrei.mobiletracker.device.security.DeviceAuthority;
+import com.andrei.mobiletracker.beans.authorities.DeviceAuthority;
+import com.andrei.mobiletracker.beans.authorities.UserAuthority;
 import com.andrei.mobiletracker.security.jwtFilter.microserviceFilters.JwtTokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,7 +23,7 @@ public class SecurityConfig {
 
     @Order(1)
     @Configuration
-    public static class UnregisteredDeviceApiConfig extends WebSecurityConfigurerAdapter {
+    public static class DeviceSecurityApiConfig extends WebSecurityConfigurerAdapter {
 
         @Autowired
         @Qualifier(value = "deviceAuthenticationFilter")
@@ -30,14 +32,13 @@ public class SecurityConfig {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-            http.antMatcher("/unregistered-devices/**")
+            http.antMatcher("/locations")
                     .csrf().disable()
                     .logout().disable()
                     .formLogin().disable()
                     .cors().and()
                     .authorizeRequests()
-                    .antMatchers("/unregistered-devices/confirm-pairing").hasAuthority(DeviceAuthority.UNREGISTERED_DEVICE.toString())
-                    .antMatchers("/unregistered-devices/**").permitAll()
+                    .antMatchers(HttpMethod.POST, "/locations").hasAuthority(DeviceAuthority.REGISTERED_DEVICE.toString())
                     .anyRequest().authenticated()
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -62,14 +63,14 @@ public class SecurityConfig {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-            http.antMatcher("/devices/**")
+            http.antMatcher("/locations/**")
                     .csrf()
                     .disable()
                     .logout().disable()
                     .formLogin().disable()
                     .cors().and()
                     .authorizeRequests()
-                    .antMatchers("/devices/**").hasAuthority("ACTIVATED_ACCOUNT")
+                    .antMatchers(HttpMethod.GET, "/locations/**").hasAuthority(UserAuthority.ACTIVATED_ACCOUNT.toString())
                     .anyRequest().authenticated()
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

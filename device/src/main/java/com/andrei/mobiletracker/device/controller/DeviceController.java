@@ -1,8 +1,7 @@
 package com.andrei.mobiletracker.device.controller;
 
-import com.andrei.mobiletracker.device.dto.ownerdevice.DevicesData;
+import com.andrei.mobiletracker.device.dto.device.DevicesData;
 import com.andrei.mobiletracker.device.facade.device.DeviceFacade;
-import com.andrei.mobiletracker.device.model.UnregisteredDevice;
 import com.andrei.mobiletracker.device.service.exception.DeviceExceptionType;
 import com.andrei.mobiletracker.device.service.exception.DeviceServiceException;
 import io.swagger.annotations.ApiOperation;
@@ -20,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/my-devices")
-public class DeviceOwnerController {
+@RequestMapping("/devices")
+public class DeviceController {
 
-    private static final Logger logger = LogManager.getLogger(DeviceOwnerController.class);
+    private static final Logger logger = LogManager.getLogger(DeviceController.class);
 
     @Autowired
     private DeviceFacade deviceFacade;
@@ -35,11 +34,14 @@ public class DeviceOwnerController {
     @RequestMapping(value = "",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DevicesData> findAllMyDevices(Principal principal) {
+    public ResponseEntity<DevicesData> findAllMyDevices(@RequestParam(name = "id-only", required = false) Boolean idOnly, Principal principal) {
 
         logger.info("------------------LOGGING  findAllMyDevices------------------");
         logger.info("username: {}", principal.getName());
-        DevicesData devicesData = deviceFacade.findAllDevicesByOwnerUsername(principal.getName());
+        if (idOnly == null){
+            idOnly = false;
+        }
+        DevicesData devicesData = deviceFacade.findAllDevicesByOwnerUsername(principal.getName(), idOnly);
         logger.info("-----------------SUCCESSFUL findAllMyDevices-----------------");
         return new ResponseEntity<>(devicesData, HttpStatus.OK);
     }

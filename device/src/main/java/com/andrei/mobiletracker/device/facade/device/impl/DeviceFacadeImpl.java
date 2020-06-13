@@ -1,9 +1,8 @@
 package com.andrei.mobiletracker.device.facade.device.impl;
 
 import com.andrei.mobiletracker.beans.converter.Converter;
-import com.andrei.mobiletracker.device.controller.DeviceOwnerController;
-import com.andrei.mobiletracker.device.dto.ownerdevice.DeviceData;
-import com.andrei.mobiletracker.device.dto.ownerdevice.DevicesData;
+import com.andrei.mobiletracker.device.dto.device.DeviceData;
+import com.andrei.mobiletracker.device.dto.device.DevicesData;
 import com.andrei.mobiletracker.device.facade.device.DeviceFacade;
 import com.andrei.mobiletracker.device.model.Device;
 import com.andrei.mobiletracker.device.service.device.DeviceService;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DeviceFacadeImpl implements DeviceFacade {
@@ -26,14 +26,26 @@ public class DeviceFacadeImpl implements DeviceFacade {
     private Converter<Device, DeviceData> deviceDataFromDeviceConverter;
 
     @Override
-    public DevicesData findAllDevicesByOwnerUsername(String name) {
+    public DevicesData findAllDevicesByOwnerUsername(String name, boolean idOnly) {
 
         logger.info("------------------LOGGING  findAllDevicesByOwnerUsername------------------");
         List<Device> devices = deviceService.findAllDevicesByOwnerUsername(name);
-        List<DeviceData> deviceDataList = deviceDataFromDeviceConverter.convertAll(devices);
+        List<?> deviceInformationDataList = idOnly ? getDeviceIdList(devices) : getDeviceDataList(devices);
         logger.info("-----------------SUCCESSFUL findAllDevicesByOwnerUsername-----------------");
         return DevicesData.builder()
-                .devices(deviceDataList)
+                .devices(deviceInformationDataList)
                 .build();
+    }
+
+    private List<DeviceData> getDeviceDataList(List<Device> devices) {
+
+        return deviceDataFromDeviceConverter.convertAll(devices);
+    }
+
+    private List<String> getDeviceIdList(List<Device> devices) {
+
+        return devices.stream()
+                .map(Device::getCode)
+                .collect(Collectors.toList());
     }
 }

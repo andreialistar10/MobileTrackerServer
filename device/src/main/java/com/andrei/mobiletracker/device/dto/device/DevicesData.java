@@ -1,4 +1,4 @@
-package com.andrei.mobiletracker.device.dto.ownerdevice;
+package com.andrei.mobiletracker.device.dto.device;
 
 import lombok.*;
 
@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 public class DevicesData {
 
-    private List<DeviceData> devices;
+    private List<?> devices;
 }

@@ -1,6 +1,6 @@
 package com.andrei.mobiletracker.device.controller;
 
-import com.andrei.mobiletracker.device.dto.ownerdevice.DevicesData;
+import com.andrei.mobiletracker.device.dto.device.DevicesData;
 import com.andrei.mobiletracker.device.dto.unregistereddevice.*;
 import com.andrei.mobiletracker.device.facade.unregistereddevice.UnregisteredDeviceFacade;
 import com.andrei.mobiletracker.device.model.UnregisteredDevice;
@@ -16,7 +16,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
