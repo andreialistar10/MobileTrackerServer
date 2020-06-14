@@ -15,7 +15,6 @@ const SignupForm = ({
   onSubmit,
   onTextChange,
   errors,
-  focus,
   onFocusChange,
   selectedTextFields,
   loading,

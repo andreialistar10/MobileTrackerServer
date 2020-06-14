@@ -107,12 +107,8 @@ export const makeSharedStyle = makeStyles({
     },
   },
   textField: {
-    backgroundColor: FIELD_BACKGROUND_COLOR,
-    height: FIELD_HEIGHT,
     margin: 0,
     justifyContent: "center",
-    border: FIELD_BORDER,
-    borderRadius: FIELD_BORDER_RADIUS,
   },
   primitiveInput: {
     paddingLeft: "5px",
@@ -121,13 +117,24 @@ export const makeSharedStyle = makeStyles({
     paddingBottom: 0,
   },
   input: {
+    backgroundColor: FIELD_BACKGROUND_COLOR,
+    border: FIELD_BORDER,
     fontSize: "1.2rem",
     fontWeight: "500",
     color: FIELD_COLOR,
     fontFamily: FONT_FAMILY,
+    borderRadius: FIELD_BORDER_RADIUS,
+    height: FIELD_HEIGHT,
+  },
+  inputError: {
+    borderColor: "#be4b49",
+    borderWidth: "1.5px",
   },
   textFieldWrapper: {
     display: "table-row",
+  },
+  errorIcon: {
+    color: "#be4b49",
   },
   formContainer: {
     display: "table",

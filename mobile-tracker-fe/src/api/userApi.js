@@ -11,6 +11,7 @@ import { getApiToken } from "../index";
 
 const SIGN_UP_URL = `${BACKEND_URL}/users/sign-up`;
 const RESEND_CONFIRMATION_EMAIL_URL = `${BACKEND_URL}/users/resend-registration-email`;
+const USER_DETAILS_URL = `${BACKEND_URL}/users`;
 
 const DUPLICATE_USER_RESPONSE_DATA_TEXT = "DUPLICATE_USER";
 
@@ -49,13 +50,21 @@ const handleResendConfirmationEmailError = (error) => {
   throw error;
 };
 
+const handleUpdateUserDetailsError = (error) => {
+  handleConnectionAndServerErrors(error);
+  const { response } = error;
+  if (response.status === 400) {
+    throw new Error("Please fill correct the invalid fields!");
+  }
+  throw error;
+};
+
+const handleGetUserDetailsError = (error) => {
+  handleConnectionAndServerErrors(error);
+  throw error;
+};
+
 export const signUpUser = (newUser) => {
-  // const configSignUpAPI = {
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Accept: "application/json",
-  //   },
-  // };
   return axiosInstance
     .post(SIGN_UP_URL, newUser)
     .then((response) => response.data)
@@ -66,4 +75,18 @@ export const resendConfirmationEmailUser = () => {
   return axiosInstance
     .get(RESEND_CONFIRMATION_EMAIL_URL)
     .catch((error) => handleResendConfirmationEmailError(error));
+};
+
+export const getUserDetails = () => {
+  return axiosInstance
+    .get(USER_DETAILS_URL)
+    .then((response) => response.data)
+    .catch((error) => handleGetUserDetailsError(error));
+};
+
+export const updateUserDetails = (userDetails) => {
+  return axiosInstance
+    .put(USER_DETAILS_URL, userDetails)
+    .then((response) => response.data)
+    .catch((error) => handleUpdateUserDetailsError(error));
 };

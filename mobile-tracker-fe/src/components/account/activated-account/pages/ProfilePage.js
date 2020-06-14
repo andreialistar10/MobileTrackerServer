@@ -1,20 +1,38 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import { makeSharedStyle } from "../../../../style/activated-account/shared";
 import MobileTrackerTableContainer from "../common/containers/MobileTrackerTableContainer";
 import MobileTrackerRow from "../common/containers/MobileTrackerRow";
-import MobileTrackerLabel from "../common/form/MobileTrackerLabel";
-import MobileTrackerCell from "../common/containers/MobileTrackerCell";
 import MobileTrackerTextField from "../common/form/MobileTrackerTextField";
 import MobileTrackerButton from "../common/form/MobileTrackerButton";
 import { toast } from "react-toastify";
+import { getUserDetails, updateUserDetails } from "../../../../api/userApi";
+import MobileTrackerModalLoadingIndicator from "../common/modals/MobileTrackerModalLoadingIndicator";
+import { validateName } from "../../../../utils/validation";
 
 const initialProfileDetails = {
-  username: "andrei.test",
-  email: "andrei.alistar98@gmail.com",
+  username: "",
+  email: "",
   firstName: "",
   lastName: "",
 };
+
+const initialErrorMessages = {
+  firstName: "",
+  lastName: "",
+};
+
+const validator = {
+  firstName: (firstNameValue) => {
+    const message = validateName(firstNameValue, "First name");
+    return message === undefined ? "" : message;
+  },
+  lastName: (lastNameValue) => {
+    const message = validateName(lastNameValue, "Last name");
+    return message === undefined ? "" : message;
+  },
+};
+
 const ProfilePage = () => {
   const {
     behindContent,
@@ -33,8 +51,31 @@ const ProfilePage = () => {
   const [profileDetails, setProfileDetails] = useState({
     ...initialProfileDetails,
   });
+  const [errors, setErrors] = useState({
+    ...initialErrorMessages,
+  });
+  const [loading, setLoading] = useState(true);
+  const [updateProfile, setUpdateProfile] = useState(false);
+  const [selectedInput, setSelectedInput] = useState("");
+
+  const validateInput = useCallback(
+    (field, fieldValue) => {
+      setErrors((prevState) => {
+        const error = validator[field](fieldValue);
+        if (prevState[field] !== error) {
+          const newErrors = { ...prevState };
+          newErrors[field] = error;
+          return newErrors;
+        }
+        return prevState;
+      });
+    },
+    [errors, setErrors]
+  );
+
   const onValueChange = (event) => {
     const { name, value } = event.target;
+    validateInput(name, value);
     setProfileDetails((prevState) => {
       const nextState = { ...prevState };
       nextState[name] = value;
@@ -42,10 +83,59 @@ const ProfilePage = () => {
     });
   };
 
+  const handleOnFocus = (event) => {
+    setSelectedInput(event.target.name);
+  };
+
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    toast.success("You successfully update your profile!");
+    if (formIsValid()) {
+      setLoading(true);
+      setUpdateProfile(true);
+    } else {
+      toast.error("Please fill the invalid fields!");
+    }
   };
+
+  const formIsValid = () => {
+    const { firstName, lastName } = errors;
+    return firstName === "" && lastName === "";
+  };
+
+  useEffect(() => {
+    if (updateProfile) {
+      const { lastName, firstName } = profileDetails;
+      updateUserDetails({ lastName, firstName })
+        .then((userDetails) => {
+          setProfileDetails((prevState) => {
+            return {
+              ...prevState,
+              ...userDetails,
+            };
+          });
+          toast.success("You successfully update your profile!");
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        })
+        .finally(() => {
+          setLoading(false);
+          setUpdateProfile(false);
+        });
+    }
+  }, [updateProfile, setLoading]);
+  useEffect(() => {
+    getUserDetails()
+      .then((response) => {
+        setProfileDetails(response);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
   return (
     <>
       <div className={behindContent}>
@@ -63,6 +153,7 @@ const ProfilePage = () => {
               className={inlineFormMaterialUITextField}
               name="username"
               readOnly={true}
+              onFocus={handleOnFocus}
             />
             <MobileTrackerTextField
               value={profileDetails.email}
@@ -73,6 +164,7 @@ const ProfilePage = () => {
               className={inlineFormMaterialUITextField}
               name="email"
               readOnly={true}
+              onFocus={handleOnFocus}
             />
           </MobileTrackerRow>
           <MobileTrackerRow>
@@ -85,6 +177,9 @@ const ProfilePage = () => {
               className={inlineFormMaterialUITextField}
               name="firstName"
               inputClassName={whiteColor}
+              errorMessage={errors.firstName}
+              onFocus={handleOnFocus}
+              openErrorTooltip={selectedInput === "firstName"}
             />
             <MobileTrackerTextField
               value={profileDetails.lastName}
@@ -95,16 +190,20 @@ const ProfilePage = () => {
               className={inlineFormMaterialUITextField}
               name="lastName"
               inputClassName={whiteColor}
+              errorMessage={errors.lastName}
+              onFocus={handleOnFocus}
+              openErrorTooltip={selectedInput === "lastName"}
             />
           </MobileTrackerRow>
         </MobileTrackerTableContainer>
         <MobileTrackerButton
           textOnDisable="Update profile"
           text="Update profile"
-          disabled={false}
+          disabled={!formIsValid()}
           className={inlineFormButton}
         />
       </form>
+      <MobileTrackerModalLoadingIndicator loading={loading} />
     </>
   );
 };
