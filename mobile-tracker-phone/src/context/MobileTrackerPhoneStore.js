@@ -1,12 +1,19 @@
-import React, {useReducer} from 'react';
+import React, {useReducer, useEffect} from 'react';
+import {Alert} from 'react-native';
 import {Provider} from './index';
 import {initialState} from './initialState';
 import {confirmPairing, getPasswordDevice, registerDevice} from '../core/api';
 import {
   getState,
   saveAuthorization,
-  saveDeviceInformation, saveDeviceSettings,
+  saveDeviceInformation,
+  saveDeviceSettings,
 } from '../core/localStorage';
+import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
+import {ROOT_BACKEND_URL_API} from '../core/constants';
+
+const SMALL_ICON_FILENAME = '../../assets/Logo_small.png';
+const LARGE_ICON_FILENAME = '../../assets/Logo_large.png';
 
 const SET_DEVICE_CODE = 'SET_DEVICE_CODE';
 const INIT_STORE = 'INIT_STORE';
@@ -23,7 +30,7 @@ function reducer(state, action) {
       return {...state, deviceInformation, authorization};
     }
     case INIT_STORE:
-      return {...payload};
+      return {...state, ...payload};
     case SET_PASSWORD:
       return {...state, password: payload};
     default:
@@ -33,6 +40,86 @@ function reducer(state, action) {
 
 export const MobileTrackerPhoneStore = ({children}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  useEffect(() => {
+    if (
+      state.authorization.token &&
+      state.authorization.refreshToken &&
+      state.deviceSettings.timeInterval
+    ) {
+      BackgroundGeolocation.configure({
+        desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
+        stationaryRadius: 50,
+        distanceFilter: 50,
+        notificationTitle: 'MobileTracker',
+        notificationText: 'Syncing locations...',
+        notificationIconSmall: SMALL_ICON_FILENAME,
+        notificationIconLarge: LARGE_ICON_FILENAME,
+        startOnBoot: false,
+        stopOnTerminate: false,
+        locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
+        interval: state.deviceSettings.timeInterval / 2,
+        fastestInterval: state.deviceSettings.timeInterval,
+        activitiesInterval: 10000,
+        stopOnStillActivity: false,
+        url: `${ROOT_BACKEND_URL_API}/locations`,
+        syncUrl: `${ROOT_BACKEND_URL_API}/locations`,
+        httpHeaders: {
+          Authorization: `Bearer ${state.authorization.token}`,
+          'Content-Type': 'application/json',
+        },
+        postTemplate: {
+          latitude: '@latitude',
+          longitude: '@longitude',
+          timestamp: '@time',
+        },
+      });
+
+      BackgroundGeolocation.on('error', error => {
+        console.log('[ERROR] BackgroundGeolocation error:', error);
+      });
+
+      BackgroundGeolocation.on('authorization', status => {
+        console.log(
+          '[INFO] BackgroundGeolocation authorization status: ' + status,
+        );
+        if (status !== BackgroundGeolocation.AUTHORIZED) {
+          setTimeout(
+            () =>
+              Alert.alert(
+                'App requires location tracking permission',
+                'Would you like to open app settings?',
+                [
+                  {
+                    text: 'Yes',
+                    onPress: () => BackgroundGeolocation.showAppSettings(),
+                  },
+                  {
+                    text: 'No',
+                    onPress: () => console.log('No Pressed'),
+                    style: 'cancel',
+                  },
+                ],
+              ),
+            1000,
+          );
+        }
+      });
+      BackgroundGeolocation.on('http_authorization', () => {
+        console.log('[INFO] App needs to authorize the http requests');
+      });
+
+      BackgroundGeolocation.checkStatus(status => {
+        if (!status.isRunning) {
+          BackgroundGeolocation.start();
+        }
+      });
+      return () => BackgroundGeolocation.removeAllListeners();
+    }
+  }, [
+    state.authorization.refreshToken,
+    state.authorization.token,
+    state.deviceSettings.timeInterval,
+  ]);
 
   const onRegisterDevice = deviceInformation => {
     return registerDevice(deviceInformation).then(responseDeviceInformation => {
@@ -51,7 +138,7 @@ export const MobileTrackerPhoneStore = ({children}) => {
 
   const initStore = () => {
     return getState().then(storedState => {
-      console.log(storedState);
+      // console.log(storedState);
       dispatch({type: INIT_STORE, payload: storedState});
       return Promise.resolve(storedState);
     });
@@ -87,6 +174,12 @@ export const MobileTrackerPhoneStore = ({children}) => {
     return newState;
   };
 
-  const value = {...state, onRegisterDevice, initStore, startPairing, confirmDevicePairing};
+  const value = {
+    ...state,
+    onRegisterDevice,
+    initStore,
+    startPairing,
+    confirmDevicePairing,
+  };
   return <Provider value={value}>{children}</Provider>;
 };

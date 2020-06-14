@@ -1,6 +1,6 @@
 package com.andrei.mobiletracker.location.controller;
 
-import com.andrei.mobiletracker.location.dto.location.LocationsData;
+import com.andrei.mobiletracker.location.dto.location.LocationData;
 import com.andrei.mobiletracker.location.dto.location.collection.FilteredLocationsData;
 import com.andrei.mobiletracker.location.dto.location.collection.LatestLocationsData;
 import com.andrei.mobiletracker.location.facade.LocationFacade;
@@ -21,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/locations")
@@ -39,14 +40,14 @@ public class LocationController {
     @RequestMapping(value = "",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LocationExceptionType> addLocation(@RequestBody @Validated LocationsData locationData, BindingResult result, Principal principal) {
+    public ResponseEntity<LocationExceptionType> addLocation(@RequestBody @Validated List<LocationData> locationDataList, BindingResult result, Principal principal) {
 
         logger.info("------------------LOGGING  addLocation-------------------");
         logger.info("DEVICE CODE: {}", principal.getName());
         if (result.hasErrors()) {
             throw new LocationServiceException("Invalid data on adding location", HttpStatus.BAD_REQUEST, LocationExceptionType.INVALID_DATA);
         }
-        locationFacade.saveLocations(locationData, principal.getName());
+        locationFacade.saveLocations(locationDataList, principal.getName());
         logger.info("-----------------SUCCESSFUL addLocation-----------------");
         return new ResponseEntity<>(LocationExceptionType.SUCCESS, HttpStatus.OK);
     }

@@ -4,7 +4,6 @@ import com.andrei.mobiletracker.beans.converter.Converter;
 import com.andrei.mobiletracker.location.dto.device.DevicesInformation;
 import com.andrei.mobiletracker.location.dto.location.FilteredLocationData;
 import com.andrei.mobiletracker.location.dto.location.LocationData;
-import com.andrei.mobiletracker.location.dto.location.LocationsData;
 import com.andrei.mobiletracker.location.dto.location.collection.FilteredLocationsData;
 import com.andrei.mobiletracker.location.dto.location.collection.LatestLocationsData;
 import com.andrei.mobiletracker.location.facade.LocationFacade;
@@ -36,10 +35,10 @@ public class LocationFacadeImpl implements LocationFacade {
     private LocationService locationService;
 
     @Override
-    public void saveLocations(LocationsData locationsData, String deviceCode) {
+    public void saveLocations(List<LocationData> locationDataList, String deviceCode) {
 
         logger.info("------------------LOGGING  saveLocation------------------");
-        locationsData.getLocations().forEach(locationData -> {
+        locationDataList.forEach(locationData -> {
             Location location = locationFromLocationDataConverter.convert(locationData);
             location.setDeviceCode(deviceCode);
             locationService.saveOneLocation(location);

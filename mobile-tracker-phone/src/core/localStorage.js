@@ -66,7 +66,7 @@ export const getDeviceSettings = async () => {
     if (!settings) {
       settings = initialState.deviceSettings;
     }
-    return deviceSettings;
+    return settings;
   } catch (e) {
     return initialState.deviceSettings;
   }
@@ -76,7 +76,11 @@ export const getState = async () => {
   const deviceInformation = await getDeviceInformation();
   const authorization = await getAuthorization();
   const deviceSettings = await getDeviceSettings();
-  return {deviceInformation, authorization, deviceSettings};
+  return {
+    deviceInformation,
+    authorization,
+    deviceSettings,
+  };
 };
 
 export const removeDeviceInformation = async () => {
