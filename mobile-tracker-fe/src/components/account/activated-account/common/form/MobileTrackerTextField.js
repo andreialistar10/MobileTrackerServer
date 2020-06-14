@@ -4,37 +4,9 @@ import { makeSharedStyle } from "../../../../../style/activated-account/shared";
 import PropTypes from "prop-types";
 import MobileTrackerCell from "../containers/MobileTrackerCell";
 import MobileTrackerLabel from "./MobileTrackerLabel";
-import { createMuiTheme, MuiThemeProvider, Tooltip } from "@material-ui/core";
-import { SMALL_DEVICE_MAX_WIDTH } from "../../../../../style/activated-account/constants";
+import { Tooltip } from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import ErrorRoundedIcon from "@material-ui/icons/ErrorRounded";
-
-const theme = createMuiTheme({
-  overrides: {
-    MuiTooltip: {
-      tooltipPlacementBottom: {
-        backgroundColor: "#be4b49",
-        color: "white",
-        fontSize: "0.75rem",
-        [`@media (max-width:850px)`]: {
-          fontSize: "0.72rem",
-          marginLeft: "calc(0.5rem - 8px)",
-        },
-        [`@media (max-width:800px)`]: {
-          fontSize: "0.69rem",
-          marginLeft: "calc(0.5rem - 8px)",
-        },
-        [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
-          fontSize: "0.62rem",
-          marginLeft: "calc(0.5rem - 8px)",
-        },
-      },
-      arrow: {
-        color: "#be4b49",
-      },
-    },
-  },
-});
 
 const MobileTrackerTextField = ({
   textLabel,
@@ -55,7 +27,8 @@ const MobileTrackerTextField = ({
     input,
     primitiveInput,
     inputError,
-    errorIcon,
+    errorColor,
+    tooltipError,
   } = makeSharedStyle();
   const classes = !className ? textField : `${textField} ${className}`;
   const inputProps = {
@@ -78,7 +51,7 @@ const MobileTrackerTextField = ({
   };
   if (!openErrorTooltip && errorMessage !== "") {
     InputProps.endAdornment = (
-      <InputAdornment position="end" className={errorIcon}>
+      <InputAdornment position="end" className={errorColor}>
         <ErrorRoundedIcon />
       </InputAdornment>
     );
@@ -86,27 +59,29 @@ const MobileTrackerTextField = ({
 
   return (
     <>
-      <MuiThemeProvider theme={theme}>
-        <MobileTrackerLabel textLabel={textLabel} {...labelProps} />
-        <MobileTrackerCell {...textFieldProps}>
-          <Tooltip
-            title={errorMessage}
-            placement={"bottom"}
-            arrow
-            open={openErrorTooltip}
-          >
-            <TextField
-              disabled={readOnly}
-              value={value}
-              onChange={onValueChange}
-              className={classes}
-              inputProps={inputProps}
-              InputProps={InputProps}
-              {...props}
-            />
-          </Tooltip>
-        </MobileTrackerCell>
-      </MuiThemeProvider>
+      <MobileTrackerLabel textLabel={textLabel} {...labelProps} />
+      <MobileTrackerCell {...textFieldProps}>
+        <Tooltip
+          title={errorMessage}
+          placement={"bottom"}
+          arrow
+          open={openErrorTooltip}
+          classes={{
+            tooltipPlacementBottom: tooltipError,
+            arrow: errorColor,
+          }}
+        >
+          <TextField
+            disabled={readOnly}
+            value={value}
+            onChange={onValueChange}
+            className={classes}
+            inputProps={inputProps}
+            InputProps={InputProps}
+            {...props}
+          />
+        </Tooltip>
+      </MobileTrackerCell>
     </>
   );
 };

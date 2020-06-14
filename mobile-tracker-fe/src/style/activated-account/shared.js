@@ -133,8 +133,25 @@ export const makeSharedStyle = makeStyles({
   textFieldWrapper: {
     display: "table-row",
   },
-  errorIcon: {
+  errorColor: {
     color: "#be4b49",
+  },
+  tooltipError: {
+    backgroundColor: "#be4b49",
+    color: "white",
+    fontSize: "0.75rem",
+    [`@media (max-width:850px)`]: {
+      fontSize: "0.72rem",
+      marginLeft: "calc(0.5rem - 8px)",
+    },
+    [`@media (max-width:800px)`]: {
+      fontSize: "0.69rem",
+      marginLeft: "calc(0.5rem - 8px)",
+    },
+    [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
+      fontSize: "0.62rem",
+      marginLeft: "calc(0.5rem - 8px)",
+    },
   },
   formContainer: {
     display: "table",
