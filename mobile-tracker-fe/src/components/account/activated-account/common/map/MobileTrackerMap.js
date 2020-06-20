@@ -76,7 +76,7 @@ const MobileTrackerMap = ({
             bigCircleRadius={bigCircleRadius}
             selected={clickableMarkers && selectedLocationKey === id}
             id={id}
-            onClick={handleOnClick}
+            onClick={() => handleOnClick(id)}
             {...otherProps}
           />
         );

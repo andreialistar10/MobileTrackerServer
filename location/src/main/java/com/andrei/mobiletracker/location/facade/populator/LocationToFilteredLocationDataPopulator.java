@@ -11,7 +11,7 @@ public class LocationToFilteredLocationDataPopulator implements Populator<Locati
     @Override
     public void populate(FilteredLocationData filteredLocationData, Location location) {
 
-        filteredLocationData.setCode(location.getCode());
+        filteredLocationData.setId(location.getCode());
         filteredLocationData.setLatitude(location.getLatitude());
         filteredLocationData.setLongitude(location.getLongitude());
         filteredLocationData.setDate(location.getDate());

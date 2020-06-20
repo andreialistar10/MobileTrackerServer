@@ -1,8 +1,10 @@
 package com.andrei.mobiletracker.location.facade.impl;
 
 import com.andrei.mobiletracker.beans.converter.Converter;
+import com.andrei.mobiletracker.location.dto.device.DeviceInformation;
 import com.andrei.mobiletracker.location.dto.device.DevicesInformation;
 import com.andrei.mobiletracker.location.dto.location.FilteredLocationData;
+import com.andrei.mobiletracker.location.dto.location.LatestLocationData;
 import com.andrei.mobiletracker.location.dto.location.LocationData;
 import com.andrei.mobiletracker.location.dto.location.collection.FilteredLocationsData;
 import com.andrei.mobiletracker.location.dto.location.collection.LatestLocationsData;
@@ -16,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class LocationFacadeImpl implements LocationFacade {
@@ -30,6 +35,9 @@ public class LocationFacadeImpl implements LocationFacade {
 
     @Autowired
     private Converter<Location, FilteredLocationData> filteredLocationDataFromLocationConverter;
+
+    @Autowired
+    private Converter<Location, LatestLocationData> latestLocationDataFromLocationConverter;
 
     @Autowired
     private LocationService locationService;
@@ -51,11 +59,38 @@ public class LocationFacadeImpl implements LocationFacade {
 
         logger.info("------------------LOGGING  findLatestLocations------------------");
         DevicesInformation devices = microservicesCaller.findAllDevicesForCurrentUser();
-        List<Location> locations = locationService.findLatestLocations(devices.getDevices());
+        List<String> deviceIds = getDeviceIds(devices.getDevices());
+        List<Location> locations = locationService.findLatestLocations(deviceIds);
+        List<LatestLocationData> latestLocationDataList = convertLocationListToLatestLocationDataList(locations, devices.getDevices());
         logger.info("-----------------SUCCESSFUL findLatestLocations-----------------");
         return LatestLocationsData.builder()
-                .locations(locations)
+                .locations(latestLocationDataList)
                 .build();
+    }
+
+    private List<LatestLocationData> convertLocationListToLatestLocationDataList(List<Location> locations, List<DeviceInformation> devices) {
+
+        Map<String, DeviceInformation> devicesMap = generateDevicesMap(devices);
+        return locations.stream()
+                .map(latestLocationDataFromLocationConverter::convert)
+                .peek(latestLocationData -> {
+                    DeviceInformation deviceInformation = devicesMap.get(latestLocationData.getDeviceCode());
+                    latestLocationData.setDeviceName(deviceInformation.getName());
+                })
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, DeviceInformation> generateDevicesMap(List<DeviceInformation> devices) {
+
+        return devices.stream()
+                .collect(Collectors.toMap(DeviceInformation::getId, Function.identity()));
+    }
+
+    private List<String> getDeviceIds(List<DeviceInformation> devices) {
+
+        return devices.stream()
+                .map(DeviceInformation::getId)
+                .collect(Collectors.toList());
     }
 
     @Override

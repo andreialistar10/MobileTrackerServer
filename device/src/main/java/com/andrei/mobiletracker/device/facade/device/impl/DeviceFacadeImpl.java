@@ -37,6 +37,16 @@ public class DeviceFacadeImpl implements DeviceFacade {
                 .build();
     }
 
+    @Override
+    public DeviceData findDeviceById(String deviceCode, String username) {
+
+        logger.info("------------------LOGGING  findDeviceById------------------");
+        Device device = deviceService.findDeviceByCodeAndOwnerUsername(deviceCode, username);
+        DeviceData deviceData = deviceDataFromDeviceConverter.convert(device);
+        logger.info("-----------------SUCCESSFUL findDeviceById-----------------");
+        return deviceData;
+    }
+
     private List<DeviceData> getDeviceDataList(List<Device> devices) {
 
         return deviceDataFromDeviceConverter.convertAll(devices);

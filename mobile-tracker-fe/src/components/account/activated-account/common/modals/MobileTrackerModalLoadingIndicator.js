@@ -7,7 +7,6 @@ import {
   MEDIUM_DEVICE_MAX_WIDTH,
   SMALL_DEVICE_MAX_WIDTH,
 } from "../../../../../style/activated-account/constants";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const theme = createMuiTheme({
   // palette: {

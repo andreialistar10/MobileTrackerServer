@@ -8,6 +8,7 @@ import configureStore from "./redux/configureStore";
 import { Provider as ReduxProvider } from "react-redux";
 import * as stateLoader from "./redux/stateManagement";
 import * as authorizationSelectors from "./redux/selectors/authorizationSelectors";
+import * as deviceSelectors from "./redux/selectors/deviceSelectors";
 import { NOT_ACTIVATED_ACCOUNT } from "./utils/auth/roles";
 
 const store = configureStore(stateLoader.loadState());
@@ -25,6 +26,11 @@ export const getApiToken = () => {
 export const getRefreshToken = () => {
   return authorizationSelectors.getRefreshToken(store.getState());
 };
+
+export const getDevicesLastUpdate = () => {
+    return deviceSelectors.getDevicesLastUpdate(store.getState());
+};
+
 render(
   <ReduxProvider store={store}>
     <Router>

@@ -3,8 +3,6 @@ export const FONT_FAMILY = "Segoe UI";
 //Header constants
 export const DEFAULT_HEADER_HEIGHT_VALUE = "90px";
 export const HEADER_HEIGHT_VALUE_MAX_WIDTH_500PX = "65px";
-export const HEADER_GRADIENT_COLOR =
-  "rgba(207, 241, 238,0.15), rgba(207, 241, 238,1)";
 export const DEFAULT_HEADER_LOGO_DIMENSIONS = "2.75rem";
 export const HEADER_LOGO_DIMENSIONS_MAX_WIDTH_500PX = "2rem";
 

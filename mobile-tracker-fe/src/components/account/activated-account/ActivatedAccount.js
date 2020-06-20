@@ -11,7 +11,6 @@ import TitlePage from "./common/TitlePage";
 import { Route, Switch } from "react-router-dom";
 import ProfilePage from "./pages/ProfilePage";
 import DevicesPage from "./pages/devices/DevicesPage";
-import DeviceSettingsPage from "./pages/DeviceSettingsPage";
 import LocationsPage from "./pages/LocationsPage";
 
 const ActivatedAccount = ({ logout, pageTitle }) => {

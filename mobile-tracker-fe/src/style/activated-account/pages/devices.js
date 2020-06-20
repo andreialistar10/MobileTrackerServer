@@ -1,6 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  COLOR_TITLE_PAGE,
   DEFAULT_BORDER_SPACING,
   DEFAULT_BORDER_SPACING_MAX_WIDTH_500px,
   FIELD_BACKGROUND_COLOR,

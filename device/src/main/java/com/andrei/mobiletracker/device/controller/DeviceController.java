@@ -1,5 +1,6 @@
 package com.andrei.mobiletracker.device.controller;
 
+import com.andrei.mobiletracker.device.dto.device.DeviceData;
 import com.andrei.mobiletracker.device.dto.device.DevicesData;
 import com.andrei.mobiletracker.device.facade.device.DeviceFacade;
 import com.andrei.mobiletracker.device.service.exception.DeviceExceptionType;
@@ -44,6 +45,23 @@ public class DeviceController {
         DevicesData devicesData = deviceFacade.findAllDevicesByOwnerUsername(principal.getName(), idOnly);
         logger.info("-----------------SUCCESSFUL findAllMyDevices-----------------");
         return new ResponseEntity<>(devicesData, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Get device by id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "SUCCESS", response = DeviceData.class),
+            @ApiResponse(code = 404, message = "DEVICE_NOT_FOUND", response = DeviceExceptionType.class)
+    })
+    @RequestMapping(value = "/{deviceCode}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DeviceData> findDeviceById(@PathVariable(name = "deviceCode") String deviceCode, Principal principal) {
+
+        logger.info("------------------LOGGING  findDevice------------------");
+        logger.info("username: {}", principal.getName());
+        DeviceData deviceData = deviceFacade.findDeviceById(deviceCode, principal.getName());
+        logger.info("-----------------SUCCESSFUL findDevice-----------------");
+        return new ResponseEntity<>(deviceData, HttpStatus.OK);
     }
 
     @ExceptionHandler({DeviceServiceException.class})

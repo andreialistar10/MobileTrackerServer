@@ -29,5 +29,8 @@ export const defaultState = {
     role: null,
   },
   user: {},
-  devices: [],
+  devices: {
+    devicesList: [],
+    lastUpdate: 0,
+  },
 };

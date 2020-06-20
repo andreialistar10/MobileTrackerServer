@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FilteredLocationData {
+public class LatestLocationData {
 
     private Long id;
+    private String deviceCode;
     private Double latitude;
     private Double longitude;
     private Long date;
     private String address;
+    private String deviceName;
 }

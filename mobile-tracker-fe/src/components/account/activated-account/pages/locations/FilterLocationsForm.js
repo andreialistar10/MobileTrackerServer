@@ -118,7 +118,6 @@ FilterLocationForm.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

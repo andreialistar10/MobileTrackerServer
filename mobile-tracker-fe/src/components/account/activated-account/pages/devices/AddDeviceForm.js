@@ -14,7 +14,6 @@ import SelectDeviceDialog from "./SelectDeviceDialog";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import {
   COLOR_TITLE_PAGE,
-  LABEL_COLOR,
 } from "../../../../../style/activated-account/constants";
 import MobileTrackerAlertModal from "../../common/modals/MobileTrackerAlertModal";
 

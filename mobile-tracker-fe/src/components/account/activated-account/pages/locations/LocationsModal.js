@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import MobileTrackerModal from "../../common/modals/MobileTrackerModal";
 import MaterialTable from "material-table";
-import {
-  COLOR_TITLE_PAGE,
-  FONT_FAMILY,
-} from "../../../../../style/activated-account/constants";
+import { FONT_FAMILY } from "../../../../../style/activated-account/constants";
 import { makeLocationsStyle } from "../../../../../style/activated-account/pages/locations";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { compose, setDisplayName } from "recompose";
@@ -53,7 +50,7 @@ const headerStyle = {
   fontFamily: FONT_FAMILY,
   textAlign: "center",
   fontSize: "1.1rem",
-  backgroundColor: "transparent",
+  backgroundColor: "#156082",
 };
 const cellStyle = {};
 

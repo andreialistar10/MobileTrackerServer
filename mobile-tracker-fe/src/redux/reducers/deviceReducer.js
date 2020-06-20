@@ -5,7 +5,7 @@ export default function deviceReducer(state = defaultState.devices, action) {
   const { type, payload } = action;
   switch (type) {
     case types.GET_ALL_DEVICES:
-      return [...payload];
+      return {...payload};
     case types.ADD_DEVICE:
       return state.concat(payload);
     case types.UPDATE_DEVICE: {

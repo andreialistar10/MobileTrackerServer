@@ -7,4 +7,6 @@ import java.util.List;
 public interface DeviceService {
 
     List<Device> findAllDevicesByOwnerUsername(String username);
+
+    Device findDeviceByCodeAndOwnerUsername(String deviceCode, String username);
 }

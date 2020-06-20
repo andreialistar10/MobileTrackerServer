@@ -29,7 +29,7 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public List<Device> findAllAvailableDevicesByOwnerUsernameAndDeleted(String username) {
+    public List<Device> findAllAvailableDevicesByOwnerUsername(String username) {
 
         logger.info("------------------LOGGING  findAllDevicesByOwnerUsername------------------");
         List<Device> devices = jpaRepository.findAllByOwnerUsernameAndDeleted(username, false);

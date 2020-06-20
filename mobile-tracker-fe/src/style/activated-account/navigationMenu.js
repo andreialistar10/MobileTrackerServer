@@ -1,7 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import {
   DEFAULT_HEADER_HEIGHT_VALUE,
-  HEADER_GRADIENT_COLOR,
   HEADER_HEIGHT_VALUE_MAX_WIDTH_500PX,
   SMALL_DEVICE_MAX_WIDTH,
 } from "./constants";
@@ -14,7 +13,6 @@ export const makeNavigationMenuStyle = makeStyles({
     minHeight: "100%",
     display: "flex",
     flexDirection: "column",
-    // backgroundImage: `linear-gradient(to bottom, ${HEADER_GRADIENT_COLOR})`,
     backgroundColor: "#2e303e",
     "-webkit-box-shadow": "1px 3px 6px -3px rgba(0,0,0,0.75)",
     "-moz-box-shadow": "1px 3px 6px -3px rgba(0,0,0,0.75)",

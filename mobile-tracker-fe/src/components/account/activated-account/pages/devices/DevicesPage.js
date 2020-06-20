@@ -194,7 +194,7 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = ({ authorization, devices }) => {
-  const newDevices = devices.map((device) => {
+  const newDevices = devices.devicesList.map((device) => {
     const newDevice = { ...device };
     newDevice.date = new Date(device.date).toDateString();
     return newDevice;

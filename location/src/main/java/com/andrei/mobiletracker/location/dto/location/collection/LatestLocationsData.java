@@ -1,5 +1,6 @@
 package com.andrei.mobiletracker.location.dto.location.collection;
 
+import com.andrei.mobiletracker.location.dto.location.LatestLocationData;
 import com.andrei.mobiletracker.location.model.Location;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +15,5 @@ import java.util.List;
 @Builder
 public class LatestLocationsData {
 
-    private List<Location> locations;
+    private List<LatestLocationData> locations;
 }

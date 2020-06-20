@@ -6,8 +6,14 @@ import { makeLocationsStyle } from "../../../../style/activated-account/pages/lo
 import FilterLocationForm from "./locations/FilterLocationsForm";
 import LocationsModal from "./locations/LocationsModal";
 import { getMidnightDate } from "../../../../utils/timeUtils";
-import { getAddressesByLatitudeAndLongitude } from "../../../../api/geocoderApi";
 import MobileTrackerModalLoadingIndicator from "../common/modals/MobileTrackerModalLoadingIndicator";
+import {
+  getLatestLocations,
+  getLocationsByDeviceCodeAndTimeInterval,
+} from "../../../../api/locationApi";
+import { getAllUserDevices } from "../../../../redux/actions/deviceActions";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 const moment = require("moment");
 
 const popupProperties = [
@@ -16,7 +22,7 @@ const popupProperties = [
     propertyTitle: "ID:",
   },
   {
-    propertyName: "name",
+    propertyName: "deviceName",
     propertyTitle: "Name:",
   },
   {
@@ -24,84 +30,55 @@ const popupProperties = [
     propertyTitle: "Date:",
   },
 ];
-const LocationsPage = () => {
+const LocationsPage = ({ getAllDevices, devices }) => {
   const { behindContent, icon } = makeSharedStyle();
   const { wrapper, mapContainer, rightSide } = makeLocationsStyle();
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [startDate, setStartDate] = useState(getMidnightDate());
   const [endDate, setEndDate] = useState(new Date());
-  const [foundLocationsFilter, setFoundLocations] = useState([]);
+  const [latestLocations, setLatestLocations] = useState([]);
+  const [filteredLocations, setFilteredLocations] = useState([]);
   const [loadingFilter, setLoadingFilter] = useState(false);
-  const foundLocations = [
-    {
-      latitude: 46.778888,
-      longitude: 23.637285,
-      date: moment(new Date()).format("DD-MM-YYYY HH:mm"),
-      locationCoordinates: "46.778888, 23.637285",
-      address: "DA",
-    },
-    {
-      latitude: 46.788888,
-      longitude: 23.637285,
-      date: moment(new Date()).format("DD-MM-YYYY HH:mm"),
-      locationCoordinates: "46.778888, 23.637285",
-      address: "DA",
-    },
-    {
-      latitude: 46.798888,
-      longitude: 23.637285,
-      date: moment(new Date()).format("DD-MM-YYYY HH:mm"),
-      locationCoordinates: "46.778888, 23.637285",
-      address: "DA",
-    },
-    {
-      latitude: 46.808888,
-      longitude: 23.637285,
-      date: moment(new Date()).format("DD-MM-YYYY HH:mm"),
-      locationCoordinates: "46.778888, 23.637285",
-      address: "DA",
-    },
-    {
-      latitude: 46.818888,
-      longitude: 23.637285,
-      date: moment(new Date()).format("DD-MM-YYYY HH:mm"),
-      locationCoordinates: "46.778888, 23.637285",
-      address: "DA",
-    },
-    {
-      latitude: 46.828888,
-      longitude: 23.637285,
-      date: moment(new Date()).format("DD-MM-YYYY HH:mm"),
-      locationCoordinates: "46.778888, 23.637285",
-      address: "DA",
-    },
-    {
-      latitude: 46.838888,
-      longitude: 23.637285,
-      date: moment(new Date()).format("DD-MM-YYYY HH:mm"),
-      locationCoordinates: "46.778888, 23.637285",
-      address: "DA",
-    },
-    {
-      latitude: 46.848888,
-      longitude: 23.637285,
-      date: moment(new Date()).format("DD-MM-YYYY HH:mm"),
-      locationCoordinates: "46.778888, 23.637285",
-      address: "DA",
-    },
-  ];
+  const [loadingRequestsOnStart, setLoadingRequestsOnStart] = useState(2);
 
   useEffect(() => {
-    if (loadingFilter === true) {
-      getAddressesByLatitudeAndLongitude(foundLocations)
-        .then((addresses) => {
-          addresses.forEach(
-            (address, i) => (foundLocations[i].address = address.display_name)
-          );
-          setFoundLocations([...foundLocations]);
+    getLatestLocations()
+      .then((locations) => {
+        const newLatestLocations = locations.map((location) => {
+          location.date = moment(location.date).format("DD-MM-YYYY HH:mm:ss");
+          return location;
+        });
+        setLatestLocations(newLatestLocations);
+      })
+      .catch(() => {})
+      .finally(() => {
+        setLoadingRequestsOnStart((prevState) => prevState - 1);
+      });
+    getAllDevices()
+      .catch(() => {})
+      .finally(() => {
+        setLoadingRequestsOnStart((prevState) => prevState - 1);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (loadingFilter) {
+      getLocationsByDeviceCodeAndTimeInterval(
+        selectedDevice.id,
+        startDate.getTime(),
+        endDate.getTime()
+      )
+        .then((foundLocations) => {
+          foundLocations.forEach((currentLocation) => {
+            currentLocation.locationCoordinates = `${currentLocation.latitude}, ${currentLocation.longitude}`;
+            currentLocation.date = moment(currentLocation.date).format(
+              "DD-MM-YYYY HH:mm"
+            );
+          });
+          setFilteredLocations([...foundLocations]);
         })
-        .then(() => {
+        .finally(() => {
           setLoadingFilter(false);
           setLocationModalOpen(true);
         });
@@ -120,83 +97,7 @@ const LocationsPage = () => {
     setEndDate(new Date());
     setStartDate(getMidnightDate());
   };
-  const devices = [
-    {
-      id: "MOTR_112312313_1312312313211",
-      name: "Andrei",
-      date: new Date().toDateString(),
-    },
-    {
-      id: "MOTR_23123123123_31231231232",
-      name: "Andreea",
-      date: new Date(23).toDateString(),
-    },
-    {
-      id: "MOTR_342342342_4234234234234",
-      name: "Cosmin",
-      date: new Date(23).toDateString(),
-    },
-    {
-      id: "MOTR_431231231_3123123123131",
-      name: "Mihai",
-      date: new Date(23).toDateString(),
-    },
-    {
-      id: "MOTR_546231231_3123123123131",
-      name: "Radu",
-      date: new Date(23).toDateString(),
-    },
-    {
-      id: "MOTR_665231231_3123123123131",
-      name: "Marius",
-      date: new Date(23).toDateString(),
-    },
-  ];
-  const markers = [
-    {
-      deviceCode: "MOTR_112312313_1312312313211",
-      name: "Andrei",
-      date: moment.unix(1586567898).format("DD-MM-YYYY HH:mm"),
-      latitude: 46.787538,
-      longitude: 23.627285,
-    },
-    {
-      deviceCode: "MOTR_23123123123_31231231232",
-      name: "Andreea",
-      date: moment.unix(1586567898).format("DD-MM-YYYY HH:mm"),
-      latitude: 46.787538,
-      longitude: 23.637285,
-    },
-    {
-      deviceCode: "MOTR_342342342_4234234234234",
-      name: "Cosmin",
-      date: moment.unix(1586567898).format("DD-MM-YYYY HH:mm"),
-      latitude: 46.787538,
-      longitude: 23.647285,
-    },
-    {
-      deviceCode: "MOTR_431231231_3123123123131",
-      name: "Mihai",
-      date: moment.unix(1586567898).format("DD-MM-YYYY HH:mm"),
-      latitude: 46.787538,
-      longitude: 23.637285,
-    },
-    {
-      deviceCode: "MOTR_546231231_3123123123131",
-      name: "Radu",
-      date: moment.unix(1586567898).format("DD-MM-YYYY HH:mm"),
-      latitude: 46.777538,
-      longitude: 23.617285,
-    },
-    {
-      deviceCode: "MOTR_665231231_3123123123131",
-      name: "Marius",
-      date: moment(new Date()).format("DD-MM-YYYY HH:mm"),
-      latitude: 46.777538,
-      longitude: 23.637285,
-      circleColor: "blue",
-    },
-  ];
+
   return (
     <div className={wrapper}>
       <div className={behindContent}>
@@ -204,7 +105,7 @@ const LocationsPage = () => {
       </div>
       <div className={mapContainer}>
         <MobileTrackerMap
-          markers={markers}
+          markers={latestLocations}
           popupProperties={popupProperties}
           markerIdName={"deviceCode"}
         />
@@ -224,15 +125,37 @@ const LocationsPage = () => {
       </div>
       {selectedDevice !== null && (
         <LocationsModal
-          locations={foundLocationsFilter}
+          locations={filteredLocations}
           open={locationModalOpen}
           deviceName={selectedDevice.name}
           onClose={onModalClose}
         />
       )}
-      <MobileTrackerModalLoadingIndicator loading={loadingFilter} />
+      <MobileTrackerModalLoadingIndicator
+        loading={loadingFilter || loadingRequestsOnStart !== 0}
+      />
     </div>
   );
 };
 
-export default LocationsPage;
+LocationsPage.propTypes = {
+  getAllDevices: PropTypes.func.isRequired,
+  devices: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
+
+const mapStateToProps = ({ devices }) => {
+  return {
+    devices: devices.devicesList,
+  };
+};
+
+const mapDispatchToProps = {
+  getAllDevices: getAllUserDevices,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LocationsPage);
