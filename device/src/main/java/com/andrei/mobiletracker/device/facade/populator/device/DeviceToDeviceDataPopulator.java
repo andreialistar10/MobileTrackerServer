@@ -13,7 +13,7 @@ public class DeviceToDeviceDataPopulator implements Populator<DeviceData, Device
 
         deviceData.setId(device.getCode());
         deviceData.setName(device.getDeviceSettings().getName());
-        deviceData.setRegisteredOn(device.getRegisteredOn());
+        deviceData.setDate(device.getRegisteredOn());
     }
 }
 

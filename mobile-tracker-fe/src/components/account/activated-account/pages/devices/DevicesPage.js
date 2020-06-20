@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PhoneAndroidOutlinedIcon from "@material-ui/icons/PhoneAndroidOutlined";
 import { makeSharedStyle } from "../../../../../style/activated-account/shared";
 import { makeDevicesStyle } from "../../../../../style/activated-account/pages/devices";
@@ -9,17 +9,31 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import MobileTrackerErrorModal from "../../common/modals/MobileTrackerErrorModal";
 import MobileTrackerInfoModal from "../../common/modals/MobileTrackerInfoModal";
+import {
+  addDevice,
+  getAllUserDevices,
+  updateDevice,
+} from "../../../../../redux/actions/deviceActions";
+import { toast } from "react-toastify";
+import MobileTrackerModalLoadingIndicator from "../../common/modals/MobileTrackerModalLoadingIndicator";
 
 const initialCredentials = {
   id: "",
   password: "",
 };
 
-const DevicesPage = ({ username }) => {
+const DevicesPage = ({
+  username,
+  getAllDevices,
+  devices,
+  addDevice,
+  updateDevice,
+}) => {
   const { behindContent, icon } = makeSharedStyle();
   const { root } = makeDevicesStyle();
   const [isOpen, setIsOpen] = React.useState(false);
   const [pairingLoading, setPairingLoading] = React.useState(false);
+  const [loadingPage, setLoadingPage] = React.useState(true);
   const [credentials, setCredentials] = React.useState({
     ...initialCredentials,
   });
@@ -28,43 +42,6 @@ const DevicesPage = ({ username }) => {
     successfullyPairingMessage,
     setSuccessfullyPairingMessage,
   ] = React.useState("");
-  const [devices, setDevices] = React.useState([
-    {
-      id: "MOTR_000000000000000602558016_0005",
-      name: "Andrei",
-      date: new Date().toDateString(),
-    },
-    {
-      id: "MOTR_000000000000000602558016_0010",
-      name: "Andreea",
-      date: new Date(1584567891111).toDateString(),
-    },
-    {
-      id: "MOTR_000000000000000602558016_0012",
-      name: "Cosmin",
-      date: new Date(1584569891111).toDateString(),
-    },
-    {
-      id: "MOTR_000000000000000602558016_0013",
-      name: "Mihai",
-      date: new Date(1584667891111).toDateString(),
-    },
-    {
-      id: "MOTR_000000000000000602558016_0014",
-      name: "Radu",
-      date: new Date(1584577891111).toDateString(),
-    },
-    {
-      id: "MOTR_000000000000000602558016_0015",
-      name: "Marian",
-      date: new Date(1584567891111).toDateString(),
-    },
-    {
-      id: "MOTR_000000000000000602558016_0020",
-      name: "Marius",
-      date: new Date(1584567891111).toDateString(),
-    },
-  ]);
   const sockJsClientRef = React.createRef(null);
 
   const handleAddDevice = () => {
@@ -78,7 +55,6 @@ const DevicesPage = ({ username }) => {
   };
 
   const handlePairing = (credentials) => {
-    console.log(credentials);
     setCredentials(credentials);
     setPairingLoading(true);
   };
@@ -94,7 +70,6 @@ const DevicesPage = ({ username }) => {
   };
 
   const handleOnMessageArrive = (message, topic) => {
-    console.log(message);
     if (topic.startsWith("/errors")) {
       handleOnErrorMessageArrive(message);
     } else {
@@ -103,7 +78,6 @@ const DevicesPage = ({ username }) => {
   };
 
   const handleOnSuccessMessageArrive = (message) => {
-    console.log(message);
     const {
       deviceCode,
       state,
@@ -115,23 +89,13 @@ const DevicesPage = ({ username }) => {
       setSuccessfullyPairingMessage(
         `Now you can track the locations of ${name}'s smartphone.`
       );
-      setDevices((prevState) => {
-        const newDevice = { id, name, date: new Date(date).toDateString() };
-        let newDevices = [];
-        if (id === deviceCode) {
-          newDevices = Array.isArray(devices)
-            ? prevState.concat(newDevice)
-            : [newDevice];
-        } else {
-          newDevices = prevState.map((currentDevice) => {
-            if (currentDevice.id === id) {
-              return newDevice;
-            }
-            return currentDevice;
-          });
-        }
-        return newDevices;
-      });
+
+      const newDevice = { id, name, date: new Date(date).toDateString() };
+      if (id === deviceCode) {
+        addDevice(newDevice);
+      } else {
+        updateDevice(newDevice);
+      }
       setPairingLoading(false);
       setIsOpen(false);
     }
@@ -153,7 +117,17 @@ const DevicesPage = ({ username }) => {
     setErrorMessage(messageErrorText);
   };
 
-  return (
+  useEffect(() => {
+    getAllDevices()
+      .catch((error) => {
+        toast.error(error.message);
+      })
+      .finally(() => setLoadingPage(false));
+  }, []);
+
+  return loadingPage ? (
+    <MobileTrackerModalLoadingIndicator loading={loadingPage} />
+  ) : (
     <div className={root}>
       <div className={behindContent}>
         <PhoneAndroidOutlinedIcon className={icon} />
@@ -201,12 +175,34 @@ const DevicesPage = ({ username }) => {
 
 DevicesPage.propTypes = {
   username: PropTypes.string.isRequired,
+  getAllDevices: PropTypes.func.isRequired,
+  addDevice: PropTypes.func.isRequired,
+  updateDevice: PropTypes.func.isRequired,
+  devices: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
-const mapStateToProps = ({ authorization }) => {
+const mapDispatchToProps = {
+  getAllDevices: getAllUserDevices,
+  addDevice,
+  updateDevice,
+};
+
+const mapStateToProps = ({ authorization, devices }) => {
+  const newDevices = devices.map((device) => {
+    const newDevice = { ...device };
+    newDevice.date = new Date(device.date).toDateString();
+    return newDevice;
+  });
   return {
     username: authorization.username,
+    devices: newDevices,
   };
 };
 
-export default connect(mapStateToProps)(DevicesPage);
+export default connect(mapStateToProps, mapDispatchToProps)(DevicesPage);

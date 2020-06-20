@@ -3,3 +3,6 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
 export const SIGN_UP_ERROR = "SIGN_UP_ERROR";
 export const LOGIN_ERROR = "LOGIN_ERROR";
+export const GET_ALL_DEVICES = "GET_ALL_DEVICES";
+export const ADD_DEVICE = "ADD_DEVICE";
+export const UPDATE_DEVICE = "UPDATE_DEVICE";

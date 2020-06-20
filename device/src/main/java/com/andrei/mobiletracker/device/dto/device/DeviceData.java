@@ -1,6 +1,8 @@
 package com.andrei.mobiletracker.device.dto.device;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -9,5 +11,5 @@ public class DeviceData {
 
     private String id;
     private String name;
-    private Long registeredOn;
+    private Long date;
 }
