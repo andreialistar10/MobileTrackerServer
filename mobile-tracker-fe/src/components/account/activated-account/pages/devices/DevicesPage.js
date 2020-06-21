@@ -11,8 +11,10 @@ import MobileTrackerErrorModal from "../../common/modals/MobileTrackerErrorModal
 import MobileTrackerInfoModal from "../../common/modals/MobileTrackerInfoModal";
 import {
   addDevice,
+  deleteDevice,
   getAllUserDevices,
   updateDevice,
+  updatePairedDevice,
 } from "../../../../../redux/actions/deviceActions";
 import { toast } from "react-toastify";
 import MobileTrackerModalLoadingIndicator from "../../common/modals/MobileTrackerModalLoadingIndicator";
@@ -29,6 +31,8 @@ const DevicesPage = ({
   devices,
   addDevice,
   updateDevice,
+  updatePairedDevice,
+  deleteDevice,
 }) => {
   const { behindContent, icon } = makeSharedStyle();
   const { root } = makeDevicesStyle();
@@ -156,7 +160,12 @@ const DevicesPage = ({
       <div className={behindContent}>
         <PhoneAndroidOutlinedIcon className={icon} />
       </div>
-      <DevicesTable handleOnAdd={handleAddDevice} devices={devices} />
+      <DevicesTable
+        handleOnAdd={handleAddDevice}
+        devices={devices}
+        onDelete={deleteDevice}
+        onUpdate={updatePairedDevice}
+      />
       <MobileTrackerInfoModal
         isOpen={successfullyPairingMessage !== ""}
         handleOnClose={() => setSuccessfullyPairingMessage("")}
@@ -207,6 +216,8 @@ DevicesPage.propTypes = {
   getAllDevices: PropTypes.func.isRequired,
   addDevice: PropTypes.func.isRequired,
   updateDevice: PropTypes.func.isRequired,
+  updatePairedDevice: PropTypes.func.isRequired,
+  deleteDevice: PropTypes.func.isRequired,
   devices: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -220,6 +231,8 @@ const mapDispatchToProps = {
   getAllDevices: getAllUserDevices,
   addDevice,
   updateDevice,
+  updatePairedDevice,
+  deleteDevice,
 };
 
 const mapStateToProps = ({ authorization, devices }) => {

@@ -30,15 +30,15 @@ const Header = ({ logout }) => {
         <span className={`${headerText} ${suffixHeaderText}`}>Tracker</span>
       </h1>
       <div className={logoutButtonContainer}>
-        <Tooltip title="Logout">
-          <IconButton
-            aria-label="Sign out"
-            className={logoutButton}
-            onClick={logout}
-          >
+        <IconButton
+          aria-label="Sign out"
+          className={logoutButton}
+          onClick={logout}
+        >
+          <Tooltip title="Logout">
             <ExitToAppOutlinedIcon className={logoutIcon} />
-          </IconButton>
-        </Tooltip>
+          </Tooltip>
+        </IconButton>
       </div>
     </div>
   );
