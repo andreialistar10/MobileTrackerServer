@@ -44,7 +44,7 @@ const defaultActionOnMessageReceive = (message) => {
 
 const subscribeToTopics = (client, topics, actionsOnMessageReceived) => {
   for (let index = 0; index < topics.length; ++index) {
-    client.subscribe(topics[index], message => {
+    client.subscribe(topics[index], (message) => {
       const messageBody = JSON.parse(message.body);
       actionsOnMessageReceived[index](messageBody);
     });
@@ -97,5 +97,25 @@ export const connectToPairingStompBroker = (
     token,
     actionOnConnect,
     onConnectionError,
+  );
+};
+
+export const connectToNotificationStompBroker = (
+  id,
+  token,
+  onMessageReceived,
+) => {
+  const eventTopic = `/devices/${id}/notifications`;
+  return stompSubscribeOnConnect(
+    [eventTopic],
+    [onMessageReceived],
+    true,
+    token,
+    () => {
+      console.log('CONNECTED');
+    },
+    () => {
+      console.log('CLOSEEEEEEEEE');
+    },
   );
 };

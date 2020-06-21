@@ -16,7 +16,7 @@
             </activation>
             <properties>
                 <worker-microservice.spring-activated-profiles>production,discovery-client,user-authorization,jpa,liquibase</worker-microservice.spring-activated-profiles>
-                <device-microservice.spring-activated-profiles>rabbitmq,pairing-topic,device-authorization</device-microservice.spring-activated-profiles>
+                <device-microservice.spring-activated-profiles>rabbitmq,pairing-topic,device-authorization,notification-topic</device-microservice.spring-activated-profiles>
                 <location-microservice.spring-activated-profiles>device-authorization</location-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>mobiletracker</db.username>
@@ -44,7 +44,7 @@
             </activation>
             <properties>
                 <worker-microservice.spring-activated-profiles>development,discovery-client,user-authorization,jpa,liquibase</worker-microservice.spring-activated-profiles>
-                <device-microservice.spring-activated-profiles>rabbitmq,pairing-topic,device-authorization</device-microservice.spring-activated-profiles>
+                <device-microservice.spring-activated-profiles>rabbitmq,pairing-topic,device-authorization,notification-topic</device-microservice.spring-activated-profiles>
                 <location-microservice.spring-activated-profiles>device-authorization</location-microservice.spring-activated-profiles>
                 <db.driverClassName>com.mysql.jdbc.Driver</db.driverClassName>
                 <db.username>mobiletracker</db.username>

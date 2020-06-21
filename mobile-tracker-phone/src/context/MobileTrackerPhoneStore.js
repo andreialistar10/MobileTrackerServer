@@ -4,6 +4,8 @@ import {Provider} from './index';
 import {initialState} from './initialState';
 import {confirmPairing, getPasswordDevice, registerDevice} from '../core/api';
 import {
+  clearLocalStorage,
+  getDeviceInformation,
   getState,
   saveAuthorization,
   saveDeviceInformation,
@@ -11,6 +13,10 @@ import {
 } from '../core/localStorage';
 import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
 import {ROOT_BACKEND_URL_API} from '../core/constants';
+import {connectToNotificationStompBroker} from '../core/stompClient';
+import navService from "../core/navService";
+
+let isMounted = false;
 
 const SMALL_ICON_FILENAME = '../../assets/Logo_small.png';
 const LARGE_ICON_FILENAME = '../../assets/Logo_large.png';
@@ -18,6 +24,7 @@ const LARGE_ICON_FILENAME = '../../assets/Logo_large.png';
 const SET_DEVICE_CODE = 'SET_DEVICE_CODE';
 const INIT_STORE = 'INIT_STORE';
 const SET_PASSWORD = 'SET_PASSWORD';
+const UPDATE_DEVICE_INFORMATION = 'UPDATE_DEVICE_INFORMATION';
 
 function reducer(state, action) {
   const {type, payload} = action;
@@ -33,6 +40,8 @@ function reducer(state, action) {
       return {...state, ...payload};
     case SET_PASSWORD:
       return {...state, password: payload};
+    case UPDATE_DEVICE_INFORMATION:
+      return {...state, deviceInformation: payload};
     default:
       return state;
   }
@@ -40,12 +49,92 @@ function reducer(state, action) {
 
 export const MobileTrackerPhoneStore = ({children}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const onRegisterDevice = deviceInformation => {
+    return registerDevice(deviceInformation).then(responseDeviceInformation => {
+      const {id, name, token} = responseDeviceInformation;
+      return saveDeviceInformation({id, name})
+        .then(() => saveAuthorization({...initialState.authorization, token}))
+        .then(() => {
+          dispatch({
+            type: SET_DEVICE_CODE,
+            payload: responseDeviceInformation,
+          });
+          return Promise.resolve(responseDeviceInformation);
+        });
+    });
+  };
+
+  const initStore = () => {
+    return getState().then(storedState => {
+      console.log(storedState);
+      dispatch({type: INIT_STORE, payload: storedState});
+      return Promise.resolve(storedState);
+    });
+  };
+
+  const startPairing = () => {
+    return getPasswordDevice().then(({password}) => {
+      console.log(password);
+      dispatch({type: SET_PASSWORD, payload: password});
+      return Promise.resolve();
+    });
+  };
+
+  const confirmDevicePairing = async (ownerUsername) => {
+    const {
+      tokenApi,
+      timeInterval,
+      refreshToken,
+      deviceId,
+      name,
+    } = await confirmPairing(ownerUsername);
+    const authorization = {refreshToken, token: tokenApi};
+    const deviceInformation = {id: deviceId, name: name, ownerUsername};
+    const deviceSettings = {timeInterval};
+    await saveDeviceSettings(deviceSettings);
+    await saveDeviceInformation(deviceInformation);
+    await saveAuthorization(authorization);
+    const newState = {authorization, deviceInformation, deviceSettings};
+    dispatch({
+      type: INIT_STORE,
+      payload: newState,
+    });
+    return newState;
+  };
+
+  const updateDeviceInfo = React.useCallback(async (deviceInfo) => {
+    const {name} = deviceInfo;
+    const deviceInformation = await getDeviceInformation();
+    deviceInformation.name = name;
+    await saveDeviceInformation(deviceInformation);
+    if (isMounted) {
+      dispatch({
+        type: UPDATE_DEVICE_INFORMATION,
+        payload: deviceInformation,
+      });
+    }
+  }, []);
+
+  const deleteDevice = React.useCallback(async () => {
+    await clearLocalStorage();
+    const newState = await getState();
+    if (isMounted) {
+      dispatch({
+        type: INIT_STORE,
+        payload: newState,
+      });
+      navService.navigate('AuthLoading');
+    }
+  }, []);
+
   useEffect(() => {
     if (
       state.authorization.token &&
       state.authorization.refreshToken &&
       state.deviceSettings.timeInterval
     ) {
+      let stompClient;
       BackgroundGeolocation.configure({
         desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
         stationaryRadius: 50,
@@ -74,11 +163,33 @@ export const MobileTrackerPhoneStore = ({children}) => {
         },
       });
 
-      BackgroundGeolocation.on('error', error => {
+      BackgroundGeolocation.on('start', () => {
+        console.log('START');
+        BackgroundGeolocation.startTask((taskKey) => {
+          stompClient = connectToNotificationStompBroker(
+            state.deviceInformation.id,
+            state.authorization.token,
+            message => {
+              if (message.type === 'UPDATE') {
+                updateDeviceInfo(message.data);
+              } else {
+                deleteDevice();
+                BackgroundGeolocation.stop();
+                if (stompClient !== undefined) {
+                  stompClient.deactivate();
+                }
+              }
+            },
+          );
+          stompClient.activate();
+        });
+      });
+
+      BackgroundGeolocation.on('error', (error) => {
         console.log('[ERROR] BackgroundGeolocation error:', error);
       });
 
-      BackgroundGeolocation.on('authorization', status => {
+      BackgroundGeolocation.on('authorization', (status) => {
         console.log(
           '[INFO] BackgroundGeolocation authorization status: ' + status,
         );
@@ -108,71 +219,31 @@ export const MobileTrackerPhoneStore = ({children}) => {
         console.log('[INFO] App needs to authorize the http requests');
       });
 
-      BackgroundGeolocation.checkStatus(status => {
+      BackgroundGeolocation.checkStatus((status) => {
         if (!status.isRunning) {
           BackgroundGeolocation.start();
         }
       });
-      return () => BackgroundGeolocation.removeAllListeners();
+      return () => {
+        // stompClient.deactivate();
+        console.log('OUT');
+        BackgroundGeolocation.removeAllListeners();
+      };
     }
   }, [
     state.authorization.refreshToken,
     state.authorization.token,
     state.deviceSettings.timeInterval,
+    updateDeviceInfo,
+    deleteDevice,
   ]);
 
-  const onRegisterDevice = deviceInformation => {
-    return registerDevice(deviceInformation).then(responseDeviceInformation => {
-      const {id, name, token} = responseDeviceInformation;
-      return saveDeviceInformation({id, name})
-        .then(() => saveAuthorization({...initialState.authorization, token}))
-        .then(() => {
-          dispatch({
-            type: SET_DEVICE_CODE,
-            payload: responseDeviceInformation,
-          });
-          return Promise.resolve(responseDeviceInformation);
-        });
-    });
-  };
-
-  const initStore = () => {
-    return getState().then(storedState => {
-      // console.log(storedState);
-      dispatch({type: INIT_STORE, payload: storedState});
-      return Promise.resolve(storedState);
-    });
-  };
-
-  const startPairing = () => {
-    return getPasswordDevice().then(({password}) => {
-      console.log(password);
-      dispatch({type: SET_PASSWORD, payload: password});
-      return Promise.resolve();
-    });
-  };
-
-  const confirmDevicePairing = async ownerUsername => {
-    const {
-      tokenApi,
-      timeInterval,
-      refreshToken,
-      deviceId,
-      name,
-    } = await confirmPairing(ownerUsername);
-    const authorization = {refreshToken, token: tokenApi};
-    const deviceInformation = {id: deviceId, name: name, ownerUsername};
-    const deviceSettings = {timeInterval};
-    await saveDeviceSettings(deviceSettings);
-    await saveDeviceInformation(deviceInformation);
-    await saveAuthorization(authorization);
-    const newState = {authorization, deviceInformation, deviceSettings};
-    dispatch({
-      type: INIT_STORE,
-      payload: newState,
-    });
-    return newState;
-  };
+  useEffect(() => {
+    isMounted = true;
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const value = {
     ...state,
