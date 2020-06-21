@@ -3,6 +3,7 @@ package com.andrei.mobiletracker.device.facade.device.impl;
 import com.andrei.mobiletracker.beans.converter.Converter;
 import com.andrei.mobiletracker.device.dto.device.DeviceData;
 import com.andrei.mobiletracker.device.dto.device.DevicesData;
+import com.andrei.mobiletracker.device.dto.device.UpdateDeviceData;
 import com.andrei.mobiletracker.device.facade.device.DeviceFacade;
 import com.andrei.mobiletracker.device.model.Device;
 import com.andrei.mobiletracker.device.service.device.DeviceService;
@@ -26,10 +27,10 @@ public class DeviceFacadeImpl implements DeviceFacade {
     private Converter<Device, DeviceData> deviceDataFromDeviceConverter;
 
     @Override
-    public DevicesData findAllDevicesByOwnerUsername(String name, boolean idOnly) {
+    public DevicesData findAllDevicesByOwnerUsername(String name, boolean idOnly, boolean allowDeleted) {
 
         logger.info("------------------LOGGING  findAllDevicesByOwnerUsername------------------");
-        List<Device> devices = deviceService.findAllDevicesByOwnerUsername(name);
+        List<Device> devices = deviceService.findAllDevicesByOwnerUsername(name, allowDeleted);
         List<?> deviceInformationDataList = idOnly ? getDeviceIdList(devices) : getDeviceDataList(devices);
         logger.info("-----------------SUCCESSFUL findAllDevicesByOwnerUsername-----------------");
         return DevicesData.builder()
@@ -45,6 +46,28 @@ public class DeviceFacadeImpl implements DeviceFacade {
         DeviceData deviceData = deviceDataFromDeviceConverter.convert(device);
         logger.info("-----------------SUCCESSFUL findDeviceById-----------------");
         return deviceData;
+    }
+
+    @Override
+    public DeviceData deleteDeviceByIdAndOwnerUsername(String deviceCode, String username) {
+
+        logger.info("------------------LOGGING  deleteDeviceByIdAndOwnerUsername------------------");
+        Device device = deviceService.deleteDeviceByCodeAndOwnerUsername(deviceCode, username);
+        DeviceData deviceData = deviceDataFromDeviceConverter.convert(device);
+        logger.info("-----------------SUCCESSFUL deleteDeviceByIdAndOwnerUsername-----------------");
+        return deviceData;
+
+    }
+
+    @Override
+    public DeviceData updateDeviceById(String deviceCode, UpdateDeviceData updateDeviceData, String username) {
+
+        logger.info("------------------LOGGING  updateDeviceById------------------");
+        Device device = deviceService.updateDevice(deviceCode, updateDeviceData, username);
+        DeviceData deviceData = deviceDataFromDeviceConverter.convert(device);
+        logger.info("-----------------SUCCESSFUL updateDeviceById-----------------");
+        return deviceData;
+
     }
 
     private List<DeviceData> getDeviceDataList(List<Device> devices) {

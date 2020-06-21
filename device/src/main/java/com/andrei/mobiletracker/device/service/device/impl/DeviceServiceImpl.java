@@ -1,7 +1,10 @@
 package com.andrei.mobiletracker.device.service.device.impl;
 
 import com.andrei.mobiletracker.device.dao.device.DeviceDao;
+import com.andrei.mobiletracker.device.dao.devicesettings.DeviceSettingsDao;
+import com.andrei.mobiletracker.device.dto.device.UpdateDeviceData;
 import com.andrei.mobiletracker.device.model.Device;
+import com.andrei.mobiletracker.device.model.DeviceSettings;
 import com.andrei.mobiletracker.device.service.device.DeviceService;
 import com.andrei.mobiletracker.device.service.exception.DeviceExceptionType;
 import com.andrei.mobiletracker.device.service.exception.DeviceServiceException;
@@ -23,12 +26,17 @@ public class DeviceServiceImpl implements DeviceService {
 
     private static final Logger logger = LogManager.getLogger(DeviceServiceImpl.class);
 
-    @Transactional(readOnly = true)
     @Override
-    public List<Device> findAllDevicesByOwnerUsername(String username) {
+    @Transactional
+    public List<Device> findAllDevicesByOwnerUsername(String username, boolean allowDeleted) {
 
         logger.info("------------------LOGGING  findAllDevicesByOwnerUsername------------------");
-        List<Device> devices = deviceDao.findAllAvailableDevicesByOwnerUsername(username);
+        List<Device> devices;
+        if (allowDeleted) {
+            devices = deviceDao.findAllDevicesByOwnerUsername(username);
+        } else {
+            devices = deviceDao.findAllDevicesByOwnerUsernameAndDeleted(username, false);
+        }
         devices.forEach(device -> Hibernate.initialize(device.getDeviceSettings()));
         logger.info("-----------------SUCCESSFUL findAllDevicesByOwnerUsername-----------------");
         return devices;
@@ -45,4 +53,27 @@ public class DeviceServiceImpl implements DeviceService {
         logger.info("-----------------SUCCESSFUL findDeviceByCodeAndOwnerUsername-----------------");
         return device;
     }
+
+    @Override
+    @Transactional
+    public Device deleteDeviceByCodeAndOwnerUsername(String deviceCode, String username) {
+
+        logger.info("------------------LOGGING  deleteDeviceByCodeAndOwnerUsername------------------");
+        Device device = this.findDeviceByCodeAndOwnerUsername(deviceCode, username);
+        device.setDeleted(true);
+        deviceDao.saveOrUpdateOneDevice(device);
+        logger.info("-----------------SUCCESSFUL deleteDeviceByCodeAndOwnerUsername-----------------");
+        return device;
+    }
+
+    @Override
+    @Transactional
+    public Device updateDevice(String deviceCode, UpdateDeviceData updateDeviceData, String username) {
+
+        logger.info("------------------LOGGING  updateDevice------------------");
+        Device device = this.findDeviceByCodeAndOwnerUsername(deviceCode, username);
+        DeviceSettings deviceSettings = device.getDeviceSettings();
+        deviceSettings.setName(updateDeviceData.getName());
+        logger.info("-----------------SUCCESSFUL updateDevice-----------------");
+        return device;    }
 }

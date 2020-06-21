@@ -23,16 +23,39 @@ public class DeviceDaoImpl implements DeviceDao {
     public Device findOneDeviceByDeviceIdAndOwnerUsername(String id, String ownerUsername) {
 
         logger.info("------------------LOGGING  findOneDeviceByDeviceIdAndOwnerUsername------------------");
-        Device device = jpaRepository.findByCodeAndOwnerUsername(id, ownerUsername);
+        Device device = jpaRepository.findByCodeAndOwnerUsernameAndDeleted(id, ownerUsername, false);
         logger.info("-----------------SUCCESSFUL findOneDeviceByDeviceIdAndOwnerUsername-----------------");
         return device;
     }
 
     @Override
-    public List<Device> findAllAvailableDevicesByOwnerUsername(String username) {
+    public Device findOneDeviceByDeviceIdAndOwnerUsername(String id, String ownerUsername, boolean allowDeleted) {
+
+        logger.info("------------------LOGGING  findOneDeviceByDeviceIdAndOwnerUsername------------------");
+        Device device;
+        if (allowDeleted) {
+            device = jpaRepository.findByCodeAndOwnerUsername(id, ownerUsername);
+        } else{
+            device = jpaRepository.findByCodeAndOwnerUsernameAndDeleted(id, ownerUsername, false);
+        }
+        logger.info("-----------------SUCCESSFUL findOneDeviceByDeviceIdAndOwnerUsername-----------------");
+        return device;
+    }
+
+    @Override
+    public List<Device> findAllDevicesByOwnerUsernameAndDeleted(String username, boolean deleted) {
 
         logger.info("------------------LOGGING  findAllDevicesByOwnerUsername------------------");
-        List<Device> devices = jpaRepository.findAllByOwnerUsernameAndDeleted(username, false);
+        List<Device> devices = jpaRepository.findAllByOwnerUsernameAndDeleted(username, deleted);
+        logger.info("-----------------SUCCESSFUL findAllDevicesByOwnerUsername-----------------");
+        return devices;
+    }
+
+    @Override
+    public List<Device> findAllDevicesByOwnerUsername(String username) {
+
+        logger.info("------------------LOGGING  findAllDevicesByOwnerUsername------------------");
+        List<Device> devices = jpaRepository.findAllByOwnerUsername(username);
         logger.info("-----------------SUCCESSFUL findAllDevicesByOwnerUsername-----------------");
         return devices;
     }

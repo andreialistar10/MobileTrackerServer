@@ -16,6 +16,7 @@ import {
 } from "../../../../../redux/actions/deviceActions";
 import { toast } from "react-toastify";
 import MobileTrackerModalLoadingIndicator from "../../common/modals/MobileTrackerModalLoadingIndicator";
+import { getAllReplaceableDevices } from "../../../../../api/deviceApi";
 
 const initialCredentials = {
   id: "",
@@ -42,10 +43,15 @@ const DevicesPage = ({
     successfullyPairingMessage,
     setSuccessfullyPairingMessage,
   ] = React.useState("");
+  const [replaceableDevices, setReplaceableDevices] = React.useState([]);
+  const [
+    loadingGetReplaceableDevices,
+    setLoadingGetReplaceableDevices,
+  ] = React.useState(false);
   const sockJsClientRef = React.createRef(null);
 
   const handleAddDevice = () => {
-    setIsOpen(true);
+    setLoadingGetReplaceableDevices(true);
   };
 
   const handleClose = () => {
@@ -125,6 +131,24 @@ const DevicesPage = ({
       .finally(() => setLoadingPage(false));
   }, []);
 
+  useEffect(() => {
+    if (loadingGetReplaceableDevices) {
+      getAllReplaceableDevices()
+        .then((devices) => {
+          setReplaceableDevices(devices);
+          setIsOpen(true);
+        })
+        .catch(() => {
+          toast.error(
+            "Something went wrong when trying to retrieve your replaceable devices! Please try again later!"
+          );
+        })
+        .finally(() => {
+          setLoadingGetReplaceableDevices(false);
+        });
+    }
+  }, [loadingGetReplaceableDevices]);
+
   return loadingPage ? (
     <MobileTrackerModalLoadingIndicator loading={loadingPage} />
   ) : (
@@ -161,7 +185,7 @@ const DevicesPage = ({
         handleOnClose={handleClose}
         handleSubmit={handlePairing}
         loading={pairingLoading}
-        devices={devices}
+        devices={replaceableDevices}
       />
       <MobileTrackerErrorModal
         isOpen={errorMessage !== ""}
@@ -169,6 +193,11 @@ const DevicesPage = ({
         handleOnClose={() => setErrorMessage("")}
         message={errorMessage}
       />
+      {loadingGetReplaceableDevices && (
+        <MobileTrackerModalLoadingIndicator
+          loading={loadingGetReplaceableDevices}
+        />
+      )}
     </div>
   );
 };

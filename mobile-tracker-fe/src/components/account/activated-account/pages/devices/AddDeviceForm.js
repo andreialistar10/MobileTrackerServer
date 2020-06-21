@@ -12,9 +12,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import SelectDeviceDialog from "./SelectDeviceDialog";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-import {
-  COLOR_TITLE_PAGE,
-} from "../../../../../style/activated-account/constants";
+import { COLOR_TITLE_PAGE } from "../../../../../style/activated-account/constants";
 import MobileTrackerAlertModal from "../../common/modals/MobileTrackerAlertModal";
 
 const AddDeviceForm = ({ loading, handleSubmit, devices }) => {
@@ -185,7 +183,6 @@ AddDeviceForm.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

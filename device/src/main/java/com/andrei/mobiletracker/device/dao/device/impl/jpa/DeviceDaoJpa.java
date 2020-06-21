@@ -7,7 +7,11 @@ import java.util.List;
 
 interface DeviceDaoJpa extends JpaRepository<Device, String> {
 
-    Device findByCodeAndOwnerUsername(String code, String ownerUsername);
+    Device findByCodeAndOwnerUsernameAndDeleted(String code, String ownerUsername, Boolean deleted);
 
     List<Device> findAllByOwnerUsernameAndDeleted(String username, Boolean deleted);
+
+    List<Device> findAllByOwnerUsername(String username);
+
+    Device findByCodeAndOwnerUsername(String id, String ownerUsername);
 }

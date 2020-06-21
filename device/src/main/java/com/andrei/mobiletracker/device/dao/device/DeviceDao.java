@@ -8,7 +8,11 @@ public interface DeviceDao {
 
     Device findOneDeviceByDeviceIdAndOwnerUsername(String id, String ownerUsername);
 
-    List<Device> findAllAvailableDevicesByOwnerUsername(String username);
+    Device findOneDeviceByDeviceIdAndOwnerUsername(String id, String ownerUsername, boolean allowDeleted);
+
+    List<Device> findAllDevicesByOwnerUsernameAndDeleted(String username, boolean deleted);
+
+    List<Device> findAllDevicesByOwnerUsername(String username);
 
     Device saveOrUpdateOneDevice(Device device);
 }

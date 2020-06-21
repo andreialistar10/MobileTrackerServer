@@ -1,5 +1,5 @@
 import * as types from "./actionTypes";
-import { getAllDevices } from "../../api/deviceApi";
+import {deleteOneDevice, getAllAvailableDevices, updateOneDevice} from "../../api/deviceApi";
 import { getDevicesLastUpdate } from "../../index";
 
 const DEVICES_CACHE_TIME = 1000 * 60;
@@ -20,12 +20,16 @@ export function getAllDevicesFromCache() {
   return { type: types.GET_ALL_DEVICES_FROM_CACHE };
 }
 
+export function deleteDeviceSuccess(device) {
+  return { type: types.DELETE_DEVICE, payload: device };
+}
+
 export function getAllUserDevices() {
   const currentTime = new Date().getTime();
   const lastUpdate = getDevicesLastUpdate();
   if (currentTime - lastUpdate > DEVICES_CACHE_TIME) {
     return (dispatch) =>
-      getAllDevices().then((response) => {
+      getAllAvailableDevices().then((response) => {
         const devices = {
           devicesList: response.devices,
           lastUpdate: new Date().getTime(),
@@ -49,5 +53,25 @@ export function addDevice(device) {
 export function updateDevice(device) {
   return (dispatch) => {
     dispatch(updateDeviceSuccess(device));
+  };
+}
+
+export function updatePairedDevice(deviceCode, deviceInformation) {
+  return (dispatch) => {
+    return updateOneDevice(deviceCode, deviceInformation).then(
+      (newDevice) => {
+        dispatch(updateDeviceSuccess(newDevice));
+        return Promise.resolve();
+      }
+    );
+  };
+}
+
+export function deleteDevice(deviceCode) {
+  return (dispatch) => {
+    return deleteOneDevice(deviceCode).then((device) => {
+      dispatch(deleteDeviceSuccess(device));
+      return Promise.resolve();
+    });
   };
 }

@@ -180,7 +180,7 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
         if (currentId.equals(targetId)) {
             return;
         }
-        Device foundDevice = deviceDao.findOneDeviceByDeviceIdAndOwnerUsername(targetId, unregisteredDevice.getTryingToPairingUsername());
+        Device foundDevice = deviceDao.findOneDeviceByDeviceIdAndOwnerUsername(targetId, unregisteredDevice.getTryingToPairingUsername(), true);
         if (foundDevice == null) {
             throw new DeviceServiceException(
                     "The old device you want to replace by pairing with the new device does not exist.",
