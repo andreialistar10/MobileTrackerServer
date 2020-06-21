@@ -26,9 +26,9 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
 
     private static final Logger logger = LogManager.getLogger(UnregisteredDeviceServiceImpl.class);
 
-    private static final int DEFAULT_INTERVAL = 60000;
+    private static final int DEFAULT_INTERVAL = 60000 * 2;
 
-    private static final int PASSWORD_LENGTH = 8;
+    private static final int PASSWORD_LENGTH = 6;
 
     @Autowired
     private UnregisteredDeviceDao unregisteredDeviceDao;
@@ -91,7 +91,7 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
         if (unregisteredDevice.getState() != UnregisteredDeviceState.UNPAIRED) {
             throw new DeviceServiceException("Device: " + deviceId + " already starts pairing!", HttpStatus.BAD_REQUEST, DeviceExceptionType.INVALID_DATA);
         }
-        String password = RandomStringUtils.random(PASSWORD_LENGTH, true, true);
+        String password = RandomStringUtils.random(PASSWORD_LENGTH, false, true);
         unregisteredDevice.setState(UnregisteredDeviceState.PAIRING);
         unregisteredDevice.setPassword(password);
         logger.info("-----------------SUCCESSFUL startPairing-----------------");

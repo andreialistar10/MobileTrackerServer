@@ -10,11 +10,13 @@ import com.andrei.mobiletracker.location.dto.location.collection.FilteredLocatio
 import com.andrei.mobiletracker.location.dto.location.collection.LatestLocationsData;
 import com.andrei.mobiletracker.location.facade.LocationFacade;
 import com.andrei.mobiletracker.location.model.Location;
+import com.andrei.mobiletracker.location.service.GeoCoderService;
 import com.andrei.mobiletracker.location.service.LocationService;
 import com.andrei.mobiletracker.location.util.communication.MicroservicesCaller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -42,6 +44,10 @@ public class LocationFacadeImpl implements LocationFacade {
     @Autowired
     private LocationService locationService;
 
+    @Autowired
+    @Qualifier(value = "locationiqGeocoderService")
+    private GeoCoderService geoCoderService;
+
     @Override
     public void saveLocations(List<LocationData> locationDataList, String deviceCode) {
 
@@ -49,6 +55,8 @@ public class LocationFacadeImpl implements LocationFacade {
         locationDataList.forEach(locationData -> {
             Location location = locationFromLocationDataConverter.convert(locationData);
             location.setDeviceCode(deviceCode);
+            String address = geoCoderService.getAddressByLatitudeAndLongitude(location.getLatitude(), location.getLongitude());
+            location.setAddress(address);
             locationService.saveOneLocation(location);
         });
         logger.info("-----------------SUCCESSFUL saveLocation-----------------");

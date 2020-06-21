@@ -1,6 +1,6 @@
 import { getApiAxiosInstance } from "./apiUtils";
 import { BACKEND_URL } from "./commonConstants";
-import { getAddressesByLatitudeAndLongitude } from "./geocoderApi";
+import { getAddressesByLatitudeAndLongitudeDelay } from "./geocoderApi";
 
 const axiosInstance = getApiAxiosInstance();
 
@@ -21,12 +21,14 @@ export const getLocationsByDeviceCodeAndTimeInterval = (
   return axiosInstance
     .get(`${LOCATIONS_URL}/${deviceCode}?start=${start}&end=${end}`)
     .then((response) => response.locations)
-    .then((locations) => {
-      return getAddressesByLatitudeAndLongitude(locations).then((addresses) => {
-        addresses.forEach(
-          (address, i) => (locations[i].address = address.display_name)
-        );
-        return Promise.resolve(locations);
-      });
-    });
+    // .then((locations) => {
+    //   return getAddressesByLatitudeAndLongitudeDelay(locations).then(
+    //     (addresses) => {
+    //       addresses.forEach(
+    //         (address, i) => (locations[i].address = address.display_name)
+    //       );
+    //       return Promise.resolve(locations);
+    //     }
+    //   );
+    // });
 };

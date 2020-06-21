@@ -14,7 +14,11 @@ export function updateDeviceSuccess(device) {
 }
 
 export function addDeviceSuccess(device) {
-  return { type: types.ADD_DEVICE, payload: device };
+  return { type: types.ADD_NEW_DEVICE, payload: device };
+}
+
+export function addExistingDeviceSuccess(device) {
+  return {type: types.ADD_EXISTING_DEVICE, payload: device}
 }
 
 export function getAllDevicesFromCache() {
@@ -51,9 +55,9 @@ export function addDevice(device) {
   };
 }
 
-export function updateDevice(device) {
+export function addExistingDevice(device) {
   return (dispatch) => {
-    dispatch(updateDeviceSuccess(device));
+    dispatch(addExistingDeviceSuccess(device));
   };
 }
 

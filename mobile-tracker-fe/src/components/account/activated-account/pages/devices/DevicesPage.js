@@ -13,7 +13,7 @@ import {
   addDevice,
   deleteDevice,
   getAllUserDevices,
-  updateDevice,
+  addExistingDevice,
   updatePairedDevice,
 } from "../../../../../redux/actions/deviceActions";
 import { toast } from "react-toastify";
@@ -30,7 +30,7 @@ const DevicesPage = ({
   getAllDevices,
   devices,
   addDevice,
-  updateDevice,
+  addExistingDevice,
   updatePairedDevice,
   deleteDevice,
 }) => {
@@ -100,11 +100,11 @@ const DevicesPage = ({
         `Now you can track the locations of ${name}'s smartphone.`
       );
 
-      const newDevice = { id, name, date: new Date(date).toDateString() };
+      const newDevice = { id, name, date };
       if (id === deviceCode) {
         addDevice(newDevice);
       } else {
-        updateDevice(newDevice);
+        addExistingDevice(newDevice);
       }
       setPairingLoading(false);
       setIsOpen(false);
@@ -215,7 +215,7 @@ DevicesPage.propTypes = {
   username: PropTypes.string.isRequired,
   getAllDevices: PropTypes.func.isRequired,
   addDevice: PropTypes.func.isRequired,
-  updateDevice: PropTypes.func.isRequired,
+  addExistingDevice: PropTypes.func.isRequired,
   updatePairedDevice: PropTypes.func.isRequired,
   deleteDevice: PropTypes.func.isRequired,
   devices: PropTypes.arrayOf(
@@ -230,7 +230,7 @@ DevicesPage.propTypes = {
 const mapDispatchToProps = {
   getAllDevices: getAllUserDevices,
   addDevice,
-  updateDevice,
+  addExistingDevice,
   updatePairedDevice,
   deleteDevice,
 };

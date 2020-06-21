@@ -6,10 +6,27 @@ export default function deviceReducer(state = defaultState.devices, action) {
   switch (type) {
     case types.GET_ALL_DEVICES:
       return { ...payload };
-    case types.ADD_DEVICE: {
+    case types.ADD_NEW_DEVICE: {
       const newState = { ...state };
-      newState.devicesList.push(payload);
+      newState.devicesList = newState.devicesList.concat(payload);
       return newState;
+    }
+    case types.ADD_EXISTING_DEVICE: {
+      let replaced = false;
+      const currentDevices = state.devicesList.map((currentDevice) => {
+        if (currentDevice.id === payload.id) {
+          replaced = true;
+          return payload;
+        }
+        return currentDevice;
+      });
+      if (!replaced) {
+        currentDevices.push(payload);
+      }
+      return {
+        ...state,
+        devicesList: currentDevices,
+      };
     }
     case types.UPDATE_DEVICE: {
       const currentDevices = state.devicesList.map((currentDevice) => {
