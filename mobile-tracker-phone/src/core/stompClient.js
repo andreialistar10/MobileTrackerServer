@@ -111,11 +111,5 @@ export const connectToNotificationStompBroker = (
     [onMessageReceived],
     true,
     token,
-    () => {
-      console.log('CONNECTED');
-    },
-    () => {
-      console.log('CLOSEEEEEEEEE');
-    },
   );
 };

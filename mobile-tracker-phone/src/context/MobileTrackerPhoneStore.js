@@ -164,7 +164,6 @@ export const MobileTrackerPhoneStore = ({children}) => {
       });
 
       BackgroundGeolocation.on('start', () => {
-        console.log('START');
         BackgroundGeolocation.startTask((taskKey) => {
           stompClient = connectToNotificationStompBroker(
             state.deviceInformation.id,
@@ -225,8 +224,6 @@ export const MobileTrackerPhoneStore = ({children}) => {
         }
       });
       return () => {
-        // stompClient.deactivate();
-        console.log('OUT');
         BackgroundGeolocation.removeAllListeners();
       };
     }
