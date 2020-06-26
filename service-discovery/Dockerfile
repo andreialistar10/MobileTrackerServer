@@ -1,11 +1,3 @@
-#FROM openjdk:8-jdk-alpine
-#ARG JAR_FILE=target/*.jar
-#COPY ${JAR_FILE} /discovery-service/app.jar
-#ENTRYPOINT ["java"]
-#CMD ["-jar","/discovery-service/app.jar"]
-#VOLUME /var/lib/mobile-tracker/discovery-service-repo
-#EXPOSE 8761
-
 FROM openjdk:8-jdk-alpine
 RUN apk --no-cache add netcat-openbsd
 ARG JAR_FILE=target/*.jar
