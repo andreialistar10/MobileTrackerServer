@@ -26,7 +26,7 @@ public class UnregisteredDeviceServiceImpl implements UnregisteredDeviceService 
 
     private static final Logger logger = LogManager.getLogger(UnregisteredDeviceServiceImpl.class);
 
-    private static final int DEFAULT_INTERVAL = 60000 * 2;
+    private static final int DEFAULT_INTERVAL = 60000;
 
     private static final int PASSWORD_LENGTH = 6;
 

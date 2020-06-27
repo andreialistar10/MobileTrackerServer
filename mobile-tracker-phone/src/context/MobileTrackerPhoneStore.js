@@ -95,7 +95,12 @@ export const MobileTrackerPhoneStore = ({children}) => {
     await saveDeviceSettings(deviceSettings);
     await saveDeviceInformation(deviceInformation);
     await saveAuthorization(authorization);
-    const newState = {authorization, deviceInformation, deviceSettings};
+    const newState = {
+      authorization,
+      deviceInformation,
+      deviceSettings,
+      password: initialState.password,
+    };
     dispatch({
       type: INIT_STORE,
       payload: newState,
