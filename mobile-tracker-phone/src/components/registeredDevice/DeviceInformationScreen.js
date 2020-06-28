@@ -65,10 +65,19 @@ const DeviceInformationScreen = ({navigation}) => {
                 Device Name:
               </Text>
               <Text style={textStyle}>{deviceInformation.name}</Text>
-              <Text style={[styles.text, styles.deviceInformationSubtitle]}>
-                Parent:
-              </Text>
-              <Text style={textStyle}>{deviceInformation.ownerUsername}</Text>
+              {deviceInformation.ownerUsername !== null &&
+                deviceInformation.ownerUsername !== undefined &&
+                deviceInformation.ownerUsername !== '' && (
+                  <>
+                    <Text
+                      style={[styles.text, styles.deviceInformationSubtitle]}>
+                      Parent:
+                    </Text>
+                    <Text style={textStyle}>
+                      {deviceInformation.ownerUsername}
+                    </Text>
+                  </>
+                )}
               {password !== null && password !== undefined && password !== '' && (
                 <>
                   <Text style={[styles.text, styles.deviceInformationSubtitle]}>
