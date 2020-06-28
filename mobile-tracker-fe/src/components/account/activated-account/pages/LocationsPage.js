@@ -108,6 +108,7 @@ const LocationsPage = ({ getAllDevices, devices }) => {
           markers={latestLocations}
           popupProperties={popupProperties}
           markerIdName={"deviceCode"}
+          zoom={13}
         />
       </div>
       <div className={rightSide}>

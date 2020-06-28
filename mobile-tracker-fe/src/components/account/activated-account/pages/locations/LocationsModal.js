@@ -82,7 +82,7 @@ const theme = createMuiTheme({
     },
     MuiToolbar: {
       gutters: {
-        paddingRight: "57px !important",
+        paddingRight: "42px !important",
       },
     },
   },
