@@ -3,6 +3,7 @@ import {Dimensions, Text, View, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {HEADER_HEIGHT} from '../style';
 import {styles} from '../style/registerDevice';
+import TransparentLoading from '../common/TransparentLoading';
 
 const dimensions = Dimensions.get('window');
 
@@ -65,7 +66,12 @@ const ContentOnPairing = ({onPress}) => {
   );
 };
 
-const RegisteredDeviceScreen = ({onTurnOnPress, onTurnOffPress, pairing}) => {
+const RegisteredDeviceScreen = ({
+  onTurnOnPress,
+  onTurnOffPress,
+  pairing,
+  loading,
+}) => {
   const [actualRootDimensions, setActualRootDimensions] = useState({
     width: dimensions.width,
     height: dimensions.height,
@@ -86,6 +92,7 @@ const RegisteredDeviceScreen = ({onTurnOnPress, onTurnOffPress, pairing}) => {
       start={{x: 0, y: 0}}
       end={{x: 1, y: 0}}
       onLayout={resize}>
+      <TransparentLoading loading={loading} />
       <View style={styles.contentWrapper}>
         <View style={styles.content}>
           {pairing ? (

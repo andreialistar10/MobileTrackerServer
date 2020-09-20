@@ -1,7 +1,7 @@
 package com.andrei.mobiletracker.user.beans.annotation.constraint.dtoConstraint.validator;
 
 import com.andrei.mobiletracker.user.beans.annotation.constraint.dtoConstraint.UserAccountDetailRequestDtoConstraint;
-import com.andrei.mobiletracker.user.dto.UserAccountDetailRequestDto;
+import com.andrei.mobiletracker.user.dto.user.UserAccountDetailRequestDto;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

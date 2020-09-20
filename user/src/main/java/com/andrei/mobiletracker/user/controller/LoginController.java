@@ -1,8 +1,8 @@
 package com.andrei.mobiletracker.user.controller;
 
 import com.andrei.mobiletracker.security.config.BasicJwtConfig;
-import com.andrei.mobiletracker.user.dto.LoggedInUserData;
-import com.andrei.mobiletracker.user.dto.UserAccountData;
+import com.andrei.mobiletracker.user.dto.login.LoggedInUserData;
+import com.andrei.mobiletracker.user.dto.user.UserAccountData;
 import com.andrei.mobiletracker.user.facade.login.LoginFacade;
 import com.andrei.mobiletracker.user.service.exception.UserExceptionType;
 import com.andrei.mobiletracker.user.service.exception.UserServiceException;

@@ -1,6 +1,5 @@
 import React, {useContext, useState} from 'react';
 import {
-  Button,
   Dimensions,
   SafeAreaView,
   ScrollView,
@@ -21,7 +20,7 @@ const DeviceInformationScreen = ({navigation}) => {
     width: dimensions.width,
     height: dimensions.height,
   });
-  const {deviceInformation} = useContext(MobileTrackerPhoneContext);
+  const {deviceInformation, password} = useContext(MobileTrackerPhoneContext);
   const getStyleForRoot = () => {
     let {height} = actualRootDimensions;
     height -= HEADER_HEIGHT;
@@ -33,10 +32,16 @@ const DeviceInformationScreen = ({navigation}) => {
   };
   const textStyle = {
     ...styles.text,
-    color: 'rgba(210,0,0,1)',
-    fontSize: 14,
+    color: 'rgba(109,109,100,1)',
+    fontSize: 15,
     fontWeight: 'bold',
   };
+
+  const passwordStyle = {
+    ...textStyle,
+    fontSize: 18,
+  };
+
   return (
     <SafeAreaView>
       <ScrollView style={styleScrollView.style}>
@@ -60,10 +65,27 @@ const DeviceInformationScreen = ({navigation}) => {
                 Device Name:
               </Text>
               <Text style={textStyle}>{deviceInformation.name}</Text>
-              <Text style={[styles.text, styles.deviceInformationSubtitle]}>
-                Password:
-              </Text>
-              <Text style={textStyle}>parola mea</Text>
+              {deviceInformation.ownerUsername !== null &&
+                deviceInformation.ownerUsername !== undefined &&
+                deviceInformation.ownerUsername !== '' && (
+                  <>
+                    <Text
+                      style={[styles.text, styles.deviceInformationSubtitle]}>
+                      Parent:
+                    </Text>
+                    <Text style={textStyle}>
+                      {deviceInformation.ownerUsername}
+                    </Text>
+                  </>
+                )}
+              {password !== null && password !== undefined && password !== '' && (
+                <>
+                  <Text style={[styles.text, styles.deviceInformationSubtitle]}>
+                    Password:
+                  </Text>
+                  <Text style={passwordStyle}>{password}</Text>
+                </>
+              )}
               <View style={styles.buttonWrapper}>
                 <TouchableOpacity
                   style={[styles.button, styles.turnOnButton]}

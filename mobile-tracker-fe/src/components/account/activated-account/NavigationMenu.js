@@ -4,8 +4,8 @@ import { makeNavigationMenuStyle } from "../../../style/activated-account/naviga
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import PhoneAndroidOutlinedIcon from "@material-ui/icons/PhoneAndroidOutlined";
 import RoomOutlinedIcon from "@material-ui/icons/RoomOutlined";
-import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
-import PhonelinkSetupOutlinedIcon from "@material-ui/icons/PhonelinkSetupOutlined";
+// import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
+// import PhonelinkSetupOutlinedIcon from "@material-ui/icons/PhonelinkSetupOutlined";
 import PropTypes from "prop-types";
 const NavigationMenu = ({ selectedPage }) => {
   const style = makeNavigationMenuStyle();
@@ -52,28 +52,28 @@ const NavigationMenu = ({ selectedPage }) => {
             <span className={anchorText}>Locations</span>
           </NavLink>
         </li>
-        <li
-          className={
-            selectedPage === "notifications" ? selectedListItemStyle : listItem
-          }
-        >
-          <NavLink to="/account/notifications" className={anchor}>
-            <NotificationsNoneOutlinedIcon className={icon} />
-            <span className={anchorText}>Notifications</span>
-          </NavLink>
-        </li>
-        <li
-          className={
-            selectedPage === "device-settings"
-              ? selectedListItemStyle
-              : listItem
-          }
-        >
-          <NavLink to="/account/device-settings" className={anchor}>
-            <PhonelinkSetupOutlinedIcon className={icon} />
-            <span className={anchorText}>Settings</span>
-          </NavLink>
-        </li>
+        {/*<li*/}
+        {/*  className={*/}
+        {/*    selectedPage === "notifications" ? selectedListItemStyle : listItem*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  <NavLink to="/account/notifications" className={anchor}>*/}
+        {/*    <NotificationsNoneOutlinedIcon className={icon} />*/}
+        {/*    <span className={anchorText}>Notifications</span>*/}
+        {/*  </NavLink>*/}
+        {/*</li>*/}
+        {/*<li*/}
+        {/*  className={*/}
+        {/*    selectedPage === "device-settings"*/}
+        {/*      ? selectedListItemStyle*/}
+        {/*      : listItem*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  <NavLink to="/account/device-settings" className={anchor}>*/}
+        {/*    <PhonelinkSetupOutlinedIcon className={icon} />*/}
+        {/*    <span className={anchorText}>Settings</span>*/}
+        {/*  </NavLink>*/}
+        {/*</li>*/}
       </ul>
     </nav>
   );

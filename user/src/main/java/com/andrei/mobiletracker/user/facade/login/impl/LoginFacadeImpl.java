@@ -1,8 +1,8 @@
 package com.andrei.mobiletracker.user.facade.login.impl;
 
-import com.andrei.mobiletracker.user.dto.LoggedInActivatedAccountUserData;
-import com.andrei.mobiletracker.user.dto.LoggedInUserData;
-import com.andrei.mobiletracker.user.dto.UserAccountData;
+import com.andrei.mobiletracker.user.dto.login.LoggedInActivatedAccountUserData;
+import com.andrei.mobiletracker.user.dto.login.LoggedInUserData;
+import com.andrei.mobiletracker.user.dto.user.UserAccountData;
 import com.andrei.mobiletracker.user.facade.converter.Converter;
 import com.andrei.mobiletracker.user.facade.login.LoginFacade;
 import com.andrei.mobiletracker.user.model.RefreshToken;

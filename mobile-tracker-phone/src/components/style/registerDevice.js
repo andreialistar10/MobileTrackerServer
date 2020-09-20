@@ -95,7 +95,7 @@ export const styles = StyleSheet.create({
   deviceInformationSubtitle: {
     textDecorationLine: 'underline',
     marginTop: 25,
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: 'bold',
     marginBottom: 4,
   },

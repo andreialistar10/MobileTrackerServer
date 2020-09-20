@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @RefreshScope
-@Component
 public class UserJwtAuthorizationProviderConfig extends UserBasicJwtConfig implements JwtAuthorizationProviderConfig {
 
     @Value("${user.security.jwt.login-url}")

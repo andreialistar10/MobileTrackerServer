@@ -24,7 +24,6 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      // "process.env.API_URL": JSON.stringify("http://localhost:3001"),
       "process.env.API_FILE_URL": JSON.stringify("http://localhost:3002"),
       "process.env.BACKEND_URL": JSON.stringify(
         "http://localhost:8080/mobile-tracker"
@@ -56,6 +55,10 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+        test: /\.svg$/,
+        loader: "svg-react-loader",
       },
     ],
   },

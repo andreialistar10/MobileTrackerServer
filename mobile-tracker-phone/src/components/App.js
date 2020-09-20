@@ -13,14 +13,16 @@ import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {MobileTrackerPhoneStore} from '../context/MobileTrackerPhoneStore';
 import UnregisteredDeviceContainer from './unregisteredDevice/UnregisteredDeviceContainer';
 import AuthLoading from './AuthLoading';
-import {Tab} from './registeredDevice';
+import {RegisteredDeviceTabNavigator} from './registeredDevice';
+import {PairedDeviceTabNavigator} from './pairedDevice';
+import navService from '../core/navService';
 
 const MainNavigator = createSwitchNavigator(
   {
     AuthLoading,
     UnregisteredDevice: UnregisteredDeviceContainer,
-    // RegisteredDevice,
-    RegisteredDevice: Tab,
+    RegisteredDevice: RegisteredDeviceTabNavigator,
+    PairedDevice: PairedDeviceTabNavigator,
   },
   {initialRouteName: 'AuthLoading'},
 );
@@ -31,9 +33,9 @@ const App: () => React$Node = () => {
   return (
     <MobileTrackerPhoneStore>
       <AppContainer
-      // ref={(navigationRef) => {
-      //   navService.setTopLevelNavigator(navigationRef);
-      // }}
+        ref={navigationRef => {
+          navService.setTopLevelNavigator(navigationRef);
+        }}
       />
     </MobileTrackerPhoneStore>
   );

@@ -1,0 +1,125 @@
+version: '3'
+services:
+  config-service:
+    container_name: config-service
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    image: config-service:latest
+    expose:
+      - 8888
+    ports:
+      - "8888:8888"
+    environment:
+      EUREKA_HOSTNAME: host.docker.internal
+#    networks:
+#      - mobile-tracker-network
+#    volumes:
+#      - mobile-tracker-repo:/var/lib/mobile-tracker/config-service-repo
+    logging:
+      driver: json-file
+  discovery-service:
+    container_name: discovery-service
+    build:
+      context: ./service-discovery
+      dockerfile: Dockerfile
+    image: discovery-service:latest
+    expose:
+      - 8761
+    ports:
+      - "8761:8761"
+#    networks:
+#      - mobile-tracker-network
+    depends_on:
+      - config-service
+    logging:
+      driver: json-file
+    links:
+      - config-service:config-service
+    environment:
+      SPRING_CLOUD_CONFIG_URI: http://config-service:8888
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    image: user-service:latest
+    expose:
+      - 8086
+    ports:
+      - "8086:8086"
+    depends_on:
+      - config-service
+      - discovery-service
+    environment:
+      EUREKA_HOSTNAME: host.docker.internal
+      MYSQL_URL: "jdbc:mysql://host.docker.internal:3306/mobile_tracker_user_development"
+    links:
+      - discovery-service:discovery-service
+    logging:
+      driver: json-file
+  device-service:
+    container_name: device-service
+    build:
+      context: ./device
+      dockerfile: Dockerfile
+    image: device-service:latest
+    expose:
+      - 8082
+    ports:
+      - "8082:8082"
+    depends_on:
+      - user-service
+    environment:
+      EUREKA_HOSTNAME: host.docker.internal
+      MYSQL_URL: "jdbc:mysql://host.docker.internal:3306/mobile_tracker_device_development"
+      RABBITMQ_HOST: "host.docker.internal"
+    links:
+      - user-service:user-service
+  location-service:
+    container_name: location-service
+    build:
+      context: ./location
+      dockerfile: Dockerfile
+    image: location-service:latest
+    expose:
+      - 8083
+    ports:
+      - "8083:8083"
+    depends_on:
+      - device-service
+    links:
+      - device-service:device-service
+    environment:
+      EUREKA_HOSTNAME: host.docker.internal
+      MYSQL_URL: "jdbc:mysql://host.docker.internal:3306/mobile_tracker_location_development"
+  gateway-service:
+    container_name: gateway-service
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    image: gateway-service:latest
+    expose:
+      - 8080
+    ports:
+    - "8080:8080"
+    depends_on:
+      - config-service
+      - discovery-service
+      - user-service
+      - device-service
+      - location-service
+    environment:
+      EUREKA_HOSTNAME: host.docker.internal
+    links:
+      - discovery-service
+      - user-service
+      - device-service
+      - location-service
+#networks:
+#  mobile-tracker-network:
+#    driver: bridge
+#volumes:
+#  mobile-tracker-repo:
+#    external: false
+

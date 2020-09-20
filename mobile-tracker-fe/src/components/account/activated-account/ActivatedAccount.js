@@ -10,14 +10,19 @@ import { makeActivatedAccountStyle } from "../../../style/activated-account/acti
 import TitlePage from "./common/TitlePage";
 import { Route, Switch } from "react-router-dom";
 import ProfilePage from "./pages/ProfilePage";
-import DevicesPage from "./pages/DevicesPage";
-import DeviceSettingsPage from "./pages/DeviceSettingsPage";
+import DevicesPage from "./pages/devices/DevicesPage";
 import LocationsPage from "./pages/LocationsPage";
-import NotificationsPage from "./pages/NotificationsPage";
 
-const ActivatedAccount = ({ username, logout, pageTitle }) => {
+const ActivatedAccount = ({ logout, pageTitle }) => {
   const style = makeActivatedAccountStyle();
-  const { root, header, belowHeader, rightSide, leftSide } = style;
+  const {
+    root,
+    header,
+    belowHeader,
+    rightSide,
+    leftSide,
+    rightSideContentWrapper,
+  } = style;
   const [loading, setLoading] = useState(false);
   const handleLogout = () => {
     setLoading(true);
@@ -41,19 +46,21 @@ const ActivatedAccount = ({ username, logout, pageTitle }) => {
         </div>
         <div className={rightSide}>
           <TitlePage title={pageTitle} />
-          <Switch>
-            <Route path="/account/devices" component={DevicesPage} />
-            <Route
-              path="/account/device-settings"
-              component={DeviceSettingsPage}
-            />
-            <Route path="/account/locations" component={LocationsPage} />
-            <Route
-              path="/account/notifications"
-              component={NotificationsPage}
-            />
-            <Route path="/account" component={ProfilePage} />
-          </Switch>
+          <div className={rightSideContentWrapper}>
+            <Switch>
+              <Route path="/account/devices" component={DevicesPage}/>
+              {/*<Route*/}
+              {/*  path="/account/device-settings"*/}
+              {/*  component={DeviceSettingsPage}*/}
+              {/*/>*/}
+              <Route path="/account/locations" component={LocationsPage} />
+              {/*<Route*/}
+              {/*  path="/account/notifications"*/}
+              {/*  component={NotificationsPage}*/}
+              {/*/>*/}
+              <Route path="/account" component={ProfilePage} />
+            </Switch>
+          </div>
         </div>
       </div>
     </div>
@@ -70,7 +77,6 @@ const mapStateToProps = (state, ownProps) => {
   const page = ownProps.match.params.page;
   const pageTitle = page || "profile";
   return {
-    username: state.authorization.username,
     pageTitle,
   };
 };

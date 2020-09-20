@@ -1,7 +1,9 @@
 package com.andrei.mobiletracker.user.config;
 
+import com.andrei.mobiletracker.security.config.JwtAuthorizationProviderConfig;
 import com.andrei.mobiletracker.security.jwtFilter.authMicroserviceFilters.AuthJwtFilter;
 import com.andrei.mobiletracker.security.jwtFilter.authMicroserviceFilters.util.AuthJwtUtil;
+import com.andrei.mobiletracker.user.security.UserJwtAuthorizationProviderConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,14 +11,20 @@ import org.springframework.context.annotation.Configuration;
 public class UserConfig {
 
     @Bean
-    public AuthJwtUtil buildAuthJwtUtil() {
+    public JwtAuthorizationProviderConfig jwtAuthorizationProviderConfigBean() {
 
-        return new AuthJwtUtil();
+        return new UserJwtAuthorizationProviderConfig();
     }
 
     @Bean
-    public AuthJwtFilter buildJwtTokenAuthenticationFilter() {
+    public AuthJwtUtil authJwtUtilBean(JwtAuthorizationProviderConfig jwtAuthorizationProviderConfigBean) {
 
-        return new AuthJwtFilter();
+        return new AuthJwtUtil(jwtAuthorizationProviderConfigBean);
+    }
+
+    @Bean
+    public AuthJwtFilter buildJwtTokenAuthenticationFilter(AuthJwtUtil authJwtUtilBean, JwtAuthorizationProviderConfig jwtAuthorizationProviderConfigBean) {
+
+        return new AuthJwtFilter(authJwtUtilBean, jwtAuthorizationProviderConfigBean);
     }
 }

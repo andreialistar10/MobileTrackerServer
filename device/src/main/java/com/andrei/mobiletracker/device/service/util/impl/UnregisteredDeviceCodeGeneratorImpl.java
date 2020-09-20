@@ -20,7 +20,7 @@ public class UnregisteredDeviceCodeGeneratorImpl implements UnregisteredDeviceCo
 
     private final DecimalFormat decimalFormat;
 
-    private static final int MAX_BODY_LENGTH = 28;
+    private static final int MAX_BODY_LENGTH = 12;
 
     private static final String header = "MOTR";
 

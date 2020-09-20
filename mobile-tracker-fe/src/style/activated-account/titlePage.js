@@ -14,12 +14,13 @@ export const makeTitlePageStyle = makeStyles({
     color: COLOR_TITLE_PAGE,
     letterSpacing: 0,
     paddingLeft: PADDING_LEFT_TITLE_PAGE,
-    paddingBottom: "15px",
+    marginBottom: DEFAULT_FONT_SIZE_TITLE_PAGE,
     boxSizing: "border-box",
     textTransform: "capitalize",
     fontSize: DEFAULT_FONT_SIZE_TITLE_PAGE,
     [`@media (max-width:${SMALL_DEVICE_MAX_WIDTH})`]: {
       fontSize: FONT_SIZE_TITLE_PAGE_MAX_WIDTH_500PX,
+      marginBottom: FONT_SIZE_TITLE_PAGE_MAX_WIDTH_500PX,
     },
   },
   titleText: {

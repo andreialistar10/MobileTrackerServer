@@ -30,7 +30,6 @@ module.exports = {
       "process.env.BACKEND_URL": JSON.stringify(
         "http://localhost:8080/mobile-tracker"
       ),
-      // "process.env.API_URL": JSON.stringify("http://localhost:3001"),
     }),
     new HtmlWebpackPlugin({
       template: "src/index.html",
@@ -75,6 +74,21 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+      test: /\.(png|jpg|gif)$/i,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 8192,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.svg$/,
+        loader: "svg-react-loader",
       },
     ],
   },

@@ -5,20 +5,20 @@ import com.andrei.mobiletracker.security.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Service
 public class AuthJwtUtil extends JwtUtil {
 
-    @Autowired
     private JwtAuthorizationProviderConfig config;
+
+    public AuthJwtUtil(JwtAuthorizationProviderConfig config) {
+        this.config = config;
+    }
 
     public String generateToken(UserDetails userDetails) {
 
@@ -26,6 +26,14 @@ public class AuthJwtUtil extends JwtUtil {
         List<String> authorities = generateAuthoritiesList(userDetails);
         claims.put("authorities", authorities);
         return createToken(claims, userDetails.getUsername(), config.getExpiration(), config.getSecretSignIn());
+    }
+
+    public String generateUnexpiredToken(UserDetails userDetails){
+
+        Map<String, Object> claims = new HashMap<>();
+        List<String> authorities = generateAuthoritiesList(userDetails);
+        claims.put("authorities", authorities);
+        return createUnexpiredToken(claims, userDetails.getUsername(), config.getSecretSignIn());
     }
 
     public String generateRefreshToken(String username) {
@@ -48,7 +56,7 @@ public class AuthJwtUtil extends JwtUtil {
 
     private Date extractExpiration(String token, String secretSignIn) {
 
-        return extractClaim(token, secretSignIn,Claims::getExpiration);
+        return extractClaim(token, secretSignIn, Claims::getExpiration);
     }
 
     private <T> T extractClaim(String token, String secretSignIn, Function<Claims, T> claimsResolver) {
@@ -69,6 +77,16 @@ public class AuthJwtUtil extends JwtUtil {
                 .compact();
     }
 
+    private String createUnexpiredToken(Map<String, Object> claims, String username, String secretSignIn) {
+
+        final long currentTimestamp = System.currentTimeMillis();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(username)
+                .setIssuedAt(new Date(currentTimestamp))
+                .signWith(SignatureAlgorithm.HS256, secretSignIn)
+                .compact();
+    }
     private boolean isTokenExpired(String token, String secretSignIn) {
 
         return extractExpiration(token, secretSignIn).before(new Date());

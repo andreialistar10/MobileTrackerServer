@@ -1,7 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import {
   DEFAULT_HEADER_HEIGHT_VALUE,
-  HEADER_GRADIENT_COLOR,
   HEADER_HEIGHT_VALUE_MAX_WIDTH_500PX,
   SMALL_DEVICE_MAX_WIDTH,
 } from "./constants";
@@ -11,10 +10,10 @@ const selectedOrHoverListItem = "rgba(171, 232, 227,0.85)";
 export const makeNavigationMenuStyle = makeStyles({
   root: {
     width: "100%",
-    height: "100%",
+    minHeight: "100%",
     display: "flex",
     flexDirection: "column",
-    backgroundImage: `linear-gradient(to bottom, ${HEADER_GRADIENT_COLOR})`,
+    backgroundColor: "#2e303e",
     "-webkit-box-shadow": "1px 3px 6px -3px rgba(0,0,0,0.75)",
     "-moz-box-shadow": "1px 3px 6px -3px rgba(0,0,0,0.75)",
     "box-shadow": "1px 3px 6px -3px rgba(0,0,0,0.75)",
@@ -47,7 +46,7 @@ export const makeNavigationMenuStyle = makeStyles({
     display: "flex",
     "&:hover": {
       color: "#007bff",
-    }
+    },
   },
   icon: {
     width: "2rem",

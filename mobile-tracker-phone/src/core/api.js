@@ -1,15 +1,22 @@
-const BACKEND_HOST = '192.168.100.3';
-const BACKEND_URL_API = `http://${BACKEND_HOST}:8080/mobile-tracker/`;
+import {getAuthorization} from './localStorage';
+import {ROOT_BACKEND_URL_API} from './constants';
+
+function handleResponse(response) {
+  if (!response.ok) {
+    return Promise.reject(response);
+  }
+  return Promise.resolve(response.json());
+}
 
 function setTimeoutFetch(url, config, ms = 10000) {
   return new Promise((resolve, reject) => {
     const timeoutId = setTimeout(() => {
       reject(new Error('promise timeout'));
-    }, ms + 1000);
+    }, ms);
     fetch(url, config).then(
-      (res) => {
+      (response) => {
         clearTimeout(timeoutId);
-        resolve(res);
+        resolve(handleResponse(response));
       },
       (err) => {
         clearTimeout(timeoutId);
@@ -19,28 +26,55 @@ function setTimeoutFetch(url, config, ms = 10000) {
   });
 }
 
-export const registerDevice = (deviceInformation) => {
+export function registerDevice(deviceInformation) {
   const config = {
     method: 'POST',
     body: JSON.stringify(deviceInformation),
     headers: {'content-type': 'application/json', accept: 'application/json'},
   };
-  return setTimeoutFetch(`${BACKEND_URL_API}devices`, config)
-    .then((response) => {
-      const {status} = response;
-      if (status / 100 === 4) {
-        throw {error: 'Invalid device information!'};
-      }
-      if (status / 100 === 5) {
-        throw -1;
-      }
-      return Promise.resolve(response.json());
-    })
-    .catch((err) => {
-      console.log(err);
-      if (err && err.error) {
-        throw new Error(err.error);
-      }
-      throw new Error('Something went wrong! Please try again later!');
+  return setTimeoutFetch(
+    `${ROOT_BACKEND_URL_API}/unregistered-devices`,
+    config,
+  ).catch((error) => {
+    console.log(error);
+    return Promise.reject('Something went wrong! Please try again later!');
+  });
+}
+
+export async function getPasswordDevice() {
+  return getAuthorization().then(({token}) => {
+    const config = {
+      method: 'POST',
+      headers: {accept: 'application/json', authorization: `Bearer ${token}`},
+    };
+    return setTimeoutFetch(
+      `${ROOT_BACKEND_URL_API}/unregistered-devices/start-pairing`,
+      config,
+    ).catch((error) => {
+      console.log(error);
+      return Promise.reject('Something went wrong! Please try again later!');
     });
-};
+  });
+}
+
+export function confirmPairing(ownerUsername) {
+  return getAuthorization().then(({token}) => {
+    const config = {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        accept: 'application/json',
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ownerUsername}),
+    };
+    console.log(config.body);
+    return setTimeoutFetch(
+      `${ROOT_BACKEND_URL_API}/unregistered-devices/confirm-pairing`,
+      config,
+    ).catch((error) => {
+      console.log(error);
+      return Promise.reject('Something went wrong! Please try again later!');
+    });
+  });
+}
